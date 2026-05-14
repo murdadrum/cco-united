@@ -35,7 +35,7 @@ export default function AliWidget() {
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
-    setHist([{ role: 'assistant', content: 'Osiyo! I’m Alisdelisgi. Are you here to learn about CCO United, or are you with one of Cherokee Nation’s CCO organizations?' }])
+    setHist([{ role: 'assistant', content: 'Osiyo! I’m Alis. You can ask me anything you’d like to know about CCO United, or select an option to learn more.' }])
   }, [])
 
   useEffect(() => {
