@@ -21,7 +21,7 @@ export default function AboutSection() {
                 <div className="stat-label">Unified Workspace</div>
               </div>
               <div className="stat-card">
-                <div className="stat-num">∞</div>
+                <div className="stat-num infinity">∞</div>
                 <div className="stat-label">Community Impact</div>
               </div>
             </div>
