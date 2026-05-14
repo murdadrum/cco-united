@@ -6,6 +6,7 @@ import GetInvolvedSection from '@/components/GetInvolvedSection'
 import Footer from '@/components/Footer'
 import AliWidget from '@/components/AliWidget'
 import ScrollTopButton from '@/components/ScrollTopButton'
+import RevealObserver from '@/components/RevealObserver'
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
       <Footer />
       <ScrollTopButton />
       <AliWidget />
+      <RevealObserver />
     </>
   )
 }
