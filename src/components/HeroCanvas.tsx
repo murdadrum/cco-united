@@ -22,8 +22,9 @@ export default function HeroCanvas() {
     const canvas = canvasRef.current
     if (!canvas) return
 
-    const W = canvas.clientWidth || window.innerWidth
-    const H = canvas.clientHeight || window.innerHeight
+    const W = window.innerWidth
+    const H = window.innerHeight
+
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     renderer.setSize(W, H)
@@ -72,7 +73,8 @@ export default function HeroCanvas() {
     document.addEventListener('mousemove', onMouseMove)
 
     const resize = () => {
-      const w = canvas.clientWidth, h = canvas.clientHeight
+      const w = window.innerWidth
+      const h = window.innerHeight
       camera.aspect = w / h
       camera.updateProjectionMatrix()
       renderer.setSize(w, h)
