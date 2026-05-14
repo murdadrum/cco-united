@@ -138,7 +138,7 @@ export default function BuildingSection() {
               <div className="feature-card-scrim"></div>
               <div className="feature-card-body">
                 <span className="feature-card-tag">Emergency</span>
-                <div className="feature-name">Disaster Response</div>
+                <div className="feature-name">Disaster Readiness</div>
                 <p className="feature-desc">Centralized directory for emergency contacts, personnel, volunteers, resources,
                   policies, and protocols across Cherokee Nation.</p>
               </div>

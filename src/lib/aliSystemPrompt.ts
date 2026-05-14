@@ -15,7 +15,7 @@ CONVERSATION APPROACH:
 
 ABOUT CCO UNITED:
 - 501(c)3 initiative connecting ~14 Cherokee Nation CCO organizations
-- Built on Monday.com with AI agents, shared resource directory, grant tools, volunteer management, event planning, LMS, and disaster response coordination
+- Built on Monday.com with AI agents, shared resource directory, grant tools, volunteer management, event planning, LMS, and disaster readiness coordination
 - Seven-pointed star = seven clans of the Cherokee Nation — unity across diversity
 - In active development — early members shape the platform
 
