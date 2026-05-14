@@ -5,8 +5,7 @@ export default function Footer() {
         <div>
           <span className="footer-logo">CCO United</span>
           <p className="footer-tagline">One Platform. Fourteen Communities.<br />Stronger Together.</p>
-          <p className="footer-legal">CCO United is a 501(c)3 initiative of Cherokee Nation&apos;s Community &amp; Cultural
-            Outreach organizations.</p>
+          <p className="footer-legal">CCO United is an independent platform being developed by <a href="mailto:josh@joshbarteaux.com" className="footer-email">josh@joshbarteaux.com</a> to serve Cherokee Nation&apos;s Cultural &amp; Community Outreach organizations.</p>
         </div>
         <div className="footer-col">
           <h4>Navigate</h4>
@@ -23,7 +22,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="footer-bottom">
-        <p>© 2026 CCO United · Cherokee Nation</p>
+        <p>© 2026 CCO United</p>
         <div className="seven-dots">
           <div className="clan-dot" style={{ background: 'var(--clan1)' }}></div>
           <div className="clan-dot" style={{ background: 'var(--clan2)' }}></div>

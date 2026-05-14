@@ -1025,6 +1025,15 @@
       line-height: 1.65
     }
 
+    .footer-email {
+      color: var(--cn-gold);
+      text-decoration: none
+    }
+
+    .footer-email:hover {
+      text-decoration: underline
+    }
+
     .footer-col h4 {
       font-family: 'Cinzel', serif;
       font-size: .73rem;
