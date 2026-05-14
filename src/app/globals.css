@@ -354,19 +354,19 @@
       width: 56px;
       height: 2px;
       background: var(--cn-gold);
-      margin: 2.5rem 0
+      margin: 1.25rem 0
     }
 
     /* ABOUT */
     #about {
-      padding: 8rem 2rem;
+      padding: 4rem 2rem;
       background: linear-gradient(180deg, #120A06 0%, #0E0705 100%)
     }
 
     .about-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 6rem;
+      gap: 3rem;
       align-items: start
     }
 
@@ -451,7 +451,7 @@
 
     /* BUILDING */
     #building {
-      padding: 8rem 2rem;
+      padding: 4rem 2rem;
       background: var(--cn-dark);
       border-top: 1px solid rgba(200, 150, 12, 0.1)
     }
@@ -461,7 +461,7 @@
       font-size: 1.08rem;
       color: var(--cn-tan);
       line-height: 1.85;
-      margin-bottom: 4rem
+      margin-bottom: 2rem
     }
 
     .feature-grid {
@@ -484,22 +484,29 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      border: none;
+      border: 1px solid rgba(200, 150, 12, 0.18);
       background: #111;
-      transition: transform .3s, box-shadow .3s
+      cursor: pointer;
+      transition: transform .3s, box-shadow .3s, border-color .3s
     }
 
     .feature-card-link:hover .feature-card {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(200, 150, 12, 0.18)
+      transform: translateY(-5px);
+      box-shadow: 0 16px 48px rgba(200, 150, 12, 0.22);
+      border-color: rgba(200, 150, 12, 0.55)
     }
 
     .feature-card:hover {
-      transform: translateY(-4px)
+      transform: translateY(-5px)
     }
 
     .feature-card:hover .feature-card-img {
       transform: scale(1.05)
+    }
+
+    .feature-card-link:hover .feature-card-cta {
+      background: var(--cn-gold);
+      color: #1A0F0A
     }
 
     @keyframes shimmer {
@@ -565,7 +572,22 @@
     .feature-desc {
       font-size: .96rem;
       color: #C8B89A;
-      line-height: 1.75
+      line-height: 1.75;
+      margin-bottom: 1rem
+    }
+
+    .feature-card-cta {
+      display: inline-block;
+      font-size: .7rem;
+      font-family: 'Source Sans 3', sans-serif;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--cn-gold);
+      border: 1px solid var(--cn-gold);
+      border-radius: 2px;
+      padding: .3rem .75rem;
+      transition: background .2s, color .2s
     }
 
     .feature-card-tag {
@@ -588,7 +610,7 @@
       color: var(--cn-gold);
       text-align: center;
       line-height: 1.55;
-      margin: 0 auto 4rem;
+      margin: 0 auto 2rem;
       max-width: 780px;
       padding: 0 1rem;
       border: none;
@@ -598,12 +620,12 @@
     .ali-spotlight {
       border: 1px solid rgba(200, 150, 12, 0.28);
       background: linear-gradient(135deg, rgba(139, 26, 26, 0.12) 0%, rgba(200, 150, 12, 0.05) 100%);
-      padding: 3.5rem 4rem;
+      padding: 2rem 2.5rem;
       display: grid;
       grid-template-columns: 1fr 1.4fr;
-      gap: 4rem;
+      gap: 2.5rem;
       align-items: center;
-      margin-bottom: 4rem;
+      margin-bottom: 2rem;
       position: relative;
       overflow: hidden
     }
@@ -767,7 +789,7 @@
 
     /* GET INVOLVED */
     #get-involved {
-      padding: 8rem 2rem;
+      padding: 4rem 2rem;
       background: linear-gradient(180deg, #0E0705 0%, #120A06 100%);
       border-top: 1px solid rgba(200, 150, 12, 0.1)
     }
@@ -775,7 +797,7 @@
     .involved-grid {
       display: grid;
       grid-template-columns: 1fr 1.2fr;
-      gap: 6rem;
+      gap: 3rem;
       align-items: start
     }
 
@@ -1356,7 +1378,7 @@
       #about,
       #building,
       #get-involved {
-        padding: 5rem 1.25rem
+        padding: 2.5rem 1.25rem
       }
     }
 

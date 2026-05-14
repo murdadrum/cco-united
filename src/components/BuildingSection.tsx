@@ -57,6 +57,7 @@ export default function BuildingSection() {
                 <div className="feature-name">Shared Resource Directory</div>
                 <p className="feature-desc">Centralized, searchable resource library across all 14 CCOs — healthcare, food,
                   housing, youth, elder services, and more.</p>
+                <span className="feature-card-cta">View in Platform →</span>
               </div>
             </div>
           </a>
@@ -71,6 +72,7 @@ export default function BuildingSection() {
                 <div className="feature-name">Alisdelisgi AI Assistant</div>
                 <p className="feature-desc">An intelligent agent trained on CCO United data — a knowledgeable community guide
                   configured to our mission, available 24/7.</p>
+                <span className="feature-card-cta">View in Platform →</span>
               </div>
             </div>
           </a>
@@ -85,6 +87,7 @@ export default function BuildingSection() {
                 <div className="feature-name">Grant Management Pipeline</div>
                 <p className="feature-desc">Track, collaborate on, and win more grants together. Shared history, requirements,
                   and workflows across all member organizations.</p>
+                <span className="feature-card-cta">View in Platform →</span>
               </div>
             </div>
           </a>
@@ -99,6 +102,7 @@ export default function BuildingSection() {
                 <div className="feature-name">Volunteer &amp; Donor Tools</div>
                 <p className="feature-desc">Recruit, manage, and retain the people who power your mission — with CRM tools
                   built for nonprofit realities.</p>
+                <span className="feature-card-cta">View in Platform →</span>
               </div>
             </div>
           </a>
@@ -113,6 +117,7 @@ export default function BuildingSection() {
                 <div className="feature-name">Event Planning</div>
                 <p className="feature-desc">Coordinate events across organizations with shared calendars, planning boards, and
                   communication tools.</p>
+                <span className="feature-card-cta">View in Platform →</span>
               </div>
             </div>
           </a>
@@ -127,6 +132,7 @@ export default function BuildingSection() {
                 <div className="feature-name">Certifications &amp; LMS</div>
                 <p className="feature-desc">NonprofitReady integration for volunteer and staff development — grants,
                   fundraising, leadership, and board essentials.</p>
+                <span className="feature-card-cta">View in Platform →</span>
               </div>
             </div>
           </a>
@@ -141,6 +147,7 @@ export default function BuildingSection() {
                 <div className="feature-name">Disaster Readiness</div>
                 <p className="feature-desc">Centralized directory for emergency contacts, personnel, volunteers, resources,
                   policies, and protocols across Cherokee Nation.</p>
+                <span className="feature-card-cta">View in Platform →</span>
               </div>
             </div>
           </a>
