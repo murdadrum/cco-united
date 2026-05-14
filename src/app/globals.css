@@ -648,6 +648,13 @@
       white-space: nowrap
     }
 
+    .ali-spotlight .btn-outline {
+      letter-spacing: .1em;
+      padding: .85rem 1.6rem;
+      white-space: nowrap;
+      font-size: .78rem
+    }
+
     .ali-name {
       font-family: 'Cinzel', serif;
       font-size: clamp(2rem, 4vw, 3rem);
