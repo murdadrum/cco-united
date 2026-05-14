@@ -1,8 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
 "use client"
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 
 export default function BuildingSection() {
+  useEffect(() => {
+    document.querySelectorAll<HTMLImageElement>('.feature-card-img').forEach(img => {
+      if (img.complete) {
+        img.classList.add('loaded')
+      } else {
+        img.addEventListener('load', () => img.classList.add('loaded'), { once: true })
+      }
+    })
+  }, [])
+
   const toggleAudio = useCallback(() => {
     const audio = document.getElementById('ali-audio') as HTMLAudioElement | null
     const btn = document.getElementById('ali-play-btn')

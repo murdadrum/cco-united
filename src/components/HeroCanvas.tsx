@@ -4,16 +4,6 @@ import * as THREE from 'three'
 
 const CLAN = ['#8B1A1A','#C8960C','#4A5E3A','#2C5F7A','#7A3B6B','#8B5E1A','#1A4A3A']
 
-function starSegs(cx: number, cy: number, R: number, r: number, n: number) {
-  const pts: [number, number][] = []
-  for (let i = 0; i < n * 2; i++) {
-    const angle = (Math.PI / n) * i - Math.PI / 2
-    const rad = i % 2 === 0 ? R : r
-    pts.push([cx + rad * Math.cos(angle), cy + rad * Math.sin(angle)])
-  }
-  return pts
-}
-
 export default function HeroCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -22,75 +12,93 @@ export default function HeroCanvas() {
     const canvas = canvasRef.current
     if (!canvas) return
 
-    const W = window.innerWidth
-    const H = window.innerHeight
-
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true })
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    renderer.setSize(W, H)
+    renderer.setClearColor(0x000000, 0)
 
     const scene = new THREE.Scene()
-    const camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 100)
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100)
     camera.position.set(0, 0, 5)
 
-    scene.add(new THREE.AmbientLight(0xfff8f0, 0.55))
-    const pl = new THREE.PointLight(0xC8960C, 1.4, 100)
-    pl.position.set(3, 4, 5)
+    const resize = () => {
+      const w = canvas.clientWidth, h = canvas.clientHeight
+      renderer.setSize(w, h, false)
+      camera.aspect = w / h
+      camera.updateProjectionMatrix()
+    }
+    resize()
+    window.addEventListener('resize', resize)
+
+    scene.add(new THREE.AmbientLight(0xfff8f0, 0.3))
+
+    // Primary: bright warm white from top-right
+    const key = new THREE.DirectionalLight(0xfff5e0, 3.2)
+    key.position.set(6, 8, 5)
+    scene.add(key)
+
+    // Gold-tinted point light near the top-right to add specularity
+    const pl = new THREE.PointLight(0xC8960C, 3.5, 40)
+    pl.position.set(5, 6, 4)
     scene.add(pl)
-    const fl = new THREE.PointLight(0x2C5F7A, 0.38, 80)
-    fl.position.set(-4, -2, 3)
+
+    // Cool blue fill from bottom-left, kept dim so shadows stay deep
+    const fl = new THREE.PointLight(0x2C5F7A, 0.5, 60)
+    fl.position.set(-5, -3, 3)
     scene.add(fl)
 
-    const N = 7, R = 1.35, r = 0.55, depth = 0.22
-    const star = new THREE.Group()
-    const pts = starSegs(0, 0, R, r, N)
+    const grp = new THREE.Group()
+    scene.add(grp)
 
-    for (let i = 0; i < N; i++) {
-      const shape = new THREE.Shape()
-      const tip = pts[i * 2]
-      const il = pts[(i * 2 - 1 + N * 2) % (N * 2)]
-      const ir = pts[(i * 2 + 1) % (N * 2)]
-      shape.moveTo(0, 0)
-      shape.lineTo(il[0], il[1])
-      shape.lineTo(tip[0], tip[1])
-      shape.lineTo(ir[0], ir[1])
-      shape.closePath()
-      const geo = new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled: false })
-      const mat = new THREE.MeshPhongMaterial({
-        color: CLAN[i],
-        shininess: 60,
-        specular: new THREE.Color(0x888866),
+    const R = 1.5, r = 0.68, depth = 0.3, n = 7
+    const st = (Math.PI * 2) / n, ht = st / 2
+
+    for (let i = 0; i < n; i++) {
+      const oa = i * st - Math.PI / 2
+      const tip = new THREE.Vector2(R * Math.cos(oa), R * Math.sin(oa))
+      const lft = new THREE.Vector2(r * Math.cos(oa - ht), r * Math.sin(oa - ht))
+      const rgt = new THREE.Vector2(r * Math.cos(oa + ht), r * Math.sin(oa + ht))
+      const shape = new THREE.Shape([new THREE.Vector2(0, 0), lft, tip, rgt])
+      const geo = new THREE.ExtrudeGeometry(shape, {
+        depth,
+        bevelEnabled: true,
+        bevelThickness: 0.04,
+        bevelSize: 0.03,
+        bevelSegments: 2,
       })
-      star.add(new THREE.Mesh(geo, mat))
+      const mat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(CLAN[i]),
+        roughness: 0.22,
+        metalness: 0.72,
+      })
+      grp.add(new THREE.Mesh(geo, mat))
+      const eg = new THREE.EdgesGeometry(geo)
+      grp.add(new THREE.LineSegments(eg, new THREE.LineBasicMaterial({
+        color: 0xC8960C,
+        transparent: true,
+        opacity: 0.45,
+      })))
     }
-    scene.add(star)
+    grp.position.set(0.5, 0, 0)
 
-    let targetRX = 0, targetRY = 0, curRX = 0, curRY = 0
+    let mx = 0, my = 0, tx = 0, ty = 0
     const onMouseMove = (e: MouseEvent) => {
-      targetRY = ((e.clientX / window.innerWidth) - 0.5) * 0.6
-      targetRX = -((e.clientY / window.innerHeight) - 0.5) * 0.4
+      mx = (e.clientX / window.innerWidth - 0.5) * 2
+      my = (e.clientY / window.innerHeight - 0.5) * 2
     }
     document.addEventListener('mousemove', onMouseMove)
 
-    const resize = () => {
-      const w = window.innerWidth
-      const h = window.innerHeight
-      camera.aspect = w / h
-      camera.updateProjectionMatrix()
-      renderer.setSize(w, h)
-    }
-    window.addEventListener('resize', resize)
-
     let rafId: number
-    const clock = new THREE.Clock()
+    let t = 0
     const animate = () => {
       rafId = requestAnimationFrame(animate)
-      const t = clock.getElapsedTime()
-      star.rotation.z = t * 0.12
-      curRX += (targetRX - curRX) * 0.04
-      curRY += (targetRY - curRY) * 0.04
-      star.rotation.x = curRX
-      star.rotation.y = curRY
+      t += 0.012
+      tx += (mx - tx) * 0.055
+      ty += (my - ty) * 0.055
+      grp.rotation.y += 0.0025 + tx * 0.018
+      grp.rotation.x += (-ty * 0.35 - grp.rotation.x) * 0.08
+      grp.rotation.z += (tx * 0.12 - grp.rotation.z) * 0.06
+      const b = 1 + Math.sin(t) * 0.024
+      grp.scale.setScalar(b)
       renderer.render(scene, camera)
     }
     animate()
