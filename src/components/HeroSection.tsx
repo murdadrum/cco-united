@@ -1,6 +1,4 @@
-import dynamic from 'next/dynamic'
-
-const HeroCanvas = dynamic(() => import('./HeroCanvas'), { ssr: false })
+import HeroCanvas from './HeroCanvas'
 
 export default function HeroSection() {
   return (
