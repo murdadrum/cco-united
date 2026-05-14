@@ -3,31 +3,50 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 
 interface Message { role: 'user' | 'assistant'; content: string }
 
+const QUICK_REPLIES = [
+  "I'm with a CCO organization",
+  "I'm a volunteer",
+  "I'm a donor or partner",
+  "I'm a board member",
+  "Tell me about the platform",
+]
+
+function renderContent(text: string) {
+  // Convert **bold** to styled spans
+  const parts = text.split(/(\*\*[^*]+\*\*)/g)
+  return parts.map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return (
+        <span key={i} style={{ color: '#E8B84B', fontWeight: 600 }}>
+          {part.slice(2, -2)}
+        </span>
+      )
+    }
+    return <span key={i}>{part}</span>
+  })
+}
+
 export default function AliWidget() {
   const [collapsed, setCollapsed] = useState(true)
   const [hist, setHist] = useState<Message[]>([])
+  const [showChips, setShowChips] = useState(true)
   const [streaming, setStreaming] = useState(false)
   const msgsRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
-    setHist([{ role: 'assistant', content: 'Osiyo! I’m Alisdelisgi, the CCO United AI assistant. Ask me anything about the platform, Cherokee Nation’s CCO organizations, or how we can help your community.' }])
+    setHist([{ role: 'assistant', content: 'Osiyo! I’m Alisdelisgi. Are you here to learn about CCO United, or are you with one of Cherokee Nation’s CCO organizations?' }])
   }, [])
 
-  const scrollToBottom = () => {
+  useEffect(() => {
     if (msgsRef.current) msgsRef.current.scrollTop = msgsRef.current.scrollHeight
-  }
+  }, [hist])
 
-  useEffect(() => { scrollToBottom() }, [hist])
-
-  const sendMsg = useCallback(async () => {
-    const input = inputRef.current
-    if (!input) return
-    const text = input.value.trim()
-    if (!text || streaming) return
-    input.value = ''
-    input.style.height = 'auto'
-    const userMsg: Message = { role: 'user', content: text }
+  const sendMsg = useCallback(async (text: string) => {
+    if (!text.trim() || streaming) return
+    if (inputRef.current) { inputRef.current.value = ''; inputRef.current.style.height = 'auto' }
+    setShowChips(false)
+    const userMsg: Message = { role: 'user', content: text.trim() }
     const newHist = [...hist, userMsg]
     setHist([...newHist, { role: 'assistant', content: '…' }])
     setStreaming(true)
@@ -58,7 +77,7 @@ export default function AliWidget() {
               out += p.delta.text
               setHist([...newHist, { role: 'assistant', content: out }])
             }
-          } catch { /* skip malformed */ }
+          } catch { /* skip */ }
         }
       }
     } catch (err) {
@@ -71,8 +90,13 @@ export default function AliWidget() {
     }
   }, [hist, streaming])
 
+  const onSubmit = () => {
+    const text = inputRef.current?.value.trim() || ''
+    if (text) sendMsg(text)
+  }
+
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg() }
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); onSubmit() }
   }
 
   const onInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
@@ -82,10 +106,7 @@ export default function AliWidget() {
   }
 
   return (
-    <div
-      id="ali-widget"
-      style={{ maxHeight: collapsed ? '54px' : '520px' }}
-    >
+    <div id="ali-widget" style={{ maxHeight: collapsed ? '54px' : '560px' }}>
       <div id="ali-header" onClick={() => setCollapsed(c => !c)}>
         <div>
           <div className="ali-hname">Alisdelisgi · ᎠᎵᏍᏓᎵᏍᎩ</div>
@@ -115,8 +136,32 @@ export default function AliWidget() {
               background: m.role === 'user' ? '#C8960C' : 'rgba(255,255,255,0.06)',
               color: m.role === 'user' ? '#1A0F0A' : '#F5EDD8',
             }}
-          >{m.content}</div>
+          >{m.role === 'assistant' ? renderContent(m.content) : m.content}</div>
         ))}
+        {showChips && !streaming && (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '.4rem', padding: '.25rem 0', alignSelf: 'flex-start' }}>
+            {QUICK_REPLIES.map(q => (
+              <button
+                key={q}
+                onClick={() => sendMsg(q)}
+                style={{
+                  background: 'transparent',
+                  border: '1px solid rgba(200,150,12,0.45)',
+                  color: '#E8B84B',
+                  borderRadius: '20px',
+                  padding: '.3rem .75rem',
+                  fontSize: '.75rem',
+                  cursor: 'pointer',
+                  fontFamily: "'Source Sans 3', sans-serif",
+                  letterSpacing: '.04em',
+                  transition: 'all .2s',
+                }}
+                onMouseEnter={e => { (e.target as HTMLButtonElement).style.background = 'rgba(200,150,12,0.12)'; (e.target as HTMLButtonElement).style.borderColor = '#C8960C' }}
+                onMouseLeave={e => { (e.target as HTMLButtonElement).style.background = 'transparent'; (e.target as HTMLButtonElement).style.borderColor = 'rgba(200,150,12,0.45)' }}
+              >{q}</button>
+            ))}
+          </div>
+        )}
       </div>
       <div id="ali-row" style={{ display: collapsed ? 'none' : 'flex' }}>
         <textarea
@@ -127,7 +172,7 @@ export default function AliWidget() {
           onKeyDown={onKeyDown}
           onInput={onInput}
         />
-        <button id="ali-send" onClick={sendMsg} disabled={streaming} aria-label="Send message">
+        <button id="ali-send" onClick={onSubmit} disabled={streaming} aria-label="Send message">
           <svg viewBox="0 0 16 16" fill="currentColor">
             <path d="M15 8L1 1l3 7-3 7 14-7z" />
           </svg>
