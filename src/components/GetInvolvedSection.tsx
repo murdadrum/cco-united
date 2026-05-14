@@ -3,8 +3,8 @@ import ContactForm from './ContactForm'
 export default function GetInvolvedSection() {
   return (
     <section id="get-involved">
-      <div className="section-inner">
-        <span className="section-eyebrow reveal">Join the Movement</span>
+      <div className="container">
+        <span className="section-label reveal">Join the Movement</span>
         <h2 className="section-title reveal">Get <em>Involved</em></h2>
         <div className="involved-grid">
           <div className="involved-left reveal">

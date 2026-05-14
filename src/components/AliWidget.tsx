@@ -89,7 +89,7 @@ export default function AliWidget() {
       <div id="ali-header" onClick={() => setCollapsed(c => !c)}>
         <div>
           <div className="ali-hname">Alisdelisgi · ᎠᎵᏍᏓᎵᏍᎩ</div>
-          <div className="ali-hsub">Uh-lee-s-deh-lee-s-gee · &ldquo;One who helps&rdquo;</div>
+          <div className="ali-hsub">Uh-lee-s-deh-lee-s-gee<br />&ldquo;One who helps&rdquo;</div>
         </div>
         <div className="ali-hright">
           <div className="ali-hdot"></div>
