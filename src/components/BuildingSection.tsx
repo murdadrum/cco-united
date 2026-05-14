@@ -163,7 +163,7 @@ export default function BuildingSection() {
                   title="Copy to clipboard">⎘</button>
                 <span className="copy-tooltip" id="copy-tip">Copied!</span>
               </span>
-              &ldquo;One who helps&rdquo;
+              <br />&ldquo;One who helps&rdquo;
             </div>
             <audio id="ali-audio" preload="auto" src="/ali-pronunciation.mp3"></audio>
             <a href="#get-involved" className="btn-outline">Request Workspace Access →</a>
