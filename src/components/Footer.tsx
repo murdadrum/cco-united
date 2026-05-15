@@ -22,7 +22,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="footer-bottom">
-        <p>© 2026 CCO United</p>
+        <p>© 2026 <a href="https://joshbarteaux.com" target="_blank" rel="noopener noreferrer" className="footer-email">JoshBarteaux.com</a></p>
         <div className="seven-dots">
           <div className="clan-dot" style={{ background: 'var(--clan1)' }}></div>
           <div className="clan-dot" style={{ background: 'var(--clan2)' }}></div>
