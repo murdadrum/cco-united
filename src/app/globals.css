@@ -190,6 +190,7 @@
       color: var(--cn-cream);
       line-height: .95;
       letter-spacing: .04em;
+      white-space: nowrap;
       opacity: 0;
       animation: fadeUp .9s ease .7s forwards;
       text-shadow: 0 2px 60px rgba(200, 150, 12, 0.22)
