@@ -451,6 +451,10 @@
     /* ABOUT */
     #about,
     #building,
+    #government,
+    #services,
+    #news,
+    #cco-united,
     #get-involved {
       scroll-margin-top: 64px
     }
@@ -1079,6 +1083,305 @@
     .wado {
       font-family: 'Libre Baskerville', serif;
       font-style: italic
+    }
+
+    /* NAV CCO LINK */
+    .nav-cco-link {
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--cn-gold);
+      font-family: 'Source Sans 3', sans-serif;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color .25s;
+      border: 1px solid rgba(200,150,12,0.35);
+      padding: .25rem .7rem;
+      border-radius: 4px
+    }
+
+    .nav-cco-link:hover {
+      background: rgba(200,150,12,0.12);
+      border-color: var(--cn-gold)
+    }
+
+    .nav-flyout-cco {
+      color: var(--cn-gold) !important;
+      font-weight: 600 !important
+    }
+
+    /* GOVERNMENT */
+    #government {
+      padding: 5rem 2rem;
+      background: linear-gradient(180deg, #0E0705 0%, #120A06 100%)
+    }
+
+    .government-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2.5rem
+    }
+
+    .gov-branch-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(200,150,12,0.15);
+      border-radius: 10px;
+      padding: 2rem 1.75rem;
+      transition: border-color .25s, transform .25s
+    }
+
+    .gov-branch-card:hover {
+      border-color: rgba(200,150,12,0.4);
+      transform: translateY(-3px)
+    }
+
+    .gov-branch-card--featured {
+      border-color: rgba(200,150,12,0.3);
+      background: rgba(200,150,12,0.04)
+    }
+
+    .gov-branch-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem
+    }
+
+    .gov-branch-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.05rem;
+      color: var(--cn-gold);
+      font-weight: 600;
+      margin-bottom: .75rem
+    }
+
+    .gov-branch-rule {
+      width: 32px;
+      height: 1px;
+      background: rgba(200,150,12,0.4);
+      margin-bottom: 1rem
+    }
+
+    .gov-branch-desc {
+      color: var(--cn-tan);
+      font-size: .9rem;
+      line-height: 1.65;
+      margin-bottom: 1.25rem
+    }
+
+    .gov-branch-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: .4rem
+    }
+
+    .gov-branch-links li {
+      font-size: .8rem;
+      color: rgba(200,184,154,0.6);
+      letter-spacing: .04em;
+      padding-left: .75rem;
+      position: relative
+    }
+
+    .gov-branch-links li::before {
+      content: '·';
+      position: absolute;
+      left: 0;
+      color: var(--cn-gold)
+    }
+
+    .gov-constitution-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1.75rem;
+      border: 1px solid rgba(200,150,12,0.2);
+      border-radius: 8px;
+      background: rgba(200,150,12,0.04);
+      color: var(--cn-tan);
+      font-size: .88rem;
+      letter-spacing: .04em;
+      flex-wrap: wrap;
+      gap: 1rem
+    }
+
+    /* SERVICES */
+    #services {
+      padding: 5rem 2rem;
+      background: linear-gradient(180deg, #120A06 0%, #0E0705 100%)
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem
+    }
+
+    .service-card {
+      display: flex;
+      flex-direction: column;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(200,150,12,0.12);
+      border-radius: 10px;
+      padding: 1.75rem 1.5rem;
+      text-decoration: none;
+      transition: border-color .25s, transform .25s, background .25s
+    }
+
+    .service-card:hover {
+      border-color: rgba(200,150,12,0.38);
+      background: rgba(200,150,12,0.05);
+      transform: translateY(-3px)
+    }
+
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem
+    }
+
+    .service-title {
+      font-family: 'Cinzel', serif;
+      font-size: .95rem;
+      color: var(--cn-gold);
+      font-weight: 600;
+      margin-bottom: .6rem
+    }
+
+    .service-desc {
+      color: var(--cn-tan);
+      font-size: .88rem;
+      line-height: 1.6;
+      flex: 1;
+      margin-bottom: 1rem
+    }
+
+    .service-link {
+      font-size: .8rem;
+      color: var(--cn-gold);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-top: auto
+    }
+
+    /* NEWS */
+    #news {
+      padding: 5rem 2rem;
+      background: linear-gradient(180deg, #0E0705 0%, #120A06 100%)
+    }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem
+    }
+
+    .news-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(200,150,12,0.12);
+      border-radius: 10px;
+      padding: 1.75rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      transition: border-color .25s, transform .25s
+    }
+
+    .news-card:hover {
+      border-color: rgba(200,150,12,0.35);
+      transform: translateY(-3px)
+    }
+
+    .news-card-meta {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      margin-bottom: .85rem
+    }
+
+    .news-tag {
+      font-size: .7rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cn-gold);
+      border: 1px solid rgba(200,150,12,0.4);
+      padding: .15rem .5rem;
+      border-radius: 20px
+    }
+
+    .news-date {
+      font-size: .78rem;
+      color: rgba(200,184,154,0.5);
+      letter-spacing: .04em
+    }
+
+    .news-title {
+      font-family: 'Cinzel', serif;
+      font-size: .95rem;
+      color: var(--cn-cream);
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: .75rem
+    }
+
+    .news-excerpt {
+      color: var(--cn-tan);
+      font-size: .87rem;
+      line-height: 1.6;
+      flex: 1;
+      margin-bottom: 1rem
+    }
+
+    .news-read {
+      font-size: .78rem;
+      color: var(--cn-gold);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-top: auto
+    }
+
+    /* CCO UNITED SPOTLIGHT */
+    #cco-united {
+      padding: 5rem 2rem;
+      background: linear-gradient(180deg, #120A06 0%, #0E0705 100%)
+    }
+
+    .cco-spotlight {
+      border: 1px solid rgba(200,150,12,0.25);
+      border-radius: 14px;
+      overflow: hidden;
+      background: rgba(200,150,12,0.04)
+    }
+
+    .cco-spotlight-inner {
+      padding: 3.5rem
+    }
+
+    .cco-clan-bar {
+      display: flex;
+      height: 6px
+    }
+
+    .cco-clan-dot {
+      flex: 1
+    }
+
+    /* RESPONSIVE — new sections */
+    @media(max-width:900px) {
+      .government-grid,
+      .services-grid,
+      .news-grid {
+        grid-template-columns: 1fr
+      }
+
+      .gov-constitution-bar {
+        flex-direction: column;
+        align-items: flex-start
+      }
+
+      .cco-spotlight-inner {
+        padding: 2rem
+      }
     }
 
     /* FOOTER */

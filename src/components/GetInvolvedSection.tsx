@@ -6,12 +6,12 @@ export default function GetInvolvedSection() {
       <div className="container">
         <div className="involved-grid">
           <div className="reveal">
-            <span className="section-label">Join Us</span>
-            <h2 className="section-title">The Window<br />to Act Is <em>Now</em></h2>
+            <span className="section-label">Get Involved</span>
+            <h2 className="section-title">Connect with the<br /><em>Cherokee Nation</em></h2>
             <div className="gold-rule"></div>
-            <p className="body-text">CCO United is in active development. Early members help shape the platform, influence its features, and establish the foundation every future CCO will build on.</p>
-            <div className="urgency-highlight">Your participation today defines the Cherokee Nation of tomorrow.</div>
-            <p className="body-text">Whether you represent a CCO, support Cherokee Nation&apos;s mission, or want to volunteer, donate, or partner — there&apos;s a place for you in CCO United.</p>
+            <p className="body-text">Whether you are a Cherokee citizen seeking services, a partner organization, a member of the media, or simply want to learn more — we welcome your message.</p>
+            <div className="urgency-highlight">Our Nation is stronger when its people are connected.</div>
+            <p className="body-text">Reach out to register as a citizen, inquire about services, explore employment opportunities, or connect with our team for any other questions.</p>
           </div>
           <div className="reveal" style={{ transitionDelay: '.15s' }}>
             <div className="form-card">

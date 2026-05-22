@@ -55,7 +55,7 @@ export default function ContactForm() {
 
   return (
     <>
-      <div className="form-title">Become a Founding Member</div>
+      <div className="form-title">Contact the Cherokee Nation</div>
       <div id="form-fields" style={{ display: showSuccess ? 'none' : undefined }}>
         <div className="form-row">
           <div className="form-group">
@@ -73,8 +73,8 @@ export default function ContactForm() {
         </div>
         <div className="form-row">
           <div className="form-group">
-            <label>Organization / CCO <span style={{ color: '#D45C5C' }}>*</span></label>
-            <input type="text" id="f-org" placeholder="Your organization"
+            <label>Organization / Affiliation <span style={{ color: '#D45C5C' }}>*</span></label>
+            <input type="text" id="f-org" placeholder="Your organization or community"
               onInput={() => clearError('f-org')} />
             <span className={`field-error${errors['f-org'] ? ' visible' : ''}`} id="err-org">Please enter your organization</span>
           </div>
@@ -87,12 +87,12 @@ export default function ContactForm() {
           <label>Area of Interest</label>
           <select id="f-interest">
             <option value="">Select one...</option>
-            <option>CCO Leadership / Workspace Access</option>
-            <option>Volunteer</option>
-            <option>Donor / Supporter</option>
+            <option>Tribal Registration</option>
+            <option>Services Inquiry</option>
+            <option>Employment</option>
+            <option>Media / Press</option>
             <option>Partner Organization</option>
-            <option>Board Member</option>
-            <option>Other</option>
+            <option>General Inquiry</option>
           </select>
         </div>
         <div className="form-group">
@@ -101,9 +101,9 @@ export default function ContactForm() {
             placeholder="How can we help you, or how would you like to get involved?"></textarea>
         </div>
         <button className="btn-submit" onClick={submitForm} disabled={submitting}>
-          {submitting ? 'Sending…' : 'Become a Founding Member'}
+          {submitting ? 'Sending…' : 'Send Message'}
         </button>
-        <p className="form-note">Requests are reviewed by the CCO United team. Access is available to CCO members, partners, and approved collaborators.</p>
+        <p className="form-note">Messages are reviewed by the Cherokee Nation team. For urgent matters, please visit cherokee.org directly.</p>
       </div>
       <div className="form-success" id="form-success" style={{ display: showSuccess ? 'block' : 'none' }}>
         <div className="s-icon">✶</div>

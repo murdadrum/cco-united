@@ -4,11 +4,11 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 interface Message { role: 'user' | 'assistant'; content: string }
 
 const QUICK_REPLIES = [
-  "I'm with a CCO organization",
-  "I'm a volunteer",
-  "I'm a donor or partner",
-  "I'm a board member",
-  "Tell me about the platform",
+  "I'm a Cherokee citizen",
+  "Tell me about services",
+  "How does the government work?",
+  "Tell me about the language",
+  "What is CCO United?",
 ]
 
 function renderContent(text: string) {
@@ -35,7 +35,7 @@ export default function AliWidget() {
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
-    setHist([{ role: 'assistant', content: 'Osiyo! I’m Alis. You can ask me anything you’d like to know about CCO United, or select an option to learn more.' }])
+    setHist([{ role: 'assistant', content: "Osiyo! I'm Alis — the Cherokee Nation's AI assistant. Ask me anything about our Nation, services, government, or culture." }])
   }, [])
 
   useEffect(() => {

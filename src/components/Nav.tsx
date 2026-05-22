@@ -14,10 +14,14 @@ function starSegs(cx: number, cy: number, R: number, r: number, n: number) {
 }
 
 const NAV_ITEMS = [
-  { href: '#about', label: 'About' },
-  { href: '#building', label: 'Platform' },
+  { href: '#about', label: 'About the Nation' },
+  { href: '#government', label: 'Government' },
+  { href: '#services', label: 'Services' },
+  { href: '#news', label: 'News' },
   { href: '#get-involved', label: 'Get Involved' },
 ]
+
+const CCO_LINK = 'https://cco-united.joshbarteaux.com'
 
 export default function Nav() {
   const svgRef = useRef<SVGSVGElement>(null)
@@ -48,7 +52,7 @@ export default function Nav() {
   }, [])
 
   useEffect(() => {
-    const sections = ['hero','about','building','get-involved']
+    const sections = ['hero','about','government','services','news','cco-united','get-involved']
     const onScroll = () => {
       let current = 'hero'
       sections.forEach(id => {
@@ -80,7 +84,7 @@ export default function Nav() {
       <nav>
         <a href="#hero" className="nav-brand">
           <svg className="nav-star-svg" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" ref={svgRef}></svg>
-          <span className="nav-logo">CCO United</span>
+          <span className="nav-logo">Cherokee Nation</span>
         </a>
         <div className="nav-links">
           {NAV_ITEMS.map(({ href, label }) => (
@@ -88,9 +92,12 @@ export default function Nav() {
               {label}
             </a>
           ))}
+          <a href={CCO_LINK} target="_blank" rel="noopener noreferrer" className="nav-cco-link">
+            CCO United ↗
+          </a>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <a href="#get-involved" className="btn-nav">Request Access</a>
+          <a href="#get-involved" className="btn-nav">Contact Us</a>
           <button
             className="nav-hamburger"
             aria-label={open ? 'Close menu' : 'Open menu'}
@@ -122,8 +129,11 @@ export default function Nav() {
               {label}
             </a>
           ))}
+          <a href={CCO_LINK} target="_blank" rel="noopener noreferrer" className="nav-flyout-cco" onClick={close}>
+            CCO United ↗
+          </a>
           <a href="#get-involved" className="btn-nav nav-flyout-cta" onClick={close}>
-            Request Access
+            Contact Us
           </a>
         </nav>
       </div>

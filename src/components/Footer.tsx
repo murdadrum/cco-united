@@ -3,26 +3,28 @@ export default function Footer() {
     <footer>
       <div className="footer-inner">
         <div>
-          <span className="footer-logo">CCO United</span>
-          <p className="footer-tagline">One Platform. Fourteen Communities.<br />Stronger Together.</p>
-          <p className="footer-legal">CCO United is an independent platform being developed by <a href="mailto:josh@joshbarteaux.com" className="footer-email" target="_blank" rel="noopener noreferrer">josh@joshbarteaux.com</a> to serve Cherokee Nation&apos;s Cultural &amp; Community Outreach organizations.</p>
+          <span className="footer-logo">Cherokee Nation</span>
+          <p className="footer-tagline">Committed to protecting our inherent sovereignty,<br />preserving and promoting Cherokee culture.</p>
+          <p className="footer-legal">This is a design prototype developed by <a href="mailto:josh@joshbarteaux.com" className="footer-email" target="_blank" rel="noopener noreferrer">josh@joshbarteaux.com</a>. For official Cherokee Nation information, visit <a href="https://www.cherokee.org" className="footer-email" target="_blank" rel="noopener noreferrer">cherokee.org</a>.</p>
         </div>
         <div className="footer-col">
           <h4>Navigate</h4>
-          <a href="#about">About</a>
-          <a href="#building">Platform</a>
+          <a href="#about">About the Nation</a>
+          <a href="#government">Government</a>
+          <a href="#services">Services</a>
+          <a href="#news">News</a>
           <a href="#get-involved">Get Involved</a>
         </div>
         <div className="footer-col">
           <h4>Connect</h4>
           <a href="#get-involved">Contact Us</a>
-          <a href="#">Facebook</a>
-          <a href="#">Instagram</a>
-          <a href="#">YouTube</a>
+          <a href="https://cco-united.joshbarteaux.com" target="_blank" rel="noopener noreferrer">CCO United ↗</a>
+          <a href="https://www.cherokeephoenix.org" target="_blank" rel="noopener noreferrer">Cherokee Phoenix ↗</a>
+          <a href="https://www.osiyo.tv" target="_blank" rel="noopener noreferrer">OsiyoTV ↗</a>
         </div>
       </div>
       <div className="footer-bottom">
-        <p>© 2026 <a href="https://joshbarteaux.com" target="_blank" rel="noopener noreferrer" className="footer-email">JoshBarteaux.com</a></p>
+        <p>© 2026 Cherokee Nation · <a href="https://www.cherokee.org/privacy" target="_blank" rel="noopener noreferrer" className="footer-email">Privacy</a> · <a href="https://www.cherokee.org/accessibility" target="_blank" rel="noopener noreferrer" className="footer-email">Accessibility</a></p>
         <div className="seven-dots">
           <div className="clan-dot" style={{ background: 'var(--clan1)' }}></div>
           <div className="clan-dot" style={{ background: 'var(--clan2)' }}></div>
