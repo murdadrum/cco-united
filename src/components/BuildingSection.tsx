@@ -188,7 +188,7 @@ export default function BuildingSection() {
           <div className="ali-desc">
             <p>Meet <strong className="ali-nick-highlight">Alis</strong> — CCO United&apos;s AI assistant, trained on our data and
               grounded in our mission.</p>
-            <p>In the Cherokee tradition, a helper shows up — <strong>knowledgeable, present, and ready.</strong>
+            <p>In the Cherokee tradition, a helper shows up — <strong>knowledgeable, present, and ready.</strong>{" "}
               Alisdelisgi embodies that. Available 24/7, it answers questions about resources, grants, events, and how to
               get involved — speaking with the warmth of a trusted community guide, not the cold efficiency of a generic
               chatbot.</p>

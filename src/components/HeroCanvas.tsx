@@ -71,12 +71,6 @@ export default function HeroCanvas() {
         metalness: 0.72,
       })
       grp.add(new THREE.Mesh(geo, mat))
-      const eg = new THREE.EdgesGeometry(geo)
-      grp.add(new THREE.LineSegments(eg, new THREE.LineBasicMaterial({
-        color: 0xC8960C,
-        transparent: true,
-        opacity: 0.45,
-      })))
     }
     grp.position.set(0.5, 0, 0)
 

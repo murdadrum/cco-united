@@ -1399,6 +1399,10 @@
         bottom: 1rem
       }
 
+      #scroll-top {
+        bottom: calc(1rem + 54px + 0.75rem)
+      }
+
       #about,
       #building,
       #get-involved {
