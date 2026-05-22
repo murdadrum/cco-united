@@ -132,6 +132,94 @@
       color: var(--cn-dark)
     }
 
+    /* HAMBURGER */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px;
+      height: 36px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      flex-shrink: 0
+    }
+
+    .nav-hamburger-bar {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--cn-gold);
+      border-radius: 2px;
+      transition: transform .25s, opacity .25s
+    }
+
+    /* FLYOUT */
+    .nav-flyout-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(2px)
+    }
+
+    .nav-flyout {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 201;
+      width: 260px;
+      background: rgba(20, 11, 7, 0.97);
+      border-left: 1px solid rgba(200, 150, 12, 0.18);
+      backdrop-filter: blur(16px);
+      transform: translateX(100%);
+      transition: transform .3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      padding-top: 90px
+    }
+
+    .nav-flyout.nav-flyout-open {
+      transform: translateX(0)
+    }
+
+    .nav-flyout-links {
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem 2rem;
+      gap: 0
+    }
+
+    .nav-flyout-links a {
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #C8B89A;
+      font-family: 'Source Sans 3', sans-serif;
+      font-weight: 500;
+      text-decoration: none;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(200, 150, 12, 0.1);
+      transition: color .2s
+    }
+
+    .nav-flyout-links a:hover,
+    .nav-flyout-links a.nav-active {
+      color: var(--cn-gold)
+    }
+
+    .nav-flyout-cta {
+      margin-top: 2rem;
+      text-align: center;
+      border: 1px solid var(--cn-gold) !important;
+      border-bottom: 1px solid var(--cn-gold) !important;
+      padding: .6rem 1rem !important
+    }
+
     /* HERO */
     #hero {
       position: relative;
@@ -361,6 +449,12 @@
     }
 
     /* ABOUT */
+    #about,
+    #building,
+    #get-involved {
+      scroll-margin-top: 64px
+    }
+
     #about {
       padding: 4rem 2rem;
       background: linear-gradient(180deg, #120A06 0%, #0E0705 100%)
@@ -1289,10 +1383,15 @@
       }
 
       .btn-nav {
-        padding: .4rem .75rem;
-        text-align: right;
-        font-size: 0.7rem;
-        letter-spacing: 0.08em
+        display: none
+      }
+
+      .nav-hamburger {
+        display: flex
+      }
+
+      .nav-flyout-backdrop {
+        display: block
       }
 
       .about-grid,

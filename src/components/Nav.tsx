@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 
 const CLAN = ['#8B1A1A','#C8960C','#4A5E3A','#2C5F7A','#7A3B6B','#8B5E1A','#1A4A3A']
 
@@ -13,8 +13,18 @@ function starSegs(cx: number, cy: number, R: number, r: number, n: number) {
   return pts.join(' ')
 }
 
+const NAV_ITEMS = [
+  { href: '#about', label: 'About' },
+  { href: '#building', label: 'Platform' },
+  { href: '#get-involved', label: 'Get Involved' },
+]
+
 export default function Nav() {
   const svgRef = useRef<SVGSVGElement>(null)
+  const [open, setOpen] = useState(false)
+  const [active, setActive] = useState('hero')
+
+  const close = useCallback(() => setOpen(false), [])
 
   useEffect(() => {
     const svg = svgRef.current
@@ -39,39 +49,84 @@ export default function Nav() {
 
   useEffect(() => {
     const sections = ['hero','about','building','get-involved']
-    const navLinks = document.querySelectorAll<HTMLAnchorElement>('.nav-links a')
     const onScroll = () => {
       let current = 'hero'
       sections.forEach(id => {
         const el = document.getElementById(id)
         if (el && el.getBoundingClientRect().top <= 120) current = id
       })
-      navLinks.forEach(a => {
-        a.classList.toggle('nav-active', a.getAttribute('href') === '#' + current)
-      })
+      setActive(current)
     }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Close flyout on Escape or outside click
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') close() }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [open, close])
+
+  // Prevent body scroll when flyout is open
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [open])
+
   return (
-    <nav>
-      <a href="#hero" className="nav-brand">
-        <svg className="nav-star-svg" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" ref={svgRef}></svg>
-        <span className="nav-logo">CCO United</span>
-      </a>
-      <div className="nav-links">
-        <a href="#about">About</a>
-        <a href="#building">Platform</a>
-        <a href="#get-involved">Get Involved</a>
+    <>
+      <nav>
+        <a href="#hero" className="nav-brand">
+          <svg className="nav-star-svg" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" ref={svgRef}></svg>
+          <span className="nav-logo">CCO United</span>
+        </a>
+        <div className="nav-links">
+          {NAV_ITEMS.map(({ href, label }) => (
+            <a key={href} href={href} className={active === href.slice(1) ? 'nav-active' : ''}>
+              {label}
+            </a>
+          ))}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <a href="#get-involved" className="btn-nav">Request Access</a>
+          <button
+            className="nav-hamburger"
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-expanded={open}
+            onClick={() => setOpen(o => !o)}
+          >
+            <span className={`nav-hamburger-bar${open ? ' open' : ''}`} />
+            <span className={`nav-hamburger-bar${open ? ' open' : ''}`} />
+            <span className={`nav-hamburger-bar${open ? ' open' : ''}`} />
+          </button>
+        </div>
+      </nav>
+
+      {/* Backdrop */}
+      {open && (
+        <div className="nav-flyout-backdrop" onClick={close} aria-hidden="true" />
+      )}
+
+      {/* Flyout drawer */}
+      <div className={`nav-flyout${open ? ' nav-flyout-open' : ''}`} aria-hidden={!open}>
+        <nav className="nav-flyout-links">
+          {NAV_ITEMS.map(({ href, label }) => (
+            <a
+              key={href}
+              href={href}
+              className={active === href.slice(1) ? 'nav-active' : ''}
+              onClick={close}
+            >
+              {label}
+            </a>
+          ))}
+          <a href="#get-involved" className="btn-nav nav-flyout-cta" onClick={close}>
+            Request Access
+          </a>
+        </nav>
       </div>
-      <div style={{display:'flex',alignItems:'center',gap:'1rem'}}>
-        {/* <button id="theme-toggle" aria-label="Toggle light/dark theme">
-          <span className="toggle-icon" id="toggle-icon">☀️</span>
-          <span id="toggle-label">Light</span>
-        </button> */}
-        <a href="#get-involved" className="btn-nav">Request Access</a>
-      </div>
-    </nav>
+    </>
   )
 }
