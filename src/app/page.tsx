@@ -1,10 +1,7 @@
 import Nav from '@/components/Nav'
 import HeroSection from '@/components/HeroSection'
 import AboutSection from '@/components/AboutSection'
-import GovernmentSection from '@/components/GovernmentSection'
-import ServicesSection from '@/components/ServicesSection'
-import NewsSection from '@/components/NewsSection'
-import CCOUnitedSection from '@/components/CCOUnitedSection'
+import BuildingSection from '@/components/BuildingSection'
 import GetInvolvedSection from '@/components/GetInvolvedSection'
 import Footer from '@/components/Footer'
 import AliWidget from '@/components/AliWidget'
@@ -17,10 +14,7 @@ export default function Home() {
       <Nav />
       <HeroSection />
       <AboutSection />
-      <GovernmentSection />
-      <ServicesSection />
-      <NewsSection />
-      <CCOUnitedSection />
+      <BuildingSection />
       <GetInvolvedSection />
       <Footer />
       <ScrollTopButton />

@@ -1,5 +1,7 @@
 'use client'
 import { useEffect, useRef, useState, useCallback } from 'react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 const CLAN = ['#8B1A1A','#C8960C','#4A5E3A','#2C5F7A','#7A3B6B','#8B5E1A','#1A4A3A']
 
@@ -14,14 +16,10 @@ function starSegs(cx: number, cy: number, R: number, r: number, n: number) {
 }
 
 const NAV_ITEMS = [
-  { href: '#about', label: 'About the Nation' },
-  { href: '#government', label: 'Government' },
-  { href: '#services', label: 'Services' },
-  { href: '#news', label: 'News' },
+  { href: '#about', label: 'About' },
+  { href: '#building', label: 'Platform' },
   { href: '#get-involved', label: 'Get Involved' },
 ]
-
-const CCO_LINK = 'https://cco-united.joshbarteaux.com'
 
 export default function Nav() {
   const svgRef = useRef<SVGSVGElement>(null)
@@ -29,6 +27,7 @@ export default function Nav() {
   const [active, setActive] = useState('hero')
 
   const close = useCallback(() => setOpen(false), [])
+  const pathname = usePathname()
 
   useEffect(() => {
     const svg = svgRef.current
@@ -52,7 +51,7 @@ export default function Nav() {
   }, [])
 
   useEffect(() => {
-    const sections = ['hero','about','government','services','news','cco-united','get-involved']
+    const sections = ['hero', 'about', 'building', 'get-involved']
     const onScroll = () => {
       let current = 'hero'
       sections.forEach(id => {
@@ -65,7 +64,6 @@ export default function Nav() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Close flyout on Escape or outside click
   useEffect(() => {
     if (!open) return
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') close() }
@@ -73,7 +71,6 @@ export default function Nav() {
     return () => document.removeEventListener('keydown', onKey)
   }, [open, close])
 
-  // Prevent body scroll when flyout is open
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
@@ -84,7 +81,7 @@ export default function Nav() {
       <nav>
         <a href="#hero" className="nav-brand">
           <svg className="nav-star-svg" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" ref={svgRef}></svg>
-          <span className="nav-logo">Cherokee Nation</span>
+          <span className="nav-logo">CCO United</span>
         </a>
         <div className="nav-links">
           {NAV_ITEMS.map(({ href, label }) => (
@@ -92,12 +89,12 @@ export default function Nav() {
               {label}
             </a>
           ))}
-          <a href={CCO_LINK} target="_blank" rel="noopener noreferrer" className="nav-cco-link">
-            CCO United ↗
-          </a>
+          <Link href="/events" className={pathname.startsWith('/events') ? 'nav-active' : ''}>
+            Events
+          </Link>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <a href="#get-involved" className="btn-nav">Contact Us</a>
+          <a href="#get-involved" className="btn-nav">Request Access</a>
           <button
             className="nav-hamburger"
             aria-label={open ? 'Close menu' : 'Open menu'}
@@ -111,12 +108,10 @@ export default function Nav() {
         </div>
       </nav>
 
-      {/* Backdrop */}
       {open && (
         <div className="nav-flyout-backdrop" onClick={close} aria-hidden="true" />
       )}
 
-      {/* Flyout drawer */}
       <div className={`nav-flyout${open ? ' nav-flyout-open' : ''}`} aria-hidden={!open}>
         <nav className="nav-flyout-links">
           {NAV_ITEMS.map(({ href, label }) => (
@@ -129,11 +124,15 @@ export default function Nav() {
               {label}
             </a>
           ))}
-          <a href={CCO_LINK} target="_blank" rel="noopener noreferrer" className="nav-flyout-cco" onClick={close}>
-            CCO United ↗
-          </a>
+          <Link
+            href="/events"
+            className={pathname.startsWith('/events') ? 'nav-active' : ''}
+            onClick={close}
+          >
+            Events
+          </Link>
           <a href="#get-involved" className="btn-nav nav-flyout-cta" onClick={close}>
-            Contact Us
+            Request Access
           </a>
         </nav>
       </div>
