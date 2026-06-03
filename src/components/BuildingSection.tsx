@@ -46,7 +46,7 @@ export default function BuildingSection() {
         <p className="features-intro reveal">Every tool CCO groups need — in one place, configured to Cherokee Nation&apos;s
           mission, and powered by AI trained on our own data.</p>
         <div className="feature-grid">
-          <a href="https://remotelyamused.monday.com/boards/18412424662" target="_blank" rel="noopener"
+          <a href="/resources"
             className="feature-card-link reveal">
             <div className="feature-card">
               <img className="feature-card-img" src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80"
@@ -61,7 +61,7 @@ export default function BuildingSection() {
               </div>
             </div>
           </a>
-          <a href="https://remotelyamused.monday.com/boards/18412448435/views/256694436" target="_blank" rel="noopener"
+          <a href="#" onClick={(e) => { e.preventDefault(); const w = document.getElementById('ali-widget'); const t = document.getElementById('ali-toggle'); if (w && w.style.maxHeight === '54px') t?.click(); w?.scrollIntoView({ behavior: 'smooth', block: 'end' }) }}
             className="feature-card-link reveal">
             <div className="feature-card" style={{ transitionDelay: '.08s' }}>
               <img className="feature-card-img" src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80"
@@ -76,7 +76,7 @@ export default function BuildingSection() {
               </div>
             </div>
           </a>
-          <a href="https://remotelyamused.monday.com/overviews/37048936" target="_blank" rel="noopener"
+          <a href="/grants"
             className="feature-card-link reveal">
             <div className="feature-card" style={{ transitionDelay: '.16s' }}>
               <img className="feature-card-img" src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80"
@@ -91,7 +91,7 @@ export default function BuildingSection() {
               </div>
             </div>
           </a>
-          <a href="https://remotelyamused.monday.com/boards/18412448068" target="_blank" rel="noopener"
+          <a href="/people"
             className="feature-card-link reveal">
             <div className="feature-card" style={{ transitionDelay: '.24s' }}>
               <img className="feature-card-img" src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=800&q=80"
@@ -121,7 +121,7 @@ export default function BuildingSection() {
               </div>
             </div>
           </a>
-          <a href="https://remotelyamused.monday.com/custom_objects/18412691336" target="_blank" rel="noopener"
+          <a href="/learning"
             className="feature-card-link reveal">
             <div className="feature-card" style={{ transitionDelay: '.40s' }}>
               <img className="feature-card-img" src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80"
@@ -136,7 +136,7 @@ export default function BuildingSection() {
               </div>
             </div>
           </a>
-          <a href="https://remotelyamused.monday.com/boards/18412681114/" target="_blank" rel="noopener"
+          <a href="/emergency"
             className="feature-card-link reveal">
             <div className="feature-card" style={{ transitionDelay: '.48s' }}>
               <img className="feature-card-img" src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=800&q=80"
@@ -147,6 +147,21 @@ export default function BuildingSection() {
                 <div className="feature-name">Disaster Readiness</div>
                 <p className="feature-desc">Centralized directory for emergency contacts, personnel, volunteers, resources,
                   policies, and protocols across Cherokee Nation.</p>
+                <span className="feature-card-cta">View in Platform →</span>
+              </div>
+            </div>
+          </a>
+          <a href="/housing"
+            className="feature-card-link reveal">
+            <div className="feature-card" style={{ transitionDelay: '.56s' }}>
+              <img className="feature-card-img" src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800&q=80"
+                alt="Welcoming home representing housing assistance and community support" loading="lazy" />
+              <div className="feature-card-scrim"></div>
+              <div className="feature-card-body">
+                <span className="feature-card-tag">Housing</span>
+                <div className="feature-name">Welcome Home</div>
+                <p className="feature-desc">Connect families with housing resources, assistance programs, and support
+                  services — coordinated across Cherokee Nation CCO organizations.</p>
                 <span className="feature-card-cta">View in Platform →</span>
               </div>
             </div>
