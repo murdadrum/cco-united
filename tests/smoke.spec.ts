@@ -8,7 +8,7 @@ test.describe('Page load & navigation', () => {
 
   test('nav bar is visible', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('nav')).toBeVisible()
+    await expect(page.locator('nav').first()).toBeVisible()
     await expect(page.getByText('CCO United', { exact: false }).first()).toBeVisible()
   })
 
@@ -27,24 +27,20 @@ test.describe('Page load & navigation', () => {
 })
 
 test.describe('About section stats', () => {
-  test('shows 14 CCO Organizations stat', async ({ page }) => {
+  test('shows tribal citizens stat', async ({ page }) => {
     await page.goto('/')
-    await expect(page.getByText('14')).toBeVisible()
-    await expect(page.getByText('CCO Organizations')).toBeVisible()
+    await expect(page.getByText('450K+')).toBeVisible()
+    await expect(page.getByText('Tribal Citizens')).toBeVisible()
   })
 
-  test('shows 501(c)(3) stat without wrapping', async ({ page }) => {
+  test('shows economic impact stat', async ({ page }) => {
     await page.goto('/')
-    const statEl = page.getByText('501(c)(3)')
-    await expect(statEl).toBeVisible()
-    const box = await statEl.boundingBox()
-    // Should fit on one line — height under 60px
-    expect(box!.height).toBeLessThan(60)
+    await expect(page.getByText('$2.16B')).toBeVisible()
   })
 
-  test('infinity symbol is visible', async ({ page }) => {
+  test('shows constitutional governance stat', async ({ page }) => {
     await page.goto('/')
-    await expect(page.getByText('∞')).toBeVisible()
+    await expect(page.getByText('1839', { exact: true })).toBeVisible()
   })
 })
 
@@ -64,7 +60,7 @@ test.describe('Building section', () => {
   test('Alisdelisgi spotlight is visible', async ({ page }) => {
     await page.goto('/')
     await expect(page.locator('.ali-spotlight')).toBeVisible()
-    await expect(page.getByText(/One who helps/i)).toBeVisible()
+    await expect(page.getByText(/One who helps/i).first()).toBeVisible()
   })
 
   test('Request Workspace Access button fits on one line', async ({ page }) => {

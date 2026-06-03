@@ -119,7 +119,7 @@ function CalendarView({ events }: { events: CCOEvent[] }) {
 }
 
 export default function EventsClient({ events }: { events: CCOEvent[] }) {
-  const [view, setView] = useState<View>('grid')
+  const [view, setView] = useState<View>('list')
   const [filterOrg, setFilterOrg] = useState('')
   const [filterType, setFilterType] = useState('')
   const [filterDateFrom, setFilterDateFrom] = useState('')

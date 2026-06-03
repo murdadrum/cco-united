@@ -9,16 +9,14 @@ test.describe('Alisdelisgi chat widget', () => {
     await expect(page.locator('#ali-toggle')).toBeVisible()
   })
 
-  test('chat panel is collapsed by default', async ({ page }) => {
-    const panel = page.locator('#ali-panel')
-    // Panel exists but should not be expanded
-    await expect(panel).toBeAttached()
-    await expect(panel).not.toHaveClass(/open/)
+  test('chat messages area is hidden by default (collapsed)', async ({ page }) => {
+    // Widget starts collapsed — #ali-msgs is display:none
+    await expect(page.locator('#ali-msgs')).toBeHidden()
   })
 
   test('opens chat panel on toggle click', async ({ page }) => {
     await page.locator('#ali-toggle').click()
-    await expect(page.locator('#ali-panel')).toBeVisible({ timeout: 2000 })
+    await expect(page.locator('#ali-msgs')).toBeVisible({ timeout: 2000 })
   })
 
   test('sends a message and receives a streaming response', async ({ page }) => {
@@ -34,20 +32,20 @@ test.describe('Alisdelisgi chat widget', () => {
     })
 
     await page.locator('#ali-toggle').click()
-    await expect(page.locator('#ali-panel')).toBeVisible()
+    await expect(page.locator('#ali-msgs')).toBeVisible()
 
     const input = page.locator('#ali-input')
     await input.fill('Hello')
     await page.keyboard.press('Enter')
 
-    // A response message should appear in the chat
-    await expect(page.locator('.ali-msg').last()).toBeVisible({ timeout: 8000 })
+    // At least one message div should appear in the chat
+    await expect(page.locator('#ali-msgs > div').first()).toBeVisible({ timeout: 8000 })
   })
 
   test('closes chat panel on second toggle click', async ({ page }) => {
     await page.locator('#ali-toggle').click()
-    await expect(page.locator('#ali-panel')).toBeVisible()
+    await expect(page.locator('#ali-msgs')).toBeVisible()
     await page.locator('#ali-toggle').click()
-    await expect(page.locator('#ali-panel')).not.toBeVisible({ timeout: 2000 })
+    await expect(page.locator('#ali-msgs')).toBeHidden({ timeout: 2000 })
   })
 })

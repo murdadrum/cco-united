@@ -1,4 +1,11 @@
+'use client'
+import { usePathname } from 'next/navigation'
+
 export default function Footer() {
+  const pathname = usePathname()
+  const isHome = pathname === '/'
+  const navHref = (hash: string) => isHome ? `#${hash}` : `/#${hash}`
+
   return (
     <footer>
       <div className="footer-inner">
@@ -9,14 +16,14 @@ export default function Footer() {
         </div>
         <div className="footer-col">
           <h4>Navigate</h4>
-          <a href="#about">About</a>
-          <a href="#building">Platform</a>
-          <a href="#get-involved">Get Involved</a>
+          <a href={navHref('about')}>About</a>
+          <a href={navHref('building')}>Platform</a>
+          <a href={navHref('get-involved')}>Get Involved</a>
           <a href="/events">Events</a>
         </div>
         <div className="footer-col">
           <h4>Connect</h4>
-          <a href="#get-involved">Contact Us</a>
+          <a href={navHref('get-involved')}>Contact Us</a>
           <a href="#">Facebook</a>
           <a href="#">Instagram</a>
           <a href="#">YouTube</a>
