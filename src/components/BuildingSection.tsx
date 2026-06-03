@@ -106,7 +106,7 @@ export default function BuildingSection() {
               </div>
             </div>
           </a>
-          <a href="https://remotelyamused.monday.com/boards/18412937196/views/257429549" target="_blank" rel="noopener"
+          <a href="/events/submit"
             className="feature-card-link reveal">
             <div className="feature-card" style={{ transitionDelay: '.32s' }}>
               <img className="feature-card-img" src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&q=80"
