@@ -16,9 +16,9 @@ function starSegs(cx: number, cy: number, R: number, r: number, n: number) {
 }
 
 const NAV_ITEMS = [
-  { href: '#about', label: 'About' },
-  { href: '#building', label: 'Platform' },
-  { href: '#get-involved', label: 'Get Involved' },
+  { hash: 'about', label: 'About' },
+  { hash: 'building', label: 'Platform' },
+  { hash: 'get-involved', label: 'Get Involved' },
 ]
 
 export default function Nav() {
@@ -28,6 +28,8 @@ export default function Nav() {
 
   const close = useCallback(() => setOpen(false), [])
   const pathname = usePathname()
+  const isHome = pathname === '/'
+  const navHref = (hash: string) => isHome ? `#${hash}` : `/#${hash}`
 
   useEffect(() => {
     const svg = svgRef.current
@@ -79,13 +81,13 @@ export default function Nav() {
   return (
     <>
       <nav>
-        <a href="#hero" className="nav-brand">
+        <a href={navHref('hero')} className="nav-brand">
           <svg className="nav-star-svg" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" ref={svgRef}></svg>
           <span className="nav-logo">CCO United</span>
         </a>
         <div className="nav-links">
-          {NAV_ITEMS.map(({ href, label }) => (
-            <a key={href} href={href} className={active === href.slice(1) ? 'nav-active' : ''}>
+          {NAV_ITEMS.map(({ hash, label }) => (
+            <a key={hash} href={navHref(hash)} className={isHome && active === hash ? 'nav-active' : ''}>
               {label}
             </a>
           ))}
@@ -94,7 +96,7 @@ export default function Nav() {
           </Link>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <a href="#get-involved" className="btn-nav">Request Access</a>
+          <a href={navHref('get-involved')} className="btn-nav">Request Access</a>
           <button
             className="nav-hamburger"
             aria-label={open ? 'Close menu' : 'Open menu'}
@@ -114,11 +116,11 @@ export default function Nav() {
 
       <div className={`nav-flyout${open ? ' nav-flyout-open' : ''}`} aria-hidden={!open}>
         <nav className="nav-flyout-links">
-          {NAV_ITEMS.map(({ href, label }) => (
+          {NAV_ITEMS.map(({ hash, label }) => (
             <a
-              key={href}
-              href={href}
-              className={active === href.slice(1) ? 'nav-active' : ''}
+              key={hash}
+              href={navHref(hash)}
+              className={isHome && active === hash ? 'nav-active' : ''}
               onClick={close}
             >
               {label}
@@ -131,7 +133,7 @@ export default function Nav() {
           >
             Events
           </Link>
-          <a href="#get-involved" className="btn-nav nav-flyout-cta" onClick={close}>
+          <a href={navHref('get-involved')} className="btn-nav nav-flyout-cta" onClick={close}>
             Request Access
           </a>
         </nav>
