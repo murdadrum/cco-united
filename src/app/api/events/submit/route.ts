@@ -24,12 +24,12 @@ export async function POST(req: NextRequest) {
   })
 
   const query = `
-    mutation {
+    mutation CreateEvent($boardId: ID!, $groupId: String!, $itemName: String!, $columnValues: JSON!) {
       create_item(
-        board_id: 18415647485
-        group_id: "group_mm3wccdn"
-        item_name: ${JSON.stringify(title)}
-        column_values: ${JSON.stringify(columnValues)}
+        board_id: $boardId
+        group_id: $groupId
+        item_name: $itemName
+        column_values: $columnValues
       ) { id }
     }
   `
@@ -39,8 +39,17 @@ export async function POST(req: NextRequest) {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${process.env.MONDAY_API_KEY}`,
+      'API-Version': '2023-10',
     },
-    body: JSON.stringify({ query }),
+    body: JSON.stringify({
+      query,
+      variables: {
+        boardId: '18415647485',
+        groupId: 'group_mm3wccdn',
+        itemName: title,
+        columnValues,
+      },
+    }),
   })
 
   const data = await res.json()

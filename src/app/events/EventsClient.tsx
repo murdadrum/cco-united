@@ -129,7 +129,9 @@ export default function EventsClient({ events }: { events: CCOEvent[] }) {
   const [subscribeStatus, setSubscribeStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
 
   const uniqueOrgs = useMemo(
-    () => Array.from(new Set(events.map(e => e.organization).filter(Boolean))).sort() as string[],
+    () => Array.from(new Set(events.map(e => e.organization).filter(Boolean)))
+      .filter(org => org !== '(Register a new CCO)')
+      .sort() as string[],
     [events]
   )
   const uniqueTypes = useMemo(
@@ -260,9 +262,12 @@ export default function EventsClient({ events }: { events: CCOEvent[] }) {
           <span className="section-label">Stay Connected</span>
           <h2 className="section-title">Get Event Updates</h2>
           <p>
-            Subscribe to receive notifications about upcoming Cherokee Nation and CCO
+            Subscribe to receive notifications about upcoming CCO United
             organization events open to the public.
           </p>
+          <a href="/events/submit" className="btn-outline" style={{ marginTop: '1.25rem', display: 'inline-block' }}>
+            Submit an Event →
+          </a>
         </div>
         <div className="subscribe-form">
           {subscribeStatus === 'success' ? (

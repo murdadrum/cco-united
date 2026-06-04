@@ -589,7 +589,7 @@
       min-height: 280px;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
+      justify-content: flex-start;
       border: 1px solid rgba(200, 150, 12, 0.18);
       background: #111;
       cursor: pointer;
@@ -662,7 +662,10 @@
     .feature-card-body {
       position: relative;
       z-index: 2;
-      padding: 1.6rem 1.8rem
+      padding: 1.6rem 1.8rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1
     }
 
     .feature-name {
@@ -693,7 +696,9 @@
       border: 1px solid var(--cn-gold);
       border-radius: 2px;
       padding: .3rem .75rem;
-      transition: background .2s, color .2s
+      transition: background .2s, color .2s;
+      margin-top: auto;
+      align-self: flex-start
     }
 
     .feature-card-tag {
@@ -1055,6 +1060,71 @@
       transform: translateY(-2px);
       box-shadow: 0 8px 28px rgba(200, 150, 12, 0.4)
     }
+
+    /* datetime-local calendar icon */
+    input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+      filter: invert(1) sepia(1) saturate(2) hue-rotate(5deg);
+      opacity: 0.7;
+      cursor: pointer
+    }
+
+    /* custom checkbox */
+    .custom-checkbox {
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      border: 1.5px solid var(--cn-gold);
+      border-radius: 3px;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      transition: background .15s, border-color .15s
+    }
+    .custom-checkbox--checked {
+      background: var(--cn-gold);
+      border-color: var(--cn-gold)
+    }
+    .custom-checkbox--checked::after {
+      content: '';
+      display: block;
+      width: 5px;
+      height: 9px;
+      border: 2px solid var(--cn-dark);
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg) translateY(-1px)
+    }
+
+    /* location autocomplete suggestions */
+    .location-suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: #2a1a10;
+      border: 1px solid var(--cn-gold);
+      border-top: none;
+      border-radius: 0 0 4px 4px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      max-height: 220px;
+      overflow-y: auto
+    }
+    .location-suggestions li {
+      padding: 0.6rem 0.9rem;
+      font-size: 0.82rem;
+      color: var(--cn-cream);
+      cursor: pointer;
+      border-bottom: 1px solid rgba(200,150,12,0.15);
+      line-height: 1.4
+    }
+    .location-suggestions li:last-child { border-bottom: none }
+    .location-suggestions li:hover { background: rgba(200,150,12,0.12); color: var(--cn-gold) }
 
     .form-success {
       display: none;

@@ -55,7 +55,7 @@ export default function ContactForm() {
 
   return (
     <>
-      <div className="form-title">Contact the Cherokee Nation</div>
+      <div className="form-title">Contact CCO United</div>
       <div id="form-fields" style={{ display: showSuccess ? 'none' : undefined }}>
         <div className="form-row">
           <div className="form-group">
@@ -103,7 +103,7 @@ export default function ContactForm() {
         <button className="btn-submit" onClick={submitForm} disabled={submitting}>
           {submitting ? 'Sending…' : 'Send Message'}
         </button>
-        <p className="form-note">Messages are reviewed by the Cherokee Nation team. For urgent matters, please visit cherokee.org directly.</p>
+        <p className="form-note">Messages are reviewed by the CCO United team. For urgent matters, please visit cherokee.org directly.</p>
       </div>
       <div className="form-success" id="form-success" style={{ display: showSuccess ? 'block' : 'none' }}>
         <div className="s-icon">✶</div>

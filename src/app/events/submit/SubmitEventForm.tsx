@@ -1,5 +1,5 @@
 'use client'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 
 const CCO_ORGS = [
   { id: 3, name: 'Keys Cherokee Community Organization Inc.' },
@@ -18,28 +18,53 @@ const EVENT_TYPES = [
 
 type FieldErrors = Record<string, boolean>
 
+type LocationSuggestion = { display_name: string; place_id: number }
+
 export default function SubmitEventForm() {
   const [errors, setErrors] = useState<FieldErrors>({})
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [serverError, setServerError] = useState('')
+  const [locationValue, setLocationValue] = useState('')
+  const [locationSuggestions, setLocationSuggestions] = useState<LocationSuggestion[]>([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const locationDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const titleRef = useRef<HTMLInputElement>(null)
   const ccoOrgRef = useRef<HTMLSelectElement>(null)
   const dateTimeRef = useRef<HTMLInputElement>(null)
-  const locationRef = useRef<HTMLInputElement>(null)
   const eventTypeRef = useRef<HTMLSelectElement>(null)
-  const isPublicRef = useRef<HTMLInputElement>(null)
+  const [isPublic, setIsPublic] = useState(false)
   const submittedByRef = useRef<HTMLInputElement>(null)
   const emailRef = useRef<HTMLInputElement>(null)
   const descriptionRef = useRef<HTMLTextAreaElement>(null)
+
+  const fetchLocationSuggestions = useCallback((query: string) => {
+    if (query.length < 3) { setLocationSuggestions([]); return }
+    if (locationDebounceRef.current) clearTimeout(locationDebounceRef.current)
+    locationDebounceRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`,
+          { headers: { 'Accept-Language': 'en' } }
+        )
+        const results: LocationSuggestion[] = await res.json()
+        setLocationSuggestions(results)
+        setShowSuggestions(true)
+      } catch { /* ignore */ }
+    }, 350)
+  }, [])
+
+  useEffect(() => {
+    return () => { if (locationDebounceRef.current) clearTimeout(locationDebounceRef.current) }
+  }, [])
 
   function validate(): boolean {
     const e: FieldErrors = {}
     if (!titleRef.current?.value.trim()) e.title = true
     if (!ccoOrgRef.current?.value) e.ccoOrg = true
     if (!dateTimeRef.current?.value) e.dateTime = true
-    if (!locationRef.current?.value.trim()) e.location = true
+    if (!locationValue.trim()) e.location = true
     if (!eventTypeRef.current?.value) e.eventType = true
     if (!submittedByRef.current?.value.trim()) e.submittedBy = true
     if (!emailRef.current?.value.trim()) e.email = true
@@ -62,9 +87,9 @@ export default function SubmitEventForm() {
           title: titleRef.current!.value.trim(),
           ccoOrg: ccoOrgRef.current!.value,
           dateTime: dateTimeRef.current!.value,
-          location: locationRef.current!.value.trim(),
+          location: locationValue.trim(),
           eventType: eventTypeRef.current!.value,
-          isPublic: isPublicRef.current!.checked,
+          isPublic,
           submittedBy: submittedByRef.current!.value.trim(),
           email: emailRef.current!.value.trim(),
           description: descriptionRef.current!.value.trim(),
@@ -124,9 +149,27 @@ export default function SubmitEventForm() {
           <input id="sf-date" type="datetime-local" ref={dateTimeRef} />
           <span className={`field-error${errors.dateTime ? ' visible' : ''}`}>Date and time are required.</span>
         </div>
-        <div className="form-group">
+        <div className="form-group" style={{ position: 'relative' }}>
           <label htmlFor="sf-location">Location *</label>
-          <input id="sf-location" type="text" ref={locationRef} placeholder="Address or venue name" />
+          <input
+            id="sf-location"
+            type="text"
+            placeholder="Address or venue name"
+            autoComplete="off"
+            value={locationValue}
+            onChange={e => { setLocationValue(e.target.value); fetchLocationSuggestions(e.target.value) }}
+            onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+            onFocus={() => locationSuggestions.length > 0 && setShowSuggestions(true)}
+          />
+          {showSuggestions && locationSuggestions.length > 0 && (
+            <ul className="location-suggestions">
+              {locationSuggestions.map(s => (
+                <li key={s.place_id} onMouseDown={() => { setLocationValue(s.display_name); setShowSuggestions(false) }}>
+                  {s.display_name}
+                </li>
+              ))}
+            </ul>
+          )}
           <span className={`field-error${errors.location ? ' visible' : ''}`}>Location is required.</span>
         </div>
       </div>
@@ -142,9 +185,18 @@ export default function SubmitEventForm() {
           <span className={`field-error${errors.eventType ? ' visible' : ''}`}>Please select an event type.</span>
         </div>
         <div className="form-group" style={{ paddingTop: '1.6rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <input id="sf-public" type="checkbox" ref={isPublicRef}
-            style={{ width: 'auto', accentColor: 'var(--cn-gold)', flexShrink: 0 }} />
-          <label htmlFor="sf-public" style={{ marginBottom: 0, textTransform: 'none', fontSize: '0.9rem' }}>
+          <button
+            type="button"
+            role="checkbox"
+            aria-checked={isPublic}
+            onClick={() => setIsPublic(p => !p)}
+            className={`custom-checkbox${isPublic ? ' custom-checkbox--checked' : ''}`}
+            aria-label="Open to the public"
+          />
+          <label
+            onClick={() => setIsPublic(p => !p)}
+            style={{ marginBottom: 0, textTransform: 'none', fontSize: '0.9rem', cursor: 'pointer' }}
+          >
             Open to the public
           </label>
         </div>

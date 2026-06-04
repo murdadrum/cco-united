@@ -6,7 +6,7 @@ const FAVICON = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vc
 
 export const metadata: Metadata = {
   title: 'CCO United',
-  description: "The shared digital workspace for Cherokee Nation's Community & Cultural Outreach organizations.",
+  description: "CCO United — the shared digital workspace for Cherokee Nation's Community & Cultural Outreach organizations.",
   icons: { icon: FAVICON, shortcut: FAVICON },
   openGraph: {
     type: 'website',

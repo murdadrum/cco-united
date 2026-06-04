@@ -82,12 +82,12 @@ type Props = { params: Promise<{ id: string }> }
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params
   const event = await fetchEvent(id)
-  if (!event) return { title: 'Event Not Found — Cherokee Nation CCO United' }
+  if (!event) return { title: 'Event Not Found — CCO United' }
   return {
-    title: `${event.name} — Cherokee Nation Events`,
+    title: `${event.name} — CCO United Events`,
     description: event.description
       ? event.description.slice(0, 160)
-      : `${event.name} — a public event from Cherokee Nation CCO organizations.`,
+      : `${event.name} — a public event from CCO United organizations.`,
   }
 }
 
