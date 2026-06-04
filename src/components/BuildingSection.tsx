@@ -61,9 +61,24 @@ export default function BuildingSection() {
               </div>
             </div>
           </a>
-          <a href="/nutrition"
+          <a href="/events/submit"
             className="feature-card-link reveal">
             <div className="feature-card" style={{ transitionDelay: '.08s' }}>
+              <img className="feature-card-img" src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&q=80"
+                alt="Community gathering and celebration event" loading="lazy" />
+              <div className="feature-card-scrim"></div>
+              <div className="feature-card-body">
+                <span className="feature-card-tag">Events</span>
+                <div className="feature-name">Event Planning</div>
+                <p className="feature-desc">Coordinate events across organizations with shared calendars, planning boards, and
+                  communication tools.</p>
+                <span className="feature-card-cta">View in Platform →</span>
+              </div>
+            </div>
+          </a>
+          <a href="/nutrition"
+            className="feature-card-link reveal">
+            <div className="feature-card" style={{ transitionDelay: '.16s' }}>
               <img className="feature-card-img" src="https://images.unsplash.com/photo-1610348725531-843dff563e2c?w=800&q=80"
                 alt="Fresh produce at a community farmer's market representing food distribution" loading="lazy" />
               <div className="feature-card-scrim"></div>
@@ -78,7 +93,7 @@ export default function BuildingSection() {
           </a>
           <a href="/resources"
             className="feature-card-link reveal">
-            <div className="feature-card" style={{ transitionDelay: '.16s' }}>
+            <div className="feature-card" style={{ transitionDelay: '.24s' }}>
               <img className="feature-card-img" src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80"
                 alt="Community members gathered around a table sharing resources" loading="lazy" />
               <div className="feature-card-scrim"></div>
@@ -93,7 +108,7 @@ export default function BuildingSection() {
           </a>
           <a href="#" onClick={(e) => { e.preventDefault(); const w = document.getElementById('ali-widget'); const t = document.getElementById('ali-toggle'); if (w && w.style.maxHeight === '54px') t?.click(); w?.scrollIntoView({ behavior: 'smooth', block: 'end' }) }}
             className="feature-card-link reveal">
-            <div className="feature-card" style={{ transitionDelay: '.24s' }}>
+            <div className="feature-card" style={{ transitionDelay: '.32s' }}>
               <img className="feature-card-img" src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80"
                 alt="Abstract AI technology visualization with glowing interface" loading="lazy" />
               <div className="feature-card-scrim"></div>
@@ -108,7 +123,7 @@ export default function BuildingSection() {
           </a>
           <a href="/grants"
             className="feature-card-link reveal">
-            <div className="feature-card" style={{ transitionDelay: '.32s' }}>
+            <div className="feature-card" style={{ transitionDelay: '.40s' }}>
               <img className="feature-card-img" src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80"
                 alt="Professional reviewing grant documents at a desk" loading="lazy" />
               <div className="feature-card-scrim"></div>
@@ -123,7 +138,7 @@ export default function BuildingSection() {
           </a>
           <a href="/people"
             className="feature-card-link reveal">
-            <div className="feature-card" style={{ transitionDelay: '.40s' }}>
+            <div className="feature-card" style={{ transitionDelay: '.48s' }}>
               <img className="feature-card-img" src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=800&q=80"
                 alt="Volunteers working together in a community setting" loading="lazy" />
               <div className="feature-card-scrim"></div>
@@ -132,21 +147,6 @@ export default function BuildingSection() {
                 <div className="feature-name">Volunteer &amp; Donor Tools</div>
                 <p className="feature-desc">Recruit, manage, and retain the people who power your mission — with CRM tools
                   built for nonprofit realities.</p>
-                <span className="feature-card-cta">View in Platform →</span>
-              </div>
-            </div>
-          </a>
-          <a href="/events/submit"
-            className="feature-card-link reveal">
-            <div className="feature-card" style={{ transitionDelay: '.48s' }}>
-              <img className="feature-card-img" src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&q=80"
-                alt="Community gathering and celebration event" loading="lazy" />
-              <div className="feature-card-scrim"></div>
-              <div className="feature-card-body">
-                <span className="feature-card-tag">Events</span>
-                <div className="feature-name">Event Planning</div>
-                <p className="feature-desc">Coordinate events across organizations with shared calendars, planning boards, and
-                  communication tools.</p>
                 <span className="feature-card-cta">View in Platform →</span>
               </div>
             </div>
