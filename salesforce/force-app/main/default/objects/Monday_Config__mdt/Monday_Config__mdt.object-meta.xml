@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="urn:metadata.soap.sforce.com">
+    <label>Monday Config</label>
+    <pluralLabel>Monday Configs</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

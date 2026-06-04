@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="urn:metadata.soap.sforce.com">
+    <fullName>Board_Id__c</fullName>
+    <label>Board ID</label>
+    <type>Text</type>
+    <length>20</length>
+</CustomField>

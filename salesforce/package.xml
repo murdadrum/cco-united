@@ -6,11 +6,36 @@
         <members>MondayEtl</members>
         <members>MondayEtlTest</members>
         <members>MondayEtlScheduler</members>
+        <members>AccountEtl</members>
+        <members>AccountEtlTest</members>
+        <members>LeadEtl</members>
+        <members>LeadEtlTest</members>
         <name>ApexClass</name>
     </types>
     <types>
         <members>Event__c</members>
+        <members>Monday_Config__mdt</members>
         <name>CustomObject</name>
+    </types>
+    <types>
+        <members>Account.Monday_Board_Id__c</members>
+        <members>Account.CCO_Status__c</members>
+        <members>Account.CCO_Contact_Name__c</members>
+        <members>Account.CCO_Contact_Email__c</members>
+        <members>Account.CCO_Member_Since__c</members>
+        <members>Account.CCO_Mission__c</members>
+        <members>Lead.Monday_Item_Id__c</members>
+        <members>Monday_Config__mdt.Board_Id__c</members>
+        <members>Monday_Config__mdt.Description__c</members>
+        <name>CustomField</name>
+    </types>
+    <types>
+        <members>Monday_Config.Subscriber_Board</members>
+        <name>CustomMetadata</name>
+    </types>
+    <types>
+        <members>CCOUnited_NextJS</members>
+        <name>ConnectedApp</name>
     </types>
     <version>66.0</version>
 </Package>

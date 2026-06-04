@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="urn:metadata.soap.sforce.com">
+    <fullName>CCO_Contact_Email__c</fullName>
+    <label>CCO Contact Email</label>
+    <type>Email</type>
+    <unique>false</unique>
+</CustomField>

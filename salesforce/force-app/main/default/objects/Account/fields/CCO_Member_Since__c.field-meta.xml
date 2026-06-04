@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="urn:metadata.soap.sforce.com">
+    <fullName>CCO_Member_Since__c</fullName>
+    <label>CCO Member Since</label>
+    <type>Date</type>
+</CustomField>

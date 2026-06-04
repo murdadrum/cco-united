@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="urn:metadata.soap.sforce.com">
+    <fullName>Description__c</fullName>
+    <label>Description</label>
+    <type>Text</type>
+    <length>255</length>
+</CustomField>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConnectedApp xmlns="urn:metadata.soap.sforce.com">
+    <contactEmail>josh@joshbarteaux.com</contactEmail>
+    <label>CCO United Next.js</label>
+    <oauthConfig>
+        <callbackUrl>http://localhost:3000/api/auth/callback/salesforce</callbackUrl>
+        <isConsumerSecretOptional>false</isConsumerSecretOptional>
+        <scopes>Api</scopes>
+        <scopes>RefreshToken</scopes>
+        <scopes>OfflineAccess</scopes>
+    </oauthConfig>
+</ConnectedApp>
