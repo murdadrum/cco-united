@@ -20,13 +20,18 @@ export default function HeroCanvas() {
     const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100)
     camera.position.set(0, 0, 5)
 
-    const resize = () => {
+    const updateCamera = () => {
       const w = canvas.clientWidth, h = canvas.clientHeight
       renderer.setSize(w, h, false)
       camera.aspect = w / h
       camera.updateProjectionMatrix()
     }
-    resize()
+    updateCamera()
+    const positionStar = () => {
+      const halfH = camera.position.z * Math.tan((camera.fov * Math.PI) / 360)
+      grp.position.x = halfH * camera.aspect * 0.3
+    }
+    const resize = () => { updateCamera(); positionStar() }
     window.addEventListener('resize', resize)
 
     scene.add(new THREE.AmbientLight(0xfff8f0, 0.3))
@@ -72,8 +77,7 @@ export default function HeroCanvas() {
       })
       grp.add(new THREE.Mesh(geo, mat))
     }
-    grp.position.set(0.5, 0, 0)
-
+    positionStar()
     let mx = 0, my = 0, tx = 0, ty = 0
     const onMouseMove = (e: MouseEvent) => {
       mx = (e.clientX / window.innerWidth - 0.5) * 2
