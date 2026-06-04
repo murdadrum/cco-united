@@ -8,8 +8,12 @@
     "start": "next start",
     "lint": "next lint",
     "test": "playwright test",
+    "test:monday": "playwright test --project=chromium",
     "test:ui": "playwright test --ui",
-    "test:prod": "BASE_URL=https://cco-united.joshbarteaux.com playwright test"
+    "test:prod": "BASE_URL=https://cco-united.joshbarteaux.com playwright test",
+    "bddgen": "bddgen",
+    "test:bdd": "bddgen && playwright test --project=salesforce-bdd",
+    "test:all": "bddgen && playwright test"
   },
   "dependencies": {
     "next": "^14",
@@ -20,6 +24,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.60.0",
+    "playwright-bdd": "^9",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

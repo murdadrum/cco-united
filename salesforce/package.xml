@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="urn:metadata.soap.sforce.com">
+    <types>
+        <members>HelloWorld</members>
+        <members>HelloWorldTest</members>
+        <members>MondayEtl</members>
+        <members>MondayEtlTest</members>
+        <members>MondayEtlScheduler</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>Event__c</members>
+        <name>CustomObject</name>
+    </types>
+    <version>66.0</version>
+</Package>

@@ -4,3 +4,15 @@ node_modules/
 .next/
 out/
 .DS_Store
+
+# Salesforce
+salesforce/.sfdx/
+salesforce/.localdevserver/
+salesforce/server.key
+
+# Playwright BDD generated specs
+.features-gen/
+
+# SFDX root cache
+.sfdx/
+salesforce/.sf/

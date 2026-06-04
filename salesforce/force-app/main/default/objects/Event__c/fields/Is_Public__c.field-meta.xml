@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="urn:metadata.soap.sforce.com">
+    <fullName>Is_Public__c</fullName>
+    <label>Open to Public?</label>
+    <type>Checkbox</type>
+    <defaultValue>false</defaultValue>
+</CustomField>

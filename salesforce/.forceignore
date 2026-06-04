@@ -1,0 +1,5 @@
+# SFDX
+.sfdx
+.localdevserver
+**/*.dup
+package.xml

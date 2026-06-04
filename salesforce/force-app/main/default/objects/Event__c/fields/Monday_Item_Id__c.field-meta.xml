@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="urn:metadata.soap.sforce.com">
+    <fullName>Monday_Item_Id__c</fullName>
+    <label>Monday Item ID</label>
+    <type>Text</type>
+    <length>20</length>
+    <unique>true</unique>
+    <caseSensitive>false</caseSensitive>
+    <externalId>true</externalId>
+</CustomField>

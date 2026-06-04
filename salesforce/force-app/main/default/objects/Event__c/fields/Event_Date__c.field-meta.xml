@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="urn:metadata.soap.sforce.com">
+    <fullName>Event_Date__c</fullName>
+    <label>Event Date</label>
+    <type>DateTime</type>
+</CustomField>
