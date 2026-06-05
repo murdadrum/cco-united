@@ -41,7 +41,7 @@ jobs:
         env:
           SF_JWT_KEY: ${{ secrets.SF_JWT_KEY }}
         run: |
-          echo "$SF_JWT_KEY" | base64 --decode > server.key
+          printf '%s' "$SF_JWT_KEY" > server.key
           sf org login jwt \
             --client-id ${{ secrets.SF_CLIENT_ID }} \
             --jwt-key-file server.key \
