@@ -1,9 +1,10 @@
-import { LightningElement, wire, track } from 'lwc';
+import { LightningElement, wire, track, api } from 'lwc';
 import getUpcomingEvents from '@salesforce/apex/EventController.getUpcomingEvents';
 
 const DATE_FORMAT = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' };
 
 export default class CcoEventList extends LightningElement {
+    @api title = 'Upcoming Events';
     @track events = [];
     isLoading = true;
     hasError = false;
