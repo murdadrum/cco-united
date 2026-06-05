@@ -17,7 +17,51 @@
     </start>
     <status>Active</status>
 
-    <!-- ── Screens (all grouped) ─────────────────────────────── -->
+    <!-- ── Variables ─────────────────────────────────────────── -->
+    <variables>
+        <name>varFirstName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varLastName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varEmail</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varPhone</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varDescription</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varHouseholdSize</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+
+    <!-- ── Screens ────────────────────────────────────────────── -->
     <screens>
         <name>Step1_Personal_Info</name>
         <label>Step 1 of 3 — Personal Information</label>
@@ -27,7 +71,7 @@
         <allowFinish>false</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>Step2_Household_Details</targetReference>
+            <targetReference>Assign_Step1</targetReference>
         </connector>
         <fields>
             <name>Screen1_Header</name>
@@ -69,12 +113,12 @@
         <name>Step2_Household_Details</name>
         <label>Step 2 of 3 — Household Details</label>
         <locationX>176</locationX>
-        <locationY>268</locationY>
+        <locationY>402</locationY>
         <allowBack>true</allowBack>
         <allowFinish>false</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>Step3_Inquiry_Details</targetReference>
+            <targetReference>Assign_Step2</targetReference>
         </connector>
         <fields>
             <name>Screen2_Header</name>
@@ -95,12 +139,12 @@
         <name>Step3_Inquiry_Details</name>
         <label>Step 3 of 3 — Describe Your Need</label>
         <locationX>176</locationX>
-        <locationY>402</locationY>
+        <locationY>670</locationY>
         <allowBack>true</allowBack>
         <allowFinish>false</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>Create_Lead</targetReference>
+            <targetReference>Assign_Step3</targetReference>
         </connector>
         <fields>
             <name>Screen3_Header</name>
@@ -108,7 +152,7 @@
             <fieldType>DisplayText</fieldType>
         </fields>
         <fields>
-            <name>Input_InquiryDescription</name>
+            <name>Input_Description</name>
             <dataType>String</dataType>
             <fieldText>Description</fieldText>
             <fieldType>LargeTextArea</fieldType>
@@ -121,7 +165,7 @@
         <name>Confirmation_Screen</name>
         <label>Submitted Successfully</label>
         <locationX>176</locationX>
-        <locationY>804</locationY>
+        <locationY>1070</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -134,30 +178,89 @@
         <showHeader>true</showHeader>
     </screens>
 
-    <!-- ── Record Creates (all grouped) ──────────────────────── -->
+    <!-- ── Assignments (capture screen field values into variables) -->
+    <assignments>
+        <name>Assign_Step1</name>
+        <label>Capture Personal Info</label>
+        <locationX>176</locationX>
+        <locationY>268</locationY>
+        <assignmentItems>
+            <assignToReference>varFirstName</assignToReference>
+            <operator>Assign</operator>
+            <value><elementReference>Input_FirstName</elementReference></value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varLastName</assignToReference>
+            <operator>Assign</operator>
+            <value><elementReference>Input_LastName</elementReference></value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varEmail</assignToReference>
+            <operator>Assign</operator>
+            <value><elementReference>Input_Email</elementReference></value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varPhone</assignToReference>
+            <operator>Assign</operator>
+            <value><elementReference>Input_Phone</elementReference></value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Step2_Household_Details</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Step2</name>
+        <label>Capture Household Info</label>
+        <locationX>176</locationX>
+        <locationY>536</locationY>
+        <assignmentItems>
+            <assignToReference>varHouseholdSize</assignToReference>
+            <operator>Assign</operator>
+            <value><elementReference>Input_HouseholdSize</elementReference></value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Step3_Inquiry_Details</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Step3</name>
+        <label>Capture Description</label>
+        <locationX>176</locationX>
+        <locationY>804</locationY>
+        <assignmentItems>
+            <assignToReference>varDescription</assignToReference>
+            <operator>Assign</operator>
+            <value><elementReference>Input_Description</elementReference></value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Create_Lead</targetReference>
+        </connector>
+    </assignments>
+
+    <!-- ── Record Creates ─────────────────────────────────────── -->
     <recordCreates>
         <name>Create_Lead</name>
         <label>Create Lead</label>
         <locationX>176</locationX>
-        <locationY>536</locationY>
+        <locationY>938</locationY>
         <connector>
             <targetReference>Create_Case</targetReference>
         </connector>
         <inputAssignments>
             <field>FirstName</field>
-            <value><elementReference>Step1_Personal_Info.Input_FirstName</elementReference></value>
+            <value><elementReference>varFirstName</elementReference></value>
         </inputAssignments>
         <inputAssignments>
             <field>LastName</field>
-            <value><elementReference>Step1_Personal_Info.Input_LastName</elementReference></value>
+            <value><elementReference>varLastName</elementReference></value>
         </inputAssignments>
         <inputAssignments>
             <field>Email</field>
-            <value><elementReference>Step1_Personal_Info.Input_Email</elementReference></value>
+            <value><elementReference>varEmail</elementReference></value>
         </inputAssignments>
         <inputAssignments>
             <field>Phone</field>
-            <value><elementReference>Step1_Personal_Info.Input_Phone</elementReference></value>
+            <value><elementReference>varPhone</elementReference></value>
         </inputAssignments>
         <inputAssignments>
             <field>Company</field>
@@ -169,7 +272,7 @@
         </inputAssignments>
         <inputAssignments>
             <field>Description</field>
-            <value><elementReference>Step3_Inquiry_Details.Input_InquiryDescription</elementReference></value>
+            <value><elementReference>varDescription</elementReference></value>
         </inputAssignments>
         <object>Lead</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -178,7 +281,7 @@
         <name>Create_Case</name>
         <label>Create Housing Case</label>
         <locationX>176</locationX>
-        <locationY>670</locationY>
+        <locationY>1004</locationY>
         <connector>
             <targetReference>Confirmation_Screen</targetReference>
         </connector>
@@ -188,7 +291,7 @@
         </inputAssignments>
         <inputAssignments>
             <field>Description</field>
-            <value><elementReference>Step3_Inquiry_Details.Input_InquiryDescription</elementReference></value>
+            <value><elementReference>varDescription</elementReference></value>
         </inputAssignments>
         <inputAssignments>
             <field>Origin</field>
@@ -200,11 +303,11 @@
         </inputAssignments>
         <inputAssignments>
             <field>SuppliedEmail</field>
-            <value><elementReference>Step1_Personal_Info.Input_Email</elementReference></value>
+            <value><elementReference>varEmail</elementReference></value>
         </inputAssignments>
         <inputAssignments>
             <field>SuppliedName</field>
-            <value><elementReference>Step1_Personal_Info.Input_FirstName</elementReference></value>
+            <value><elementReference>varFirstName</elementReference></value>
         </inputAssignments>
         <object>Case</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
