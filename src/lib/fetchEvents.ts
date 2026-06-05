@@ -1,83 +1,68 @@
+import { getSfToken, invalidateSfToken } from './sfAuth'
 import type { CCOEvent } from './mondayTypes'
 
-const QUERY = `
-  query GetPublicEvents($boardId: ID!, $groupId: String!) {
-    boards(ids: [$boardId]) {
-      groups(ids: [$groupId]) {
-        items_page(limit: 50) {
-          items {
-            id
-            name
-            column_values(ids: [
-              "date_mm3wkeye",
-              "dropdown_mm3wv6ax",
-              "dropdown_mm3w9yyc",
-              "boolean_mm3wsfmn",
-              "long_text_mm3wd4nk"
-            ]) {
-              id
-              text
-              value
-            }
-          }
-        }
-      }
-    }
-  }
-`
+const SOQL = `
+  SELECT Id, Name, Event_Date__c, Location__c, Event_Type__c,
+         CCO_Organization__c, Is_Public__c, Description__c, Status__c
+  FROM Event__c
+  WHERE Is_Public__c = true
+    AND Status__c = 'Approved'
+    AND Event_Date__c >= TODAY
+  ORDER BY Event_Date__c ASC
+  LIMIT 50
+`.trim().replace(/\s+/g, ' ')
 
-function col(columnValues: { id: string; text: string }[], colId: string): string {
-  return columnValues.find(c => c.id === colId)?.text ?? ''
+interface SfEventRecord {
+  Id: string
+  Name: string
+  Event_Date__c: string | null
+  Location__c: string | null
+  Event_Type__c: string | null
+  CCO_Organization__c: string | null
+  Is_Public__c: boolean
+  Description__c: string | null
+  Status__c: string | null
 }
 
 export async function fetchPublicEvents(): Promise<CCOEvent[]> {
-  const apiKey = process.env.MONDAY_API_KEY
-  const boardId = process.env.MONDAY_EVENTS_BOARD_ID
-  const groupId = process.env.MONDAY_EVENTS_GROUP_ID
-
-  if (!apiKey || !boardId || !groupId) return []
+  let token: string
+  let instanceUrl: string
+  try {
+    ;({ token, instanceUrl } = await getSfToken())
+  } catch {
+    return []
+  }
 
   try {
-    const res = await fetch('https://api.monday.com/v2', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: apiKey,
-        'API-Version': '2023-10',
-      },
-      body: JSON.stringify({
-        query: QUERY,
-        variables: { boardId, groupId },
-      }),
-      next: { revalidate: 300 },
-    })
+    const res = await fetch(
+      `${instanceUrl}/services/data/v66.0/query?q=${encodeURIComponent(SOQL)}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+        next: { revalidate: 300 },
+      }
+    )
+
+    if (res.status === 401) {
+      invalidateSfToken()
+      return []
+    }
 
     if (!res.ok) return []
 
     const json = await res.json()
-    const items: { id: string; name: string; column_values: { id: string; text: string }[] }[] =
-      json?.data?.boards?.[0]?.groups?.[0]?.items_page?.items ?? []
+    const records: SfEventRecord[] = json.records ?? []
 
-    return items
-      .filter(item => {
-        const val = col(item.column_values, 'boolean_mm3wsfmn')
-        return val === 'true' || val === 'v'
-      })
-      .map(item => ({
-        id: item.id,
-        name: item.name,
-        date: col(item.column_values, 'date_mm3wkeye') || null,
-        time: null,
-        organization: col(item.column_values, 'dropdown_mm3wv6ax') || null,
-        eventType: col(item.column_values, 'dropdown_mm3w9yyc') || null,
-        isPublic: true,
-        description: col(item.column_values, 'long_text_mm3wd4nk') || null,
-      }))
-      .sort((a, b) => {
-        if (!a.date) return 1
-        if (!b.date) return -1
-        return new Date(a.date).getTime() - new Date(b.date).getTime()
-      })
+    return records.map(r => ({
+      id: r.Id,
+      name: r.Name,
+      date: r.Event_Date__c ?? null,
+      time: null,
+      organization: r.CCO_Organization__c ?? null,
+      eventType: r.Event_Type__c ?? null,
+      isPublic: r.Is_Public__c,
+      description: r.Description__c ?? null,
+      location: r.Location__c ?? null,
+    }))
   } catch {
     return []
   }

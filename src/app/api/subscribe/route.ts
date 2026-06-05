@@ -1,14 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getSfToken, invalidateSfToken } from '@/lib/sfAuth'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
-const MUTATION = `
-  mutation CreateSubscriber($boardId: ID!, $itemName: String!, $columnValues: JSON!) {
-    create_item(board_id: $boardId, item_name: $itemName, column_values: $columnValues) {
-      id
-    }
-  }
-`
 
 export async function POST(req: NextRequest) {
   const { email, name } = await req.json().catch(() => ({}))
@@ -17,44 +10,45 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid email address' }, { status: 400 })
   }
 
-  const apiKey = process.env.MONDAY_API_KEY
-  const boardId = process.env.MONDAY_SUBSCRIBERS_BOARD_ID
-
-  if (!apiKey || !boardId) {
-    return NextResponse.json({ error: 'Missing configuration' }, { status: 500 })
+  let token: string
+  let instanceUrl: string
+  try {
+    ;({ token, instanceUrl } = await getSfToken())
+  } catch (err) {
+    console.error('SF token error', err)
+    return NextResponse.json({ error: 'Service unavailable' }, { status: 503 })
   }
 
-  const today = new Date().toISOString().split('T')[0]
-  const columnValues = JSON.stringify({
-    email_mm3y7jse: { email, text: email },
-    date_mm3yf68t: { date: today },
-  })
+  const [firstName, ...rest] = (name?.trim() ?? '').split(' ')
+  const lastName = rest.join(' ') || 'Subscriber'
 
-  try {
-    const res = await fetch('https://api.monday.com/v2', {
+  const leadBody = {
+    FirstName: firstName || 'CCO',
+    LastName: lastName,
+    Email: email,
+    LeadSource: 'Web',
+    Company: 'CCO United Subscriber',
+    Description: 'Subscribed to CCO United event updates via public site.',
+  }
+
+  const sfRes = await fetch(
+    `${instanceUrl}/services/data/v66.0/sobjects/Lead`,
+    {
       method: 'POST',
       headers: {
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        Authorization: apiKey,
-        'API-Version': '2023-10',
       },
-      body: JSON.stringify({
-        query: MUTATION,
-        variables: {
-          boardId,
-          itemName: name?.trim() || email,
-          columnValues,
-        },
-      }),
-    })
-
-    const json = await res.json()
-    if (json?.errors?.length) {
-      return NextResponse.json({ error: 'Failed to subscribe' }, { status: 500 })
+      body: JSON.stringify(leadBody),
     }
+  )
 
-    return NextResponse.json({ ok: true })
-  } catch {
+  if (!sfRes.ok) {
+    const err = await sfRes.text()
+    console.error('SF Lead create error', err)
+    if (sfRes.status === 401) invalidateSfToken()
     return NextResponse.json({ error: 'Failed to subscribe' }, { status: 500 })
   }
+
+  return NextResponse.json({ ok: true })
 }
