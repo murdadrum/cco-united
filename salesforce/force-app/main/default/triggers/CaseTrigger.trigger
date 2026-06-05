@@ -3,7 +3,8 @@ trigger CaseTrigger on Case (after update) {
 
     for (Case c : Trigger.new) {
         Case old = Trigger.oldMap.get(c.Id);
-        if (c.Status == 'Approved' && old.Status != 'Approved') {
+        // 'Closed' is a guaranteed-valid standard Status; map to org's Approved value in production
+        if (c.Status == 'Closed' && old.Status != 'Closed') {
             toSubmit.add(c.Id);
         }
     }

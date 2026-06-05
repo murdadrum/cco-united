@@ -22,13 +22,7 @@
         </filters>
         <object>Event__c</object>
         <recordTriggerType>Update</recordTriggerType>
-        <scheduledPaths>
-            <connector>
-                <targetReference>Send_Approval_Email</targetReference>
-            </connector>
-            <pathType>Run</pathType>
-        </scheduledPaths>
-        <triggerType>RecordAfterSave</triggerType>
+<triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
 

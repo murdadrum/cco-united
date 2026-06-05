@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>62.0</apiVersion>
-    <description>Guided 3-step housing inquiry intake. Collects applicant info, creates a Lead, then creates a housing assistance Case linked to that Lead.</description>
+    <description>Guided 3-step housing inquiry intake. Collects applicant info, creates a Lead, then creates a housing assistance Case.</description>
     <label>Housing Inquiry Intake</label>
     <processMetadataValues>
         <name>BuilderType</name>
@@ -17,7 +17,7 @@
     </start>
     <status>Active</status>
 
-    <!-- ── Variables ─────────────────────────────────────────── -->
+    <!-- ── Variables (all grouped) ───────────────────────────── -->
     <variables>
         <name>varFirstName</name>
         <dataType>String</dataType>
@@ -75,7 +75,7 @@
         <isOutput>true</isOutput>
     </variables>
 
-    <!-- ── Step 1: Personal Information ─────────────────────── -->
+    <!-- ── Screens (all grouped) ─────────────────────────────── -->
     <screens>
         <name>Step1_Personal_Info</name>
         <label>Step 1 of 3 — Personal Information</label>
@@ -139,8 +139,6 @@
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
     </screens>
-
-    <!-- ── Step 2: Household Details ─────────────────────────── -->
     <screens>
         <name>Step2_Household_Details</name>
         <label>Step 2 of 3 — Household Details</label>
@@ -171,8 +169,6 @@
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
     </screens>
-
-    <!-- ── Step 3: Inquiry Description ───────────────────────── -->
     <screens>
         <name>Step3_Inquiry_Details</name>
         <label>Step 3 of 3 — Describe Your Need</label>
@@ -203,8 +199,24 @@
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
     </screens>
+    <screens>
+        <name>Confirmation_Screen</name>
+        <label>Submitted Successfully</label>
+        <locationX>176</locationX>
+        <locationY>804</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Confirmation_Text</name>
+            <fieldText>&lt;h2&gt;Wado! Your inquiry has been submitted.&lt;/h2&gt;&lt;p&gt;A CCO United housing specialist will contact you at {!varEmail} within 3–5 business days.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
 
-    <!-- ── Create Lead ────────────────────────────────────────── -->
+    <!-- ── Record Creates (all grouped) ──────────────────────── -->
     <recordCreates>
         <name>Create_Lead</name>
         <label>Create Lead</label>
@@ -244,8 +256,6 @@
         <object>Lead</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
-
-    <!-- ── Create Case ────────────────────────────────────────── -->
     <recordCreates>
         <name>Create_Case</name>
         <label>Create Housing Case</label>
@@ -281,23 +291,5 @@
         <object>Case</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
-
-    <!-- ── Confirmation Screen ────────────────────────────────── -->
-    <screens>
-        <name>Confirmation_Screen</name>
-        <label>Submitted Successfully</label>
-        <locationX>176</locationX>
-        <locationY>804</locationY>
-        <allowBack>false</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>false</allowPause>
-        <fields>
-            <name>Confirmation_Text</name>
-            <fieldText>&lt;h2&gt;Wado! Your inquiry has been submitted.&lt;/h2&gt;&lt;p&gt;A CCO United housing specialist will contact you at {!varEmail} within 3–5 business days.&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-        </fields>
-        <showFooter>true</showFooter>
-        <showHeader>true</showHeader>
-    </screens>
 
 </Flow>

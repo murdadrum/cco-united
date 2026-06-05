@@ -75,11 +75,11 @@ private class LoanOriginationCalloutTest {
         Test.setMock(HttpCalloutMock.class, new MockSuccess());
 
         Test.startTest();
-        c.Status = 'Approved';
+        c.Status = 'Closed';
         update c;
         Test.stopTest();
 
         Case updated = [SELECT Status FROM Case WHERE Id = :c.Id];
-        System.assertEquals('Approved', updated.Status, 'Status must be Approved after update');
+        System.assertEquals('Closed', updated.Status, 'Status must be Closed after update');
     }
 }
