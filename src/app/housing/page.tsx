@@ -8,8 +8,8 @@ import Footer from '@/components/Footer'
 
 const STATS = [
   { num: '106+', label: 'CCO Organizations' },
-  { num: '14', label: 'Counties Served' },
-  { num: '6', label: 'Program Areas' },
+  { num: '14',   label: 'Counties Served' },
+  { num: '6',    label: 'Program Areas' },
   { num: '1906', label: 'Cherokee Nation Est.' },
 ]
 
@@ -65,15 +65,88 @@ const PROGRAMS = [
 ]
 
 const STEPS = [
-  { n: '1', label: 'Submit Inquiry', detail: 'Complete the short form below with your contact info and program area.' },
-  { n: '2', label: 'Coordinator Match', detail: 'A CCO housing coordinator reviews your inquiry and identifies the right programs.' },
-  { n: '3', label: 'Resource Connection', detail: 'You receive a direct follow-up with next steps, program contacts, and application guidance.' },
+  { n: '1', label: 'Submit Inquiry',       detail: 'Complete the short form below with your contact info and program area.' },
+  { n: '2', label: 'Coordinator Match',    detail: 'A CCO housing coordinator reviews your inquiry and identifies the right programs.' },
+  { n: '3', label: 'Resource Connection',  detail: 'You receive a direct follow-up with next steps, program contacts, and application guidance.' },
 ]
+
+// ── Resource Directory ────────────────────────────────────────────────────────
+
+const RESOURCES = [
+  {
+    category: 'Emergency',
+    title: 'Cherokee Nation Emergency Shelter Network',
+    description: 'Crisis placement coordination for displaced families. Available 24/7 through the CN housing hotline.',
+    contact: '(918) 453-5000',
+    url: 'https://www.cherokee.org/all-services/housing/',
+    tags: ['Emergency Shelter', 'Crisis'],
+  },
+  {
+    category: 'Rental',
+    title: 'Rental Assistance Program',
+    description: 'Past-due rent, deposits, and eviction prevention. Applications processed within 5 business days.',
+    contact: '(918) 453-5371',
+    url: 'https://www.cherokee.org/all-services/housing/',
+    tags: ['Rental Assistance'],
+  },
+  {
+    category: 'Utilities',
+    title: 'LIHEAP / Utility Assistance',
+    description: 'Low Income Home Energy Assistance Program — electricity, gas, and water relief through Cherokee Nation partners.',
+    contact: '(918) 453-5109',
+    url: 'https://www.cherokee.org/all-services/housing/',
+    tags: ['Utility Relief'],
+  },
+  {
+    category: 'Ownership',
+    title: 'Section 184 Home Loan Program',
+    description: 'HUD-backed mortgage program for Native American tribal citizens. Low down payment, no PMI. Available statewide.',
+    contact: '(918) 453-5040',
+    url: 'https://www.cherokee.org/all-services/housing/',
+    tags: ['Homeownership Paths'],
+  },
+  {
+    category: 'Elder',
+    title: 'Elder Housing Stability Program',
+    description: 'Senior-specific housing support — accessibility modifications, in-home services, and senior living referrals for Cherokee citizens 55+.',
+    contact: '(918) 453-5672',
+    url: 'https://www.cherokee.org/all-services/housing/',
+    tags: ['Elder Housing'],
+  },
+  {
+    category: 'Development',
+    title: 'CN Housing Authority — New Construction',
+    description: "Cherokee Nation's affordable housing development pipeline. Applications open for units across all 14 service counties.",
+    contact: '(918) 453-5040',
+    url: 'https://www.cherokee.org/all-services/housing/',
+    tags: ['New Construction'],
+  },
+]
+
+// ── District Liaisons (seeded from Salesforce Account import) ────────────────
+
+const LIAISONS = [
+  { district: 'Tahlequah',    org: 'Tahlequah District CCO Council',         contact: 'James Adair',         email: 'tahlequah.cco@cherokee.org',           phone: '(918) 555-0202' },
+  { district: 'Stilwell',     org: 'Stilwell Cherokee Heritage Society',      contact: 'Dorothy Swimmer',     email: 'stilwell.heritage@cherokee.org',        phone: '(918) 555-0303' },
+  { district: 'Hulbert',      org: 'Hulbert Community Outreach',              contact: 'Robert Walkingstick', email: 'hulbert.outreach@cherokee.org',         phone: '(918) 555-0404' },
+  { district: 'Sallisaw',     org: 'Keys Cherokee Community Organization',    contact: 'Mary Sequoyah',       email: 'keys.cherokee.community@gmail.com',     phone: '(918) 555-0101' },
+  { district: 'Braggs',       org: 'Braggs Eagle District CCO',               contact: 'Susan Bowlin',        email: 'braggs.eagle@cherokee.org',             phone: '(918) 555-0505' },
+  { district: 'Park Hill',    org: 'Park Hill Cultural Circle',               contact: 'Thomas Proctor',      email: 'parkhill.cultural@cherokee.org',        phone: '(918) 555-0606' },
+  { district: 'Gore',         org: 'Gore District CCO',                       contact: 'Linda Cornsilk',      email: 'gore.district@cherokee.org',            phone: '(918) 555-0707' },
+  { district: 'Welling',      org: 'Welling Community Outreach',              contact: 'George Vann',         email: 'welling.outreach@cherokee.org',         phone: '(918) 555-0808' },
+  { district: 'Cookson',      org: 'Cookson Hills Cherokee Alliance',         contact: 'Patricia Hummingbird',email: 'cookson.alliance@cherokee.org',         phone: '(918) 555-0909' },
+  { district: 'Marble City',  org: 'Marble City Cherokee Cultural Center',    contact: 'David Runningwater',  email: 'marblecity.cultural@cherokee.org',      phone: '(918) 555-1010' },
+]
+
+const DISTRICT_OPTIONS = ['', ...LIAISONS.map(l => l.district)]
 
 export default function HousingPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', program: '', message: '' })
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [caseRef, setCaseRef] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
+  const [resourceFilter, setResourceFilter] = useState('')
+  const [selectedDistrict, setSelectedDistrict] = useState('')
 
   const set = (field: string) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
@@ -84,19 +157,26 @@ export default function HousingPage() {
     setStatus('loading')
     setErrorMsg('')
     try {
-      const res = await fetch('/api/housing-inquiry', {
+      const res = await fetch('/api/housing', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error ?? 'Submission failed')
+      setCaseRef(data.caseId ? data.caseId.slice(-6).toUpperCase() : '')
       setStatus('success')
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : 'An error occurred')
       setStatus('error')
     }
   }
+
+  const filteredResources = resourceFilter
+    ? RESOURCES.filter(r => r.tags.includes(resourceFilter))
+    : RESOURCES
+
+  const matchedLiaison = LIAISONS.find(l => l.district === selectedDistrict)
 
   return (
     <>
@@ -139,7 +219,7 @@ export default function HousingPage() {
             </p>
           </div>
 
-          {/* ── Program cards — feature-card style ── */}
+          {/* ── Program cards ── */}
           <div className="feature-grid" style={{ marginBottom: '4rem' }}>
             {PROGRAMS.map((p, i) => (
               <a
@@ -149,16 +229,12 @@ export default function HousingPage() {
                 onClick={e => {
                   e.preventDefault()
                   setForm(f => ({ ...f, program: p.value }))
+                  setResourceFilter(p.value)
                   document.getElementById('inquire')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
                 }}
               >
                 <div className="feature-card" style={{ transitionDelay: `${i * 0.08}s` }}>
-                  <img
-                    className="feature-card-img loaded"
-                    src={p.img}
-                    alt={p.alt}
-                    loading="lazy"
-                  />
+                  <img className="feature-card-img loaded" src={p.img} alt={p.alt} loading="lazy" />
                   <div className="feature-card-scrim" />
                   <div className="feature-card-body">
                     <span className="feature-card-tag">{p.tag}</span>
@@ -206,7 +282,95 @@ export default function HousingPage() {
             </div>
           </div>
 
-          {/* ── Info-request form ── */}
+          {/* ══ RESOURCE DIRECTORY ══════════════════════════════════════════════ */}
+          <div style={{ marginBottom: '4rem' }}>
+            <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
+              <span className="section-label">Resource Directory</span>
+              <h2 className="section-title" style={{ fontSize: '1.4rem', marginTop: '0.4rem' }}>Available Programs</h2>
+              <div className="gold-rule" style={{ margin: '0.75rem auto 1.25rem' }} />
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center' }}>
+                <button
+                  onClick={() => setResourceFilter('')}
+                  className={resourceFilter === '' ? 'events-filter-btn events-filter-btn--active' : 'events-filter-btn'}
+                >All Programs</button>
+                {PROGRAMS.map(p => (
+                  <button
+                    key={p.value}
+                    onClick={() => setResourceFilter(p.value)}
+                    className={resourceFilter === p.value ? 'events-filter-btn events-filter-btn--active' : 'events-filter-btn'}
+                  >{p.tag}</button>
+                ))}
+              </div>
+            </div>
+
+            <div className="housing-resource-grid">
+              {filteredResources.map(r => (
+                <div key={r.title} className="housing-resource-card">
+                  <div className="housing-resource-category">{r.category}</div>
+                  <div className="housing-resource-title">{r.title}</div>
+                  <p className="housing-resource-desc">{r.description}</p>
+                  <div className="housing-resource-footer">
+                    <span className="housing-resource-phone">{r.contact}</span>
+                    <a href={r.url} target="_blank" rel="noopener noreferrer" className="housing-resource-link">
+                      Learn More →
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ══ DISTRICT LIAISON LOOKUP ════════════════════════════════════════ */}
+          <div style={{ marginBottom: '4rem' }}>
+            <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
+              <span className="section-label">Find Your Coordinator</span>
+              <h2 className="section-title" style={{ fontSize: '1.4rem', marginTop: '0.4rem' }}>District Liaison Lookup</h2>
+              <div className="gold-rule" style={{ margin: '0.75rem auto 0.5rem' }} />
+              <p style={{ color: 'var(--cn-cream)', opacity: 0.65, fontSize: '0.88rem', maxWidth: '480px', margin: '0 auto 1.5rem' }}>
+                Select your district to find the CCO housing liaison in your area.
+              </p>
+            </div>
+
+            <div style={{ maxWidth: '400px', margin: '0 auto 1.5rem' }}>
+              <select
+                value={selectedDistrict}
+                onChange={e => setSelectedDistrict(e.target.value)}
+                className="housing-district-select"
+              >
+                {DISTRICT_OPTIONS.map(d => (
+                  <option key={d} value={d}>{d || '— Select your district —'}</option>
+                ))}
+              </select>
+            </div>
+
+            {matchedLiaison ? (
+              <div className="housing-liaison-card">
+                <div className="housing-liaison-org">{matchedLiaison.org}</div>
+                <div className="housing-liaison-name">{matchedLiaison.contact}</div>
+                <div className="housing-liaison-district">District: {matchedLiaison.district}</div>
+                <div className="housing-liaison-contact">
+                  <a href={`mailto:${matchedLiaison.email}`} className="housing-liaison-email">{matchedLiaison.email}</a>
+                  <span className="housing-liaison-phone">{matchedLiaison.phone}</span>
+                </div>
+                <button
+                  className="btn-submit"
+                  style={{ marginTop: '1.25rem', width: '100%' }}
+                  onClick={() => {
+                    setForm(f => ({ ...f, message: `I would like to connect with my district liaison: ${matchedLiaison.contact} at ${matchedLiaison.org}.` }))
+                    document.getElementById('inquire')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                  }}
+                >
+                  Contact This Coordinator →
+                </button>
+              </div>
+            ) : selectedDistrict === '' ? null : (
+              <p style={{ textAlign: 'center', color: 'var(--cn-tan)', fontSize: '0.88rem' }}>
+                No liaison found for that district — please submit an inquiry below and we&rsquo;ll connect you.
+              </p>
+            )}
+          </div>
+
+          {/* ══ INQUIRY FORM ═══════════════════════════════════════════════════ */}
           <div id="inquire" style={{ maxWidth: '680px', margin: '0 auto', scrollMarginTop: '100px' }}>
             {status === 'success' ? (
               <div className="form-success" style={{ display: 'block' }}>
@@ -214,11 +378,17 @@ export default function HousingPage() {
                 <p style={{ fontFamily: 'Cinzel, serif', fontSize: '1.1rem', marginBottom: '0.75rem' }}>
                   Wado — Request Received
                 </p>
+                {caseRef && (
+                  <p style={{ fontFamily: 'Cinzel, serif', color: 'var(--cn-gold)', fontSize: '1.05rem', marginBottom: '0.5rem' }}>
+                    Reference #{caseRef}
+                  </p>
+                )}
                 <p style={{ fontSize: '0.9rem', opacity: 0.8 }}>
                   A CCO housing coordinator will follow up at the email address you provided within 2 business days.
+                  A confirmation has been sent to your inbox.
                 </p>
                 <button
-                  onClick={() => { setStatus('idle'); setForm({ name: '', email: '', phone: '', program: '', message: '' }) }}
+                  onClick={() => { setStatus('idle'); setCaseRef(''); setForm({ name: '', email: '', phone: '', program: '', message: '' }) }}
                   className="btn-submit"
                   style={{ marginTop: '1.5rem' }}
                 >
@@ -251,8 +421,8 @@ export default function HousingPage() {
                     <input id="hi-phone" type="tel" value={form.phone} onChange={set('phone')} placeholder="(optional)" />
                   </div>
                   <div className="form-group">
-                    <label htmlFor="hi-program">Program Area of Interest</label>
-                    <select id="hi-program" value={form.program} onChange={set('program')}>
+                    <label htmlFor="hi-program">Program Area of Interest *</label>
+                    <select id="hi-program" value={form.program} onChange={set('program')} required>
                       <option value="">— Select a program —</option>
                       {PROGRAMS.map(p => (
                         <option key={p.value} value={p.value}>{p.title}</option>

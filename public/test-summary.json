@@ -1,0 +1,100 @@
+{
+  "generatedAt": "2026-06-05T15:10:47.683Z",
+  "totalTests": 73,
+  "totalPass": 51,
+  "totalFail": 22,
+  "totalSkip": 0,
+  "passRate": 70,
+  "suites": [
+    {
+      "suite": "Playwright — Ali Chat",
+      "file": "ali-chat.spec.ts",
+      "count": 5,
+      "pass": 2,
+      "fail": 3,
+      "skip": 0,
+      "area": "Alisdelisgi Chat",
+      "description": ""
+    },
+    {
+      "suite": "Playwright — Contact Form",
+      "file": "contact-form.spec.ts",
+      "count": 5,
+      "pass": 2,
+      "fail": 3,
+      "skip": 0,
+      "area": "Contact Form",
+      "description": ""
+    },
+    {
+      "suite": "Playwright — Events",
+      "file": "events.spec.ts",
+      "count": 5,
+      "pass": 5,
+      "fail": 0,
+      "skip": 0,
+      "area": "Events",
+      "description": ""
+    },
+    {
+      "suite": "Playwright — Negative",
+      "file": "negative.spec.ts",
+      "count": 36,
+      "pass": 23,
+      "fail": 13,
+      "skip": 0,
+      "area": "Negative / Security",
+      "description": ""
+    },
+    {
+      "suite": "Playwright — Smoke",
+      "file": "smoke.spec.ts",
+      "count": 11,
+      "pass": 11,
+      "fail": 0,
+      "skip": 0,
+      "area": "Navigation",
+      "description": ""
+    },
+    {
+      "suite": "Playwright — Submit Event",
+      "file": "submit-event.spec.ts",
+      "count": 4,
+      "pass": 1,
+      "fail": 3,
+      "skip": 0,
+      "area": "Events",
+      "description": ""
+    },
+    {
+      "suite": "Apex — HelloWorld",
+      "file": "salesforce/force-app/main/default/classes/HelloWorldTest.cls",
+      "count": 1,
+      "area": "Salesforce",
+      "description": "Basic Apex class sanity check",
+      "pass": 1,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "suite": "Apex — EventController",
+      "file": "salesforce/force-app/main/default/classes/EventControllerTest.cls",
+      "count": 2,
+      "area": "Salesforce",
+      "description": "SOQL returns only future public approved events, excludes past/private",
+      "pass": 2,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "suite": "Apex — LoanOrigination",
+      "file": "salesforce/force-app/main/default/classes/LoanOriginationCalloutTest.cls",
+      "count": 4,
+      "area": "Salesforce",
+      "description": "Mock HTTP 201 success, 500 error handling, trigger coverage, payload structure",
+      "pass": 4,
+      "fail": 0,
+      "skip": 0
+    }
+  ]
+}

@@ -3198,10 +3198,168 @@ body.light .event-detail-description {
 }
   
 /* ── Test Status Dashboard ─────────────────────────────────────── */
+/* ── Housing Resource Directory ─────────────────────────────────────────── */
+.housing-resource-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.housing-resource-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  transition: border-color .2s, transform .2s;
+}
+.housing-resource-card:hover {
+  border-color: rgba(200,150,12,.3);
+  transform: translateY(-2px);
+}
+
+.housing-resource-category {
+  font-family: 'Cinzel', serif;
+  font-size: .68rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--cn-gold);
+}
+
+.housing-resource-title {
+  font-family: 'Cinzel', serif;
+  font-size: .88rem;
+  color: var(--cn-cream);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.housing-resource-desc {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: .83rem;
+  color: var(--cn-tan);
+  line-height: 1.6;
+  flex: 1;
+}
+
+.housing-resource-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: .5rem;
+  padding-top: .75rem;
+  border-top: 1px solid rgba(255,255,255,.06);
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+
+.housing-resource-phone {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: .78rem;
+  color: var(--cn-cream);
+  opacity: .7;
+}
+
+.housing-resource-link {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: .78rem;
+  color: var(--cn-gold);
+  text-decoration: none;
+  font-weight: 600;
+}
+.housing-resource-link:hover { color: var(--cn-gold-light); }
+
+/* ── District Liaison ─────────────────────────────────────────────────────── */
+.housing-district-select {
+  width: 100%;
+  padding: .75rem 1rem;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 6px;
+  color: var(--cn-cream);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: .95rem;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C8960C' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+}
+.housing-district-select:focus { outline: none; border-color: var(--cn-gold); }
+.housing-district-select option { background: #1A0F0A; }
+
+.housing-liaison-card {
+  max-width: 480px;
+  margin: 0 auto;
+  background: rgba(200,150,12,.06);
+  border: 1px solid rgba(200,150,12,.25);
+  border-radius: 10px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.housing-liaison-org {
+  font-family: 'Cinzel', serif;
+  font-size: .82rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--cn-gold);
+  margin-bottom: .35rem;
+}
+
+.housing-liaison-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.15rem;
+  color: var(--cn-cream);
+  font-weight: 600;
+  margin-bottom: .2rem;
+}
+
+.housing-liaison-district {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: .82rem;
+  color: var(--cn-tan);
+  margin-bottom: 1rem;
+}
+
+.housing-liaison-contact {
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+  align-items: center;
+}
+
+.housing-liaison-email {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: .88rem;
+  color: var(--cn-gold);
+  text-decoration: none;
+}
+.housing-liaison-email:hover { color: var(--cn-gold-light); }
+
+.housing-liaison-phone {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: .85rem;
+  color: var(--cn-cream);
+  opacity: .7;
+}
+
+@media (max-width: 860px) {
+  .housing-resource-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 560px) {
+  .housing-resource-grid { grid-template-columns: 1fr; }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
 .tests-page {
   min-height: 100vh;
   background: var(--cn-dark);
   color: var(--cn-cream);
+  padding-top: 80px;
 }
 
 .tests-summary {
@@ -3356,12 +3514,149 @@ body.light .event-detail-description {
   border-top: 1px solid rgba(200,150,12,.2);
 }
 
-@media (max-width: 768px) {
-  .test-repo-grid { grid-template-columns: 1fr; }
+/* ── Stat Cards ── */
+.tests-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem;
+  margin-bottom: .5rem;
+}
 
-  .test-run-row {
-    grid-template-columns: 56px 1fr 56px;
-  }
+.tests-stat-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px;
+  padding: 1.5rem 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .35rem;
+  text-align: center;
+  transition: transform .15s;
+}
+.tests-stat-card:hover { transform: translateY(-2px); }
+
+.tests-stat-card--green { border-color: rgba(74,124,89,.4); background: rgba(74,124,89,.08); }
+.tests-stat-card--gold  { border-color: rgba(200,150,12,.35); background: rgba(200,150,12,.07); }
+.tests-stat-card--blue  { border-color: rgba(44,95,122,.4);  background: rgba(44,95,122,.08); }
+.tests-stat-card--red   { border-color: rgba(139,26,26,.5);  background: rgba(139,26,26,.1);  }
+
+.tests-stat-number {
+  font-family: 'Cinzel', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--cn-cream);
+  line-height: 1;
+}
+.tests-stat-label {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: .72rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--cn-tan);
+}
+
+/* ── Charts Grid ── */
+.tests-charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.tests-chart-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px;
+  padding: 1.5rem;
+}
+
+.tests-chart-card--center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tests-chart-title {
+  font-family: 'Cinzel', serif;
+  font-size: .78rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--cn-gold);
+  margin-bottom: 1rem;
+}
+
+/* Donut */
+.tests-donut-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Legend */
+.tests-donut-legend,
+.tests-layer-legend {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  width: 100%;
+}
+
+.tests-legend-row {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: .8rem;
+}
+
+.tests-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tests-legend-label {
+  color: var(--cn-cream);
+  flex: 1;
+}
+
+.tests-legend-pct {
+  color: var(--cn-gold);
+  font-weight: 700;
+  font-size: .78rem;
+  min-width: 28px;
+  text-align: right;
+}
+
+/* Gauge sub-labels */
+.tests-gauge-sub {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: .82rem;
+  margin-top: .5rem;
+}
+.tests-gauge-pass { color: #4A7C59; font-weight: 600; }
+.tests-gauge-fail { color: #8B1A1A; font-weight: 600; }
+
+.tests-layer-legend {
+  margin-top: .75rem;
+  width: 100%;
+  max-width: 200px;
+}
+
+@media (max-width: 1100px) {
+  .tests-charts-grid { grid-template-columns: 1fr 1fr; }
+  .tests-stat-grid   { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .test-repo-grid    { grid-template-columns: 1fr; }
+  .tests-charts-grid { grid-template-columns: 1fr; }
+  .tests-stat-grid   { grid-template-columns: repeat(2, 1fr); }
+
+  .test-run-row { grid-template-columns: 56px 1fr 56px; }
   .test-run-commit { display: none; }
 
   .test-inventory-row,

@@ -14,6 +14,10 @@ salesforce/server.key
 # Playwright BDD generated specs
 .features-gen/
 
+# Playwright raw test output (ephemeral — summary is in public/test-summary.json)
+test-results/
+playwright-report/
+
 # SFDX root cache
 .sfdx/
 salesforce/.sf/
