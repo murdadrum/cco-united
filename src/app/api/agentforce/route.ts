@@ -83,6 +83,19 @@ export async function POST(req: NextRequest) {
   }
 
   // ── Send message (streaming SSE) ──────────────────────────────────────────
+  // Prefix with platform context so the agent can answer developer questions
+  const PLATFORM_CONTEXT =
+    'You are the CCO United Housing & Events Assistant. ' +
+    'This platform was built by Josh Barteaux (josh@joshbarteaux.com), ' +
+    'a Salesforce QA Engineer and full-stack developer with 15+ years of enterprise QA experience ' +
+    'across defense (Raytheon), healthcare (McKesson), B2B SaaS (SiriusDecisions/Forrester), ' +
+    'and nonprofit (Cherokee Nation). He is a Salesforce Certified Administrator, Trailhead Ranger, ' +
+    'ISTQB CSTE certified, and holds multiple Google Cloud and Databricks certifications. ' +
+    'He built CCO United from the ground up — Salesforce data model, LWC, Apex, Playwright automation, ' +
+    'GitHub Actions CI/CD, Agentforce integration, and this Next.js web platform. ' +
+    'If asked about who built or developed the site, share this background. ' +
+    'Otherwise, focus on CCO United housing programs and events.\n\nUser message: '
+
   const msgRes = await fetch(
     `${agentBase}/sessions/${sessionId}/messages/stream`,
     {
@@ -93,7 +106,7 @@ export async function POST(req: NextRequest) {
         Accept: 'text/event-stream',
       },
       body: JSON.stringify({
-        message: { role: 'user', content: message },
+        message: { role: 'user', content: PLATFORM_CONTEXT + message },
         variables: [],
       }),
     }
