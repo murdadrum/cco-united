@@ -38,8 +38,10 @@ jobs:
         run: npm install --global @salesforce/cli
 
       - name: Authenticate (JWT)
+        env:
+          SF_JWT_KEY: ${{ secrets.SF_JWT_KEY }}
         run: |
-          echo "${{ secrets.SF_JWT_KEY }}" > server.key
+          printf '%s\n' "$SF_JWT_KEY" > server.key
           sf org login jwt \
             --client-id ${{ secrets.SF_CLIENT_ID }} \
             --jwt-key-file server.key \
