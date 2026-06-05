@@ -48,13 +48,13 @@ test.describe('Building section', () => {
   test('feature cards are present', async ({ page }) => {
     await page.goto('/')
     const cards = page.locator('.feature-card')
-    await expect(cards).toHaveCount(7)
+    await expect(cards).toHaveCount(9)
   })
 
   test('each feature card has a CTA', async ({ page }) => {
     await page.goto('/')
     const ctas = page.locator('.feature-card-cta')
-    await expect(ctas).toHaveCount(7)
+    await expect(ctas).toHaveCount(9)
   })
 
   test('Alisdelisgi spotlight is visible', async ({ page }) => {
