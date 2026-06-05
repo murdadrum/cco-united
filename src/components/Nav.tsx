@@ -94,6 +94,9 @@ export default function Nav() {
           <Link href="/events" className={pathname.startsWith('/events') ? 'nav-active' : ''}>
             Events
           </Link>
+          <Link href="/tests" className={pathname.startsWith('/tests') ? 'nav-active' : ''}>
+            Tests
+          </Link>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <a href={navHref('get-involved')} className="btn-nav">Request Access</a>
@@ -132,6 +135,13 @@ export default function Nav() {
             onClick={close}
           >
             Events
+          </Link>
+          <Link
+            href="/tests"
+            className={pathname.startsWith('/tests') ? 'nav-active' : ''}
+            onClick={close}
+          >
+            Tests
           </Link>
           <a href={navHref('get-involved')} className="btn-nav nav-flyout-cta" onClick={close}>
             Request Access
