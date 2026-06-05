@@ -9,7 +9,10 @@ public with sharing class EventController {
                    Location__c,
                    Event_Type__c,
                    Description__c,
-                   CCO_Organization__c
+                   CCO_Organization__c,
+                   Is_Public__c,
+                   Status__c,
+                   Monday_Item_Id__c
             FROM Event__c
             WHERE Is_Public__c = true
               AND Status__c    = 'Approved'
