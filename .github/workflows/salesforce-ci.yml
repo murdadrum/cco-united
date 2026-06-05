@@ -1,4 +1,4 @@
-# Salesforce CI — JWT auth via orgfarm Connected App (cert updated 2026-06-05)
+# Salesforce CI — JWT auth via orgfarm Connected App (cert updated 2026-06-05, pre-auth set)
 name: Salesforce CI
 
 on:
