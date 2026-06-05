@@ -8,6 +8,7 @@ Given('I am on the events page', async ({ page }) => {
 });
 
 Then('I should see the events grid container', async ({ page }) => {
-  // Grid renders even when empty (API key missing in CI shows empty state alongside grid)
-  await expect(page.locator('.events-grid, .events-empty').first()).toBeVisible();
+  // Wait for EventsClient to hydrate (controls always mount first)
+  await expect(page.locator('.events-controls')).toBeVisible();
+  await expect(page.locator('.events-grid, .events-list, .events-empty').first()).toBeVisible({ timeout: 10000 });
 });
