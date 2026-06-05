@@ -1,0 +1,84 @@
+.cco-event-list {
+    font-family: 'Source Sans 3', sans-serif;
+    padding: 1.5rem;
+}
+
+.cco-section-title {
+    font-family: Cinzel, serif;
+    font-size: 1.4rem;
+    color: #8B1A1A;
+    margin-bottom: 1.25rem;
+    border-bottom: 2px solid #C8960C;
+    padding-bottom: 0.5rem;
+}
+
+.cco-event-cards {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+}
+
+.cco-event-card {
+    background: #fff;
+    border: 1px solid #e8dfd0;
+    border-left: 4px solid #C8960C;
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    transition: box-shadow 0.18s ease;
+}
+
+.cco-event-card:hover {
+    box-shadow: 0 4px 16px rgba(139, 26, 26, 0.1);
+}
+
+.cco-event-type {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #8B1A1A;
+    margin-bottom: 0.3rem;
+}
+
+.cco-event-name {
+    font-family: Cinzel, serif;
+    font-size: 1rem;
+    color: #1A0F0A;
+    margin: 0 0 0.35rem;
+}
+
+.cco-event-meta {
+    font-size: 0.85rem;
+    color: #6B4226;
+    margin-bottom: 0.25rem;
+}
+
+.cco-event-sep {
+    margin: 0 0.4rem;
+    opacity: 0.5;
+}
+
+.cco-event-org {
+    font-size: 0.8rem;
+    color: #4A5E3A;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+
+.cco-event-desc {
+    font-size: 0.85rem;
+    color: #555;
+    line-height: 1.55;
+    margin: 0;
+}
+
+.cco-loading,
+.cco-error,
+.cco-empty {
+    text-align: center;
+    padding: 2rem;
+    color: #6B4226;
+    font-size: 0.9rem;
+}

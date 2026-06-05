@@ -1,0 +1,18 @@
+-- cco_registry_active.soql
+-- Returns all active CCO organizations from the Master CCO Registry.
+-- Used for directory lookups, dropdown population, and reporting.
+SELECT
+    Id,
+    Name,
+    CCO_Status__c,
+    CCO_Contact_Name__c,
+    CCO_Contact_Email__c,
+    Phone,
+    Website,
+    CCO_Member_Since__c,
+    Description,
+    Monday_Board_Id__c
+FROM Account
+WHERE CCO_Status__c = 'Active'
+ORDER BY Name ASC
+LIMIT 200

@@ -1,0 +1,523 @@
+{
+  "info": {
+    "name": "CCO United — Salesforce Integration",
+    "description": "API contract tests for the Monday.com → Salesforce ETL integration powering CCO United. Covers Event__c (custom object), Account (CCO Registry), Case (Housing Inquiry), and Lead (Subscriber) objects via the Salesforce REST API.\n\nAuth: OAuth 2.0 username+password flow. Set credentials in the matching environment file. The pre-request script in each folder automatically fetches and caches the access token.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "ccou-sf-integration-v1"
+  },
+  "variable": [],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{sf_access_token}}", "type": "string" }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Skip auth refresh if token is still valid (cached within this run)",
+          "if (pm.collectionVariables.get('sf_access_token')) return;",
+          "",
+          "const tokenUrl = pm.environment.get('sf_login_url') + '/services/oauth2/token';",
+          "pm.sendRequest({",
+          "  url: tokenUrl,",
+          "  method: 'POST',",
+          "  header: { 'Content-Type': 'application/x-www-form-urlencoded' },",
+          "  body: {",
+          "    mode: 'urlencoded',",
+          "    urlencoded: [",
+          "      { key: 'grant_type',    value: 'password' },",
+          "      { key: 'client_id',     value: pm.environment.get('sf_client_id') },",
+          "      { key: 'client_secret', value: pm.environment.get('sf_client_secret') },",
+          "      { key: 'username',      value: pm.environment.get('sf_username') },",
+          "      { key: 'password',      value: pm.environment.get('sf_password') + pm.environment.get('sf_security_token') }",
+          "    ]",
+          "  }",
+          "}, (err, res) => {",
+          "  if (err || res.code !== 200) {",
+          "    console.error('SF auth failed:', err || res.json());",
+          "    return;",
+          "  }",
+          "  const body = res.json();",
+          "  pm.collectionVariables.set('sf_access_token', body.access_token);",
+          "  pm.environment.set('sf_instance_url', body.instance_url);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "Event__c — CCO Events Calendar",
+      "description": "CRUD operations on the Event__c custom object. Records are ETL-synced from the Monday.com CN Master Events Calendar board (ID: 18415647485).",
+      "item": [
+        {
+          "name": "GET — Upcoming Public Events",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{sf_instance_url}}/services/data/v61.0/query?q=SELECT Id,Name,Event_Date__c,Location__c,Event_Type__c,Description__c,Status__c FROM Event__c WHERE Is_Public__c=true AND Status__c='Approved' AND Event_Date__c>=TODAY ORDER BY Event_Date__c ASC LIMIT 20",
+              "host": ["{{sf_instance_url}}"],
+              "path": ["services", "data", "v61.0", "query"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "SELECT Id,Name,Event_Date__c,Location__c,Event_Type__c,Description__c,Status__c FROM Event__c WHERE Is_Public__c=true AND Status__c='Approved' AND Event_Date__c>=TODAY ORDER BY Event_Date__c ASC LIMIT 20"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns records array', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body).to.have.property('records');",
+                  "  pm.expect(body.records).to.be.an('array');",
+                  "});",
+                  "pm.test('Each event has required fields', () => {",
+                  "  const records = pm.response.json().records;",
+                  "  records.forEach(r => {",
+                  "    pm.expect(r).to.have.property('Name');",
+                  "    pm.expect(r).to.have.property('Event_Date__c');",
+                  "    pm.expect(r).to.have.property('Status__c').that.equals('Approved');",
+                  "  });",
+                  "});",
+                  "// Cache first event ID for downstream requests",
+                  "const records = pm.response.json().records;",
+                  "if (records.length > 0) pm.collectionVariables.set('event_id', records[0].Id);"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "GET — Event by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{sf_instance_url}}/services/data/v61.0/sobjects/Event__c/{{event_id}}",
+              "host": ["{{sf_instance_url}}"],
+              "path": ["services", "data", "v61.0", "sobjects", "Event__c", "{{event_id}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Record matches requested ID', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.Id).to.equal(pm.collectionVariables.get('event_id'));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "POST — Create Event (manual / test data)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Name\": \"[TEST] Postman Created Event\",\n  \"Event_Date__c\": \"2026-09-01T18:00:00.000Z\",\n  \"Location__c\": \"Tahlequah, OK\",\n  \"Event_Type__c\": \"Community Meeting\",\n  \"Is_Public__c\": true,\n  \"Status__c\": \"Pending Review\",\n  \"Description__c\": \"Created via Postman integration test.\",\n  \"Monday_Item_Id__c\": \"POSTMAN_TEST_001\"\n}"
+            },
+            "url": {
+              "raw": "{{sf_instance_url}}/services/data/v61.0/sobjects/Event__c",
+              "host": ["{{sf_instance_url}}"],
+              "path": ["services", "data", "v61.0", "sobjects", "Event__c"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 Created', () => pm.response.to.have.status(201));",
+                  "pm.test('Returns new record ID', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body).to.have.property('id');",
+                  "  pm.expect(body.success).to.be.true;",
+                  "  pm.collectionVariables.set('new_event_id', body.id);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "PATCH — Update Event Status",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Status__c\": \"Approved\"\n}"
+            },
+            "url": {
+              "raw": "{{sf_instance_url}}/services/data/v61.0/sobjects/Event__c/{{new_event_id}}",
+              "host": ["{{sf_instance_url}}"],
+              "path": ["services", "data", "v61.0", "sobjects", "Event__c", "{{new_event_id}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 204 No Content (update succeeded)', () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "DELETE — Cleanup Test Event",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{sf_instance_url}}/services/data/v61.0/sobjects/Event__c/{{new_event_id}}",
+              "host": ["{{sf_instance_url}}"],
+              "path": ["services", "data", "v61.0", "sobjects", "Event__c", "{{new_event_id}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 204 — record deleted', () => pm.response.to.have.status(204));",
+                  "pm.collectionVariables.unset('new_event_id');"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Account — CCO Registry",
+      "description": "Account records represent CCO organizations synced from the Monday.com Master CCO Registry board (ID: 18415645308) via AccountEtl.cls.",
+      "item": [
+        {
+          "name": "GET — Active CCO Organizations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{sf_instance_url}}/services/data/v61.0/query?q=SELECT Id,Name,CCO_Status__c,CCO_Contact_Name__c,CCO_Contact_Email__c,Phone,Website FROM Account WHERE CCO_Status__c='Active' ORDER BY Name ASC LIMIT 50",
+              "host": ["{{sf_instance_url}}"],
+              "path": ["services", "data", "v61.0", "query"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "SELECT Id,Name,CCO_Status__c,CCO_Contact_Name__c,CCO_Contact_Email__c,Phone,Website FROM Account WHERE CCO_Status__c='Active' ORDER BY Name ASC LIMIT 50"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns Account records', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.records).to.be.an('array');",
+                  "});",
+                  "pm.test('All records have Active status', () => {",
+                  "  pm.response.json().records.forEach(r => {",
+                  "    pm.expect(r.CCO_Status__c).to.equal('Active');",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "GET — CCO Org by Monday Board ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{sf_instance_url}}/services/data/v61.0/query?q=SELECT Id,Name,Monday_Board_Id__c,CCO_Status__c FROM Account WHERE Monday_Board_Id__c='{{monday_board_id}}' LIMIT 1",
+              "host": ["{{sf_instance_url}}"],
+              "path": ["services", "data", "v61.0", "query"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "SELECT Id,Name,Monday_Board_Id__c,CCO_Status__c FROM Account WHERE Monday_Board_Id__c='{{monday_board_id}}' LIMIT 1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('External ID lookup returns a result', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.totalSize).to.be.greaterThan(0);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Case — Housing Inquiry",
+      "description": "Housing inquiry Cases created when site visitors submit the /housing form (Next.js → /api/housing → SF REST). RecordType: Housing Inquiry.",
+      "item": [
+        {
+          "name": "GET — Open Housing Cases",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{sf_instance_url}}/services/data/v61.0/query?q=SELECT Id,CaseNumber,Subject,Status,Priority,Contact.Name,Contact.Email,CreatedDate FROM Case WHERE Status!='Closed' ORDER BY CreatedDate DESC LIMIT 25",
+              "host": ["{{sf_instance_url}}"],
+              "path": ["services", "data", "v61.0", "query"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "SELECT Id,CaseNumber,Subject,Status,Priority,Contact.Name,Contact.Email,CreatedDate FROM Case WHERE Status!='Closed' ORDER BY CreatedDate DESC LIMIT 25"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('No closed cases returned', () => {",
+                  "  pm.response.json().records.forEach(r => {",
+                  "    pm.expect(r.Status).to.not.equal('Closed');",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "POST — Create Housing Case",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Subject\": \"Housing Inquiry — Rental Assistance\",\n  \"Description\": \"Requesting information about rental assistance programs.\",\n  \"Status\": \"New\",\n  \"Priority\": \"Medium\",\n  \"Origin\": \"Web\",\n  \"SuppliedName\": \"Jane Doe\",\n  \"SuppliedEmail\": \"jane@example.com\",\n  \"SuppliedPhone\": \"918-555-0100\"\n}"
+            },
+            "url": {
+              "raw": "{{sf_instance_url}}/services/data/v61.0/sobjects/Case",
+              "host": ["{{sf_instance_url}}"],
+              "path": ["services", "data", "v61.0", "sobjects", "Case"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 Created', () => pm.response.to.have.status(201));",
+                  "pm.test('Case ID returned', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.id).to.be.a('string');",
+                  "  pm.expect(body.success).to.be.true;",
+                  "  pm.collectionVariables.set('new_case_id', body.id);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "GET — Case by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{sf_instance_url}}/services/data/v61.0/sobjects/Case/{{new_case_id}}",
+              "host": ["{{sf_instance_url}}"],
+              "path": ["services", "data", "v61.0", "sobjects", "Case", "{{new_case_id}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Case subject matches', () => {",
+                  "  pm.expect(pm.response.json().Subject).to.include('Housing Inquiry');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Lead — CCO Event Subscribers",
+      "description": "Lead records represent event newsletter subscribers synced from Monday via LeadEtl.cls. External ID: Monday_Item_Id__c.",
+      "item": [
+        {
+          "name": "GET — CCO Subscribers (Leads)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{sf_instance_url}}/services/data/v61.0/query?q=SELECT Id,LastName,Email,LeadSource,Description,Monday_Item_Id__c FROM Lead WHERE Company='CCO United Subscriber' ORDER BY CreatedDate DESC LIMIT 50",
+              "host": ["{{sf_instance_url}}"],
+              "path": ["services", "data", "v61.0", "query"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "SELECT Id,LastName,Email,LeadSource,Description,Monday_Item_Id__c FROM Lead WHERE Company='CCO United Subscriber' ORDER BY CreatedDate DESC LIMIT 50"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('All leads have email', () => {",
+                  "  pm.response.json().records.forEach(r => {",
+                  "    pm.expect(r.Email).to.be.a('string').and.to.include('@');",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "GET — Subscriber by Monday Item ID (external ID lookup)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{sf_instance_url}}/services/data/v61.0/sobjects/Lead/Monday_Item_Id__c/{{monday_item_id}}",
+              "host": ["{{sf_instance_url}}"],
+              "path": ["services", "data", "v61.0", "sobjects", "Lead", "Monday_Item_Id__c", "{{monday_item_id}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 or 404', () => {",
+                  "  pm.expect([200, 404]).to.include(pm.response.code);",
+                  "});",
+                  "if (pm.response.code === 200) {",
+                  "  pm.test('External ID matches', () => {",
+                  "    pm.expect(pm.response.json().Monday_Item_Id__c)",
+                  "      .to.equal(pm.collectionVariables.get('monday_item_id'));",
+                  "  });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth — OAuth 2.0",
+      "description": "Standalone auth request for manual token refresh or debugging. The collection pre-request script handles auth automatically for all other folders.",
+      "item": [
+        {
+          "name": "POST — Get Access Token",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/x-www-form-urlencoded" }],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                { "key": "grant_type",    "value": "password",                    "type": "text" },
+                { "key": "client_id",     "value": "{{sf_client_id}}",            "type": "text" },
+                { "key": "client_secret", "value": "{{sf_client_secret}}",        "type": "text" },
+                { "key": "username",      "value": "{{sf_username}}",             "type": "text" },
+                { "key": "password",      "value": "{{sf_password}}{{sf_security_token}}", "type": "text" }
+              ]
+            },
+            "url": {
+              "raw": "{{sf_login_url}}/services/oauth2/token",
+              "host": ["{{sf_login_url}}"],
+              "path": ["services", "oauth2", "token"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Access token returned', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body).to.have.property('access_token');",
+                  "  pm.expect(body).to.have.property('instance_url');",
+                  "  pm.collectionVariables.set('sf_access_token', body.access_token);",
+                  "  pm.environment.set('sf_instance_url', body.instance_url);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    }
+  ]
+}

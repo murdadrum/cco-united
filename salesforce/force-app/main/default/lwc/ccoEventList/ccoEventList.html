@@ -1,0 +1,47 @@
+<template>
+    <div class="cco-event-list">
+        <h2 class="cco-section-title">Upcoming Events</h2>
+
+        <template lwc:if={isLoading}>
+            <div class="cco-loading">
+                <lightning-spinner alternative-text="Loading events…" size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <template lwc:elseif={hasError}>
+            <div class="cco-error">
+                <p>Unable to load events at this time. Please try again later.</p>
+            </div>
+        </template>
+
+        <template lwc:elseif={hasEvents}>
+            <ul class="cco-event-cards">
+                <template for:each={events} for:item="evt">
+                    <li key={evt.Id} class="cco-event-card">
+                        <div class="cco-event-type">{evt.Event_Type__c}</div>
+                        <h3 class="cco-event-name">{evt.Name}</h3>
+                        <div class="cco-event-meta">
+                            <span class="cco-event-date">{evt.formattedDate}</span>
+                            <template lwc:if={evt.Location__c}>
+                                <span class="cco-event-sep">·</span>
+                                <span class="cco-event-location">{evt.Location__c}</span>
+                            </template>
+                        </div>
+                        <template lwc:if={evt.CCO_Organization__c}>
+                            <div class="cco-event-org">{evt.CCO_Organization__c}</div>
+                        </template>
+                        <template lwc:if={evt.Description__c}>
+                            <p class="cco-event-desc">{evt.Description__c}</p>
+                        </template>
+                    </li>
+                </template>
+            </ul>
+        </template>
+
+        <template lwc:else>
+            <div class="cco-empty">
+                <p>No upcoming public events at this time. Check back soon!</p>
+            </div>
+        </template>
+    </div>
+</template>

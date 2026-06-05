@@ -1,0 +1,20 @@
+-- housing_cases_open.soql
+-- Returns all open housing inquiry Cases, ordered by submission date.
+-- Used for coordinator queue management and reporting dashboards.
+SELECT
+    Id,
+    CaseNumber,
+    Subject,
+    Status,
+    Priority,
+    ContactId,
+    Contact.Name,
+    Contact.Email,
+    Description,
+    CreatedDate,
+    LastModifiedDate
+FROM Case
+WHERE Status != 'Closed'
+  AND RecordType.Name = 'Housing Inquiry'
+ORDER BY CreatedDate DESC
+LIMIT 100
