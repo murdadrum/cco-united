@@ -3,3 +3,6 @@
 .localdevserver
 **/*.dup
 package.xml
+
+# Connected App already exists in org — deploying causes name collision
+force-app/main/default/connectedApps/
