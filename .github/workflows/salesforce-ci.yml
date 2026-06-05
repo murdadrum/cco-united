@@ -1,0 +1,97 @@
+# Salesforce CI — JWT auth via orgfarm Connected App (cert updated 2026-06-05, pre-auth set)
+name: Salesforce CI
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'salesforce/**'
+      - 'tests/bdd/**'
+      - '.github/workflows/salesforce-ci.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'salesforce/**'
+      - 'tests/bdd/**'
+      - '.github/workflows/salesforce-ci.yml'
+
+jobs:
+  # ── Lane 1: Deploy validation + Apex tests ──────────────────────
+  validate-and-test:
+    name: Validate & Apex Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Requires GitHub Secrets: SF_CLIENT_ID, SF_JWT_KEY, SF_USERNAME
+    # These are set after the Connected App + JWT cert setup (Phase 0 task)
+    defaults:
+      run:
+        working-directory: salesforce
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install SF CLI
+        run: npm install --global @salesforce/cli
+
+      - name: Authenticate (JWT)
+        env:
+          SF_JWT_KEY: ${{ secrets.SF_JWT_KEY }}
+        run: |
+          printf '%s' "$SF_JWT_KEY" > server.key
+          sf org login jwt \
+            --client-id ${{ secrets.SF_CLIENT_ID }} \
+            --jwt-key-file server.key \
+            --username ${{ secrets.SF_USERNAME }} \
+            --alias ccouSF \
+            --set-default
+          rm server.key
+
+      - name: Deploy + Run Apex Tests
+        run: |
+          sf project deploy start \
+            --source-dir force-app \
+            --target-org ccouSF \
+            --test-level RunLocalTests \
+            --wait 30
+
+  # ── Lane 2: Playwright BDD (Salesforce surface) ─────────────────
+  playwright-bdd:
+    name: Playwright BDD
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Generate BDD specs
+        run: npx bddgen
+
+      - name: Run Salesforce BDD tests
+        run: npx playwright test --project=salesforce-bdd
+        # Phase 0: runs against Next.js localhost (webServer starts automatically)
+        # Phase 4+: set SF_EXPERIENCE_CLOUD_URL as a repo variable to hit the live SF site
+        env:
+          SF_BASE_URL: ${{ vars.SF_EXPERIENCE_CLOUD_URL }}
+
+      - name: Upload BDD report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: salesforce-bdd-report
+          path: playwright-report/
+          retention-days: 14

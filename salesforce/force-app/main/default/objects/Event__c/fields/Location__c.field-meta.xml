@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="urn:metadata.soap.sforce.com">
+    <fullName>Location__c</fullName>
+    <label>Location</label>
+    <type>Text</type>
+    <length>255</length>
+    <unique>false</unique>
+    <caseSensitive>false</caseSensitive>
+</CustomField>

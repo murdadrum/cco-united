@@ -1,0 +1,78 @@
+<template>
+    <div class="hif-container">
+        <h2 class="hif-title">Request Housing Assistance</h2>
+        <p class="hif-subtitle">
+            Tell us about your situation. A CCO housing coordinator will follow up within 2 business days.
+        </p>
+
+        <template lwc:if={submitted}>
+            <div class="hif-success">
+                <div class="hif-success-icon">✓</div>
+                <p class="hif-success-heading">Wado — Request Received</p>
+                <p class="hif-success-body">
+                    Your inquiry has been submitted to CCO United. A coordinator will be in touch at
+                    the email address you provided.
+                </p>
+                <button class="hif-btn-reset" onclick={handleReset}>Submit Another Inquiry</button>
+            </div>
+        </template>
+
+        <template lwc:else>
+            <form class="hif-form" onsubmit={handleSubmit} novalidate>
+                <div class="hif-row">
+                    <div class="hif-group">
+                        <label for="hif-name">Full Name *</label>
+                        <input id="hif-name" type="text" name="name" value={form.name}
+                               oninput={handleInput} required placeholder="Your full name" />
+                    </div>
+                    <div class="hif-group">
+                        <label for="hif-email">Email Address *</label>
+                        <input id="hif-email" type="email" name="email" value={form.email}
+                               oninput={handleInput} required placeholder="you@example.com" />
+                    </div>
+                </div>
+
+                <div class="hif-row">
+                    <div class="hif-group">
+                        <label for="hif-phone">Phone Number</label>
+                        <input id="hif-phone" type="tel" name="phone" value={form.phone}
+                               oninput={handleInput} placeholder="(optional)" />
+                    </div>
+                    <div class="hif-group">
+                        <label for="hif-program">Program Area</label>
+                        <select id="hif-program" name="program" value={form.program} onchange={handleInput}>
+                            <option value="">— Select a program —</option>
+                            <option value="Emergency Shelter">Emergency Shelter</option>
+                            <option value="Rental Assistance">Rental Assistance</option>
+                            <option value="Utility Relief">Utility Relief</option>
+                            <option value="Homeownership Paths">Homeownership Paths</option>
+                            <option value="Elder Housing">Elder Housing</option>
+                            <option value="New Construction">New Construction</option>
+                            <option value="Not Sure">Not Sure / General Inquiry</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="hif-group">
+                    <label for="hif-message">Message (optional)</label>
+                    <textarea id="hif-message" name="message" value={form.message}
+                              oninput={handleInput} rows="4"
+                              placeholder="Anything you'd like the coordinator to know before they reach out."></textarea>
+                </div>
+
+                <template lwc:if={errorMsg}>
+                    <p class="hif-error">{errorMsg}</p>
+                </template>
+
+                <button type="submit" class="hif-btn-submit" disabled={isSubmitting}>
+                    <template lwc:if={isSubmitting}>Submitting…</template>
+                    <template lwc:else>Send Inquiry →</template>
+                </button>
+
+                <p class="hif-privacy">
+                    Your information is shared only with CCO housing coordinators. Wado for trusting CCO United.
+                </p>
+            </form>
+        </template>
+    </div>
+</template>

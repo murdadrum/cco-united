@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="urn:metadata.soap.sforce.com">
+    <fullName>Event_Type__c</fullName>
+    <label>Event Type</label>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Groundbreaking</fullName>
+                <default>false</default>
+                <label>Groundbreaking</label>
+            </value>
+            <value>
+                <fullName>Ribbon Cutting</fullName>
+                <default>false</default>
+                <label>Ribbon Cutting</label>
+            </value>
+            <value>
+                <fullName>Press Conference</fullName>
+                <default>false</default>
+                <label>Press Conference</label>
+            </value>
+            <value>
+                <fullName>Meeting</fullName>
+                <default>false</default>
+                <label>Meeting</label>
+            </value>
+            <value>
+                <fullName>Convention</fullName>
+                <default>false</default>
+                <label>Convention</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

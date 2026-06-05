@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <description>Sends an email to the event submitter when Event__c Status__c changes to Approved.</description>
+    <label>Event Status Notification</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value><stringValue>LightningFlowBuilder</stringValue></value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>176</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Send_Approval_Email</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Status__c</field>
+            <operator>EqualTo</operator>
+            <value><stringValue>Approved</stringValue></value>
+        </filters>
+        <object>Event__c</object>
+        <recordTriggerType>Update</recordTriggerType>
+<triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+
+    <actionCalls>
+        <name>Send_Approval_Email</name>
+        <label>Send Approval Email</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Submitter_Email__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Your event has been approved — CCO United</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <stringValue>Ôsiyo! Your event "{!$Record.Name}" has been approved and will appear on the CCO United events calendar. Wado for your submission.</stringValue>
+            </value>
+        </inputParameters>
+    </actionCalls>
+</Flow>

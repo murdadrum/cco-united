@@ -1,0 +1,13 @@
+# SFDX
+.sfdx
+.localdevserver
+**/*.dup
+package.xml
+
+# Connected App already exists in org — deploying causes name collision
+force-app/main/default/connectedApps/
+
+# Named Credential schema varies by API version and org type (legacy vs per-user split, v54+)
+# Configure manually in Setup > Security > Named Credentials:
+#   Label: Loan Origination Mock | URL: https://httpbin.org | Auth: No Authentication
+force-app/main/default/namedCredentials/

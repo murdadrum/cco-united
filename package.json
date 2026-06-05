@@ -1,0 +1,36 @@
+{
+  "name": "ccou-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "playwright test",
+    "test:monday": "playwright test --project=chromium",
+    "test:ui": "playwright test --ui",
+    "test:prod": "BASE_URL=https://cco-united.joshbarteaux.com playwright test",
+    "bddgen": "bddgen",
+    "test:bdd": "bddgen && playwright test --project=salesforce-bdd",
+    "test:all": "bddgen && playwright test"
+  },
+  "dependencies": {
+    "next": "^14",
+    "react": "^18",
+    "react-dom": "^18",
+    "resend": "^6.12.3",
+    "three": "^0.184.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "playwright-bdd": "^9",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/three": "^0.184.1",
+    "eslint": "^8",
+    "eslint-config-next": "^14",
+    "typescript": "^5"
+  }
+}

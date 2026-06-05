@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="urn:metadata.soap.sforce.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Subscriber Board</label>
+    <protected>false</protected>
+    <values>
+        <field>Board_Id__c</field>
+        <value xsi:type="xsd:string">18416038007</value>
+    </values>
+    <values>
+        <field>Description__c</field>
+        <value xsi:type="xsd:string">CCO Events Subscribers board — feeds Lead ETL</value>
+    </values>
+</CustomMetadata>

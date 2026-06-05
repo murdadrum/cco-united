@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="urn:metadata.soap.sforce.com">
+    <label>Event</label>
+    <pluralLabel>Events</pluralLabel>
+    <nameField>
+        <label>Event Name</label>
+        <type>Text</type>
+    </nameField>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>

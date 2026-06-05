@@ -1,0 +1,18 @@
+-- upcoming_public_events.soql
+-- Used by ccoEventList LWC to render approved, public-facing events
+-- on the Experience Cloud guest portal.
+SELECT
+    Id,
+    Name,
+    Event_Date__c,
+    Location__c,
+    Event_Type__c,
+    Description__c,
+    CCO_Organization__c,
+    Submitted_By__c
+FROM Event__c
+WHERE Is_Public__c = true
+  AND Status__c    = 'Approved'
+  AND Event_Date__c >= TODAY
+ORDER BY Event_Date__c ASC
+LIMIT 20

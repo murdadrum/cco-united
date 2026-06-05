@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <description>Guided 3-step housing inquiry intake. Collects applicant info, creates a Lead, then creates a housing assistance Case.</description>
+    <label>Housing Inquiry Intake</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value><stringValue>LightningFlowBuilder</stringValue></value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <start>
+        <locationX>176</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Step1_Personal_Info</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+
+    <!-- ── Variables ─────────────────────────────────────────── -->
+    <variables>
+        <name>varFirstName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varLastName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varEmail</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varPhone</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varDescription</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varHouseholdSize</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+
+    <!-- ── Screens ────────────────────────────────────────────── -->
+    <screens>
+        <name>Step1_Personal_Info</name>
+        <label>Step 1 of 3 — Personal Information</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>false</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Assign_Step1</targetReference>
+        </connector>
+        <fields>
+            <name>Screen1_Header</name>
+            <fieldText>&lt;h2&gt;Housing Assistance Inquiry&lt;/h2&gt;&lt;p&gt;Tell us about yourself so we can connect you with the right CCO program.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>Input_FirstName</name>
+            <dataType>String</dataType>
+            <fieldText>First Name</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>Input_LastName</name>
+            <dataType>String</dataType>
+            <fieldText>Last Name</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>Input_Email</name>
+            <dataType>String</dataType>
+            <fieldText>Email Address</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>Input_Phone</name>
+            <dataType>String</dataType>
+            <fieldText>Phone Number</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>false</isRequired>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Step2_Household_Details</name>
+        <label>Step 2 of 3 — Household Details</label>
+        <locationX>176</locationX>
+        <locationY>402</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>false</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Assign_Step2</targetReference>
+        </connector>
+        <fields>
+            <name>Screen2_Header</name>
+            <fieldText>&lt;h2&gt;Household Information&lt;/h2&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>Input_HouseholdSize</name>
+            <dataType>String</dataType>
+            <fieldText>Number of people in household</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Step3_Inquiry_Details</name>
+        <label>Step 3 of 3 — Describe Your Need</label>
+        <locationX>176</locationX>
+        <locationY>670</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>false</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Assign_Step3</targetReference>
+        </connector>
+        <fields>
+            <name>Screen3_Header</name>
+            <fieldText>&lt;h2&gt;Housing Need&lt;/h2&gt;&lt;p&gt;Briefly describe your housing situation and what assistance you are seeking.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>Input_Description</name>
+            <dataType>String</dataType>
+            <fieldText>Description</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Confirmation_Screen</name>
+        <label>Submitted Successfully</label>
+        <locationX>176</locationX>
+        <locationY>1070</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Confirmation_Text</name>
+            <fieldText>&lt;h2&gt;Wado! Your inquiry has been submitted.&lt;/h2&gt;&lt;p&gt;A CCO United housing specialist will contact you within 3–5 business days.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+
+    <!-- ── Assignments (capture screen field values into variables) -->
+    <assignments>
+        <name>Assign_Step1</name>
+        <label>Capture Personal Info</label>
+        <locationX>176</locationX>
+        <locationY>268</locationY>
+        <assignmentItems>
+            <assignToReference>varFirstName</assignToReference>
+            <operator>Assign</operator>
+            <value><elementReference>Input_FirstName</elementReference></value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varLastName</assignToReference>
+            <operator>Assign</operator>
+            <value><elementReference>Input_LastName</elementReference></value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varEmail</assignToReference>
+            <operator>Assign</operator>
+            <value><elementReference>Input_Email</elementReference></value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varPhone</assignToReference>
+            <operator>Assign</operator>
+            <value><elementReference>Input_Phone</elementReference></value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Step2_Household_Details</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Step2</name>
+        <label>Capture Household Info</label>
+        <locationX>176</locationX>
+        <locationY>536</locationY>
+        <assignmentItems>
+            <assignToReference>varHouseholdSize</assignToReference>
+            <operator>Assign</operator>
+            <value><elementReference>Input_HouseholdSize</elementReference></value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Step3_Inquiry_Details</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Step3</name>
+        <label>Capture Description</label>
+        <locationX>176</locationX>
+        <locationY>804</locationY>
+        <assignmentItems>
+            <assignToReference>varDescription</assignToReference>
+            <operator>Assign</operator>
+            <value><elementReference>Input_Description</elementReference></value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Create_Lead</targetReference>
+        </connector>
+    </assignments>
+
+    <!-- ── Record Creates ─────────────────────────────────────── -->
+    <recordCreates>
+        <name>Create_Lead</name>
+        <label>Create Lead</label>
+        <locationX>176</locationX>
+        <locationY>938</locationY>
+        <connector>
+            <targetReference>Create_Case</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>FirstName</field>
+            <value><elementReference>varFirstName</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>LastName</field>
+            <value><elementReference>varLastName</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Email</field>
+            <value><elementReference>varEmail</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Phone</field>
+            <value><elementReference>varPhone</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Company</field>
+            <value><stringValue>CCO United Housing Inquiry</stringValue></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>LeadSource</field>
+            <value><stringValue>Web</stringValue></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value><elementReference>varDescription</elementReference></value>
+        </inputAssignments>
+        <object>Lead</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_Case</name>
+        <label>Create Housing Case</label>
+        <locationX>176</locationX>
+        <locationY>1004</locationY>
+        <connector>
+            <targetReference>Confirmation_Screen</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Subject</field>
+            <value><stringValue>Housing Assistance Request</stringValue></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value><elementReference>varDescription</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Origin</field>
+            <value><stringValue>Web</stringValue></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value><stringValue>New</stringValue></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SuppliedEmail</field>
+            <value><elementReference>varEmail</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SuppliedName</field>
+            <value><elementReference>varFirstName</elementReference></value>
+        </inputAssignments>
+        <object>Case</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+
+</Flow>
