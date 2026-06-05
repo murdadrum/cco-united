@@ -1,7 +1,7 @@
 import { createBdd } from 'playwright-bdd';
 import { expect } from '@playwright/test';
 
-const { Given, Then, And } = createBdd();
+const { Given, Then } = createBdd();
 
 Given('I am on the events page', async ({ page }) => {
   await page.goto('/events');
