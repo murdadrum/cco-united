@@ -3197,3 +3197,178 @@ body.light .event-detail-description {
   }
 }
   
+/* ── Test Status Dashboard ─────────────────────────────────────── */
+.tests-page {
+  min-height: 100vh;
+  background: var(--cn-dark);
+  color: var(--cn-cream);
+}
+
+.tests-summary {
+  margin-top: 1rem;
+  color: var(--cn-tan);
+  font-size: 1rem;
+  font-family: 'Source Sans 3', sans-serif;
+}
+
+.tests-section {
+  margin: 3rem 0;
+}
+
+.tests-section-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  color: var(--cn-gold);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid rgba(200,150,12,.2);
+}
+
+/* CI Repo Cards */
+.test-repo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.test-repo-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.test-repo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.test-repo-label {
+  font-family: 'Cinzel', serif;
+  font-size: .85rem;
+  color: var(--cn-cream);
+  margin-bottom: .25rem;
+}
+
+.test-repo-url {
+  font-size: .75rem;
+  color: var(--cn-tan);
+  text-decoration: none;
+  font-family: 'Source Sans 3', sans-serif;
+}
+.test-repo-url:hover { color: var(--cn-gold); }
+
+.test-overall-badge {
+  font-size: .72rem;
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #fff;
+  padding: .25rem .75rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.test-run-list {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.test-run-row {
+  display: grid;
+  grid-template-columns: 56px 1fr 1fr 56px;
+  gap: .75rem;
+  align-items: center;
+  padding: .5rem .75rem;
+  background: rgba(255,255,255,.03);
+  border-radius: 4px;
+  text-decoration: none;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: .82rem;
+  color: var(--cn-cream);
+  transition: background .15s;
+}
+.test-run-row:hover { background: rgba(255,255,255,.07); }
+
+.test-run-badge {
+  font-size: .68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: #fff;
+  padding: .2rem .5rem;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.test-run-name { font-weight: 600; }
+.test-run-commit { color: var(--cn-tan); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.test-run-time { color: var(--cn-tan); text-align: right; white-space: nowrap; }
+
+.test-error {
+  color: var(--cn-tan);
+  font-size: .85rem;
+  font-family: 'Source Sans 3', sans-serif;
+  font-style: italic;
+}
+
+/* Test Inventory */
+.test-inventory {
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 8px;
+  overflow: hidden;
+  font-family: 'Source Sans 3', sans-serif;
+}
+
+.test-inventory-row {
+  display: grid;
+  grid-template-columns: 220px 48px 1fr 220px;
+  gap: 1rem;
+  align-items: start;
+  padding: .85rem 1.25rem;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  font-size: .85rem;
+}
+.test-inventory-row:last-child { border-bottom: none; }
+.test-inventory-row:nth-child(even) { background: rgba(255,255,255,.02); }
+
+.test-inventory-suite { font-weight: 600; color: var(--cn-cream); }
+.test-inventory-count { color: var(--cn-gold); font-weight: 700; text-align: center; }
+.test-inventory-desc { color: var(--cn-tan); }
+.test-inventory-file { color: rgba(255,255,255,.35); font-size: .75rem; font-family: monospace; word-break: break-all; }
+
+.test-inventory-total {
+  display: grid;
+  grid-template-columns: 220px 48px 1fr 220px;
+  gap: 1rem;
+  padding: .85rem 1.25rem;
+  background: rgba(200,150,12,.08);
+  font-weight: 700;
+  font-family: 'Cinzel', serif;
+  font-size: .85rem;
+  color: var(--cn-gold);
+  border-top: 1px solid rgba(200,150,12,.2);
+}
+
+@media (max-width: 768px) {
+  .test-repo-grid { grid-template-columns: 1fr; }
+
+  .test-run-row {
+    grid-template-columns: 56px 1fr 56px;
+  }
+  .test-run-commit { display: none; }
+
+  .test-inventory-row,
+  .test-inventory-total {
+    grid-template-columns: 1fr 48px;
+    grid-template-rows: auto auto;
+  }
+  .test-inventory-desc,
+  .test-inventory-file { grid-column: 1 / -1; }
+}
