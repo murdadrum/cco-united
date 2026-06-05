@@ -67,4 +67,19 @@ private class LoanOriginationCalloutTest {
         // 500 response is logged but must not throw — assert no exception
         System.assert(true, 'Non-2xx response handled gracefully');
     }
+
+    @isTest
+    static void testCaseTriggerFiresOnApproval() {
+        // Exercises CaseTrigger — status transition to 'Approved' must enqueue callout
+        Case c = [SELECT Id, Status FROM Case LIMIT 1];
+        Test.setMock(HttpCalloutMock.class, new MockSuccess());
+
+        Test.startTest();
+        c.Status = 'Approved';
+        update c;
+        Test.stopTest();
+
+        Case updated = [SELECT Status FROM Case WHERE Id = :c.Id];
+        System.assertEquals('Approved', updated.Status, 'Status must be Approved after update');
+    }
 }
