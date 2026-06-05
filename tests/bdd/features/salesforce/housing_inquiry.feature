@@ -6,7 +6,7 @@ Feature: Housing Inquiry Form
   Scenario: Housing page loads with inquiry form
     Given I am on the CCO United home page
     When I navigate to "/housing"
-    Then I should see the heading "Housing Assistance"
+    Then I should see the heading "Welcome Home"
     And I should see a form field labeled "Full Name"
     And I should see a form field labeled "Email Address"
 
