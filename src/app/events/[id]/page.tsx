@@ -2,64 +2,48 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
+import { getSfToken, invalidateSfToken } from '@/lib/sfAuth'
 import type { CCOEvent } from '@/lib/mondayTypes'
 
-const QUERY = `
-  query GetEvent($itemId: ID!) {
-    items(ids: [$itemId]) {
-      id
-      name
-      column_values(ids: [
-        "date_mm3wkeye",
-        "dropdown_mm3wv6ax",
-        "dropdown_mm3w9yyc",
-        "boolean_mm3wsfmn",
-        "long_text_mm3wd4nk"
-      ]) {
-        id
-        text
-      }
-    }
-  }
-`
-
-function col(columnValues: { id: string; text: string }[], colId: string): string {
-  return columnValues.find(c => c.id === colId)?.text ?? ''
-}
+const SOQL = (id: string) =>
+  `SELECT Id, Name, Event_Date__c, Location__c, Event_Type__c, CCO_Organization__c, Is_Public__c, Description__c
+   FROM Event__c WHERE Id = '${id}' AND Is_Public__c = true LIMIT 1`
 
 async function fetchEvent(id: string): Promise<CCOEvent | null> {
-  const apiKey = process.env.MONDAY_API_KEY
-  if (!apiKey) return null
+  let token: string
+  let instanceUrl: string
+  try {
+    ;({ token, instanceUrl } = await getSfToken())
+  } catch {
+    return null
+  }
 
   try {
-    const res = await fetch('https://api.monday.com/v2', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: apiKey,
-        'API-Version': '2023-10',
-      },
-      body: JSON.stringify({ query: QUERY, variables: { itemId: id } }),
-      next: { revalidate: 300 },
-    })
+    const res = await fetch(
+      `${instanceUrl}/services/data/v66.0/query?q=${encodeURIComponent(SOQL(id))}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+        next: { revalidate: 300 },
+      }
+    )
+
+    if (res.status === 401) { invalidateSfToken(); return null }
+    if (!res.ok) return null
 
     const json = await res.json()
-    const item = json?.data?.items?.[0]
-    if (!item) return null
-
-    const pubVal = col(item.column_values, 'boolean_mm3wsfmn')
-    const isPublic = pubVal === 'true' || pubVal === 'v'
-    if (!isPublic) return null
+    const r = json.records?.[0]
+    if (!r) return null
 
     return {
-      id: item.id,
-      name: item.name,
-      date: col(item.column_values, 'date_mm3wkeye') || null,
+      id: r.Id,
+      name: r.Name,
+      date: r.Event_Date__c ?? null,
       time: null,
-      organization: col(item.column_values, 'dropdown_mm3wv6ax') || null,
-      eventType: col(item.column_values, 'dropdown_mm3w9yyc') || null,
-      isPublic: true,
-      description: col(item.column_values, 'long_text_mm3wd4nk') || null,
+      organization: r.CCO_Organization__c ?? null,
+      eventType: r.Event_Type__c ?? null,
+      isPublic: r.Is_Public__c,
+      description: r.Description__c ?? null,
+      location: r.Location__c ?? null,
     }
   } catch {
     return null
@@ -110,6 +94,9 @@ export default async function EventDetailPage({ params }: Props) {
           <div className="event-detail-meta">
             {event.date && (
               <span className="event-detail-date">{formatDate(event.date)}</span>
+            )}
+            {event.location && (
+              <span className="event-detail-location">{event.location}</span>
             )}
             {event.organization && (
               <span className="event-detail-org">{event.organization}</span>

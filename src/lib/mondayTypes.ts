@@ -7,6 +7,7 @@ export interface CCOEvent {
   eventType: string | null
   isPublic: boolean
   description: string | null
+  location: string | null
 }
 
 export interface EventsApiResponse {
