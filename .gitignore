@@ -18,6 +18,9 @@ salesforce/server.key
 test-results/
 playwright-report/
 
+# Newman CI environment (generated at runtime from GitHub Secrets — never commit)
+postman/ci-environment.json
+
 # SFDX root cache
 .sfdx/
 salesforce/.sf/

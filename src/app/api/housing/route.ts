@@ -1,6 +1,7 @@
 import { Resend } from 'resend'
 import { NextRequest, NextResponse } from 'next/server'
 import { getSfToken, invalidateSfToken } from '@/lib/sfAuth'
+import { postSlackMessage, housingBlocks } from '@/lib/slack'
 
 export async function POST(req: NextRequest) {
   const { name, email, phone, program, message } = await req.json()
@@ -51,6 +52,12 @@ export async function POST(req: NextRequest) {
   }
 
   const { id: caseId } = await sfRes.json()
+
+  // ── Slack notification (non-blocking) ────────────────────────────────────
+  postSlackMessage(
+    housingBlocks(name, email, phone, program, caseId, isEmergency),
+    `${isEmergency ? '🚨 EMERGENCY' : '🏠'} Housing inquiry from ${name} — ${program}`
+  ).catch(err => console.error('Slack notify error (non-fatal)', err))
 
   // ── Send confirmation + admin emails (non-blocking) ───────────────────────
   try {

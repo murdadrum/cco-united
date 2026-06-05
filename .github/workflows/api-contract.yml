@@ -1,0 +1,63 @@
+name: API Contract Tests (Newman)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  newman:
+    name: Postman / Newman
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Write CI environment file
+        # Injects GitHub Secrets into a temporary Postman environment
+        # The committed environment file has REPLACE_WITH_* placeholders — never real values
+        run: |
+          cat > postman/ci-environment.json <<EOF
+          {
+            "id": "ccou-sf-ci-env",
+            "name": "CCO United — Salesforce (CI)",
+            "_postman_variable_scope": "environment",
+            "values": [
+              { "key": "sf_login_url",      "value": "https://login.salesforce.com", "enabled": true },
+              { "key": "sf_instance_url",   "value": "",                             "enabled": true },
+              { "key": "sf_client_id",      "value": "${{ secrets.SF_CLIENT_ID }}",     "enabled": true },
+              { "key": "sf_client_secret",  "value": "${{ secrets.SF_CLIENT_SECRET }}", "enabled": true },
+              { "key": "sf_username",       "value": "${{ secrets.SF_USERNAME }}",       "enabled": true },
+              { "key": "sf_password",       "value": "${{ secrets.SF_PASSWORD }}",       "enabled": true },
+              { "key": "sf_security_token", "value": "${{ secrets.SF_SECURITY_TOKEN }}", "enabled": true },
+              { "key": "monday_board_id",   "value": "18415645308",                  "enabled": true },
+              { "key": "monday_item_id",    "value": "",                             "enabled": true }
+            ]
+          }
+          EOF
+
+      - name: Run Newman API contract tests
+        run: |
+          npx newman run postman/CCOUnited_SF_Integration.postman_collection.json \
+            --environment postman/ci-environment.json \
+            --reporters cli,json \
+            --reporter-json-export test-results/newman-results.json \
+            --bail
+
+      - name: Upload Newman results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-results
+          path: test-results/newman-results.json
+          retention-days: 14

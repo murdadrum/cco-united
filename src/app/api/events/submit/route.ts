@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSfToken, invalidateSfToken } from '@/lib/sfAuth'
+import { postSlackMessage, eventBlocks } from '@/lib/slack'
 
 export async function POST(req: NextRequest) {
   const { title, ccoOrg, dateTime, location, eventType, isPublic,
@@ -51,5 +52,12 @@ export async function POST(req: NextRequest) {
   }
 
   const { id } = await sfRes.json()
+
+  // ── Slack notification (non-blocking) ────────────────────────────────────
+  postSlackMessage(
+    eventBlocks(title, ccoOrg, submittedBy, email, eventType, dateTime, id),
+    `📅 New event submitted: ${title} by ${submittedBy}`
+  ).catch(err => console.error('Slack notify error (non-fatal)', err))
+
   return NextResponse.json({ ok: true, id })
 }
