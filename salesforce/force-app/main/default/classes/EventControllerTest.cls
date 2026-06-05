@@ -7,7 +7,7 @@ private class EventControllerTest {
             Name           = 'Test Public Event',
             Event_Date__c  = Datetime.now().addDays(7),
             Location__c    = 'Tahlequah, OK',
-            Event_Type__c  = 'Community Meeting',
+            Event_Type__c  = 'Convention',
             Is_Public__c   = true,
             Status__c      = 'Approved',
             Monday_Item_Id__c = 'TEST_EC_001'
