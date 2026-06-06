@@ -182,7 +182,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.collectionVariables.set(\"test_monday_id\", \"POSTMAN_TEST_\" + Date.now());"
+                  "pm.collectionVariables.set(\"test_monday_id\", \"PT\" + Date.now().toString().slice(-8));"
                 ]
               }
             },
