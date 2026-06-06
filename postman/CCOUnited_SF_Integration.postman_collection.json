@@ -216,7 +216,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"Status__c\": \"Approved\"\n}"
+              "raw": "{\n  \"Status__c\": \"Completed\"\n}"
             },
             "url": {
               "raw": "{{sf_instance_url}}/services/data/v61.0/sobjects/Event__c/{{new_event_id}}",
