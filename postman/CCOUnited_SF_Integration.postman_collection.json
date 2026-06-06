@@ -331,47 +331,6 @@
             }
           ],
           "response": []
-        },
-        {
-          "name": "GET \u2014 CCO Org by Monday Board ID",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{sf_instance_url}}/services/data/v61.0/query?q=SELECT Id,Name,Monday_Board_Id__c,CCO_Status__c FROM Account WHERE Monday_Board_Id__c='{{monday_board_id}}' LIMIT 1",
-              "host": [
-                "{{sf_instance_url}}"
-              ],
-              "path": [
-                "services",
-                "data",
-                "v61.0",
-                "query"
-              ],
-              "query": [
-                {
-                  "key": "q",
-                  "value": "SELECT Id,Name,Monday_Board_Id__c,CCO_Status__c FROM Account WHERE Monday_Board_Id__c='{{monday_board_id}}' LIMIT 1"
-                }
-              ]
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('External ID lookup returns a result', () => {",
-                  "  const body = pm.response.json();",
-                  "  pm.expect(body.totalSize).to.be.greaterThan(0);",
-                  "});"
-                ]
-              }
-            }
-          ],
-          "response": []
         }
       ]
     },
