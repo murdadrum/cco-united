@@ -475,7 +475,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{sf_instance_url}}/services/data/v61.0/query?q=SELECT Id,LastName,Email,LeadSource,Description,Monday_Item_Id__c FROM Lead WHERE Company='CCO United Subscriber' ORDER BY CreatedDate DESC LIMIT 50",
+              "raw": "{{sf_instance_url}}/services/data/v61.0/query?q=SELECT Id,LastName,Email,LeadSource,Description FROM Lead WHERE Company='CCO United Subscriber' ORDER BY CreatedDate DESC LIMIT 50",
               "host": [
                 "{{sf_instance_url}}"
               ],
@@ -488,7 +488,7 @@
               "query": [
                 {
                   "key": "q",
-                  "value": "SELECT Id,LastName,Email,LeadSource,Description,Monday_Item_Id__c FROM Lead WHERE Company='CCO United Subscriber' ORDER BY CreatedDate DESC LIMIT 50"
+                  "value": "SELECT Id,LastName,Email,LeadSource,Description FROM Lead WHERE Company='CCO United Subscriber' ORDER BY CreatedDate DESC LIMIT 50"
                 }
               ]
             }
@@ -505,48 +505,6 @@
                   "    pm.expect(r.Email).to.be.a('string').and.to.include('@');",
                   "  });",
                   "});"
-                ]
-              }
-            }
-          ],
-          "response": []
-        },
-        {
-          "name": "GET \u2014 Subscriber by Monday Item ID (external ID lookup)",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{sf_instance_url}}/services/data/v61.0/sobjects/Lead/Monday_Item_Id__c/{{monday_item_id}}",
-              "host": [
-                "{{sf_instance_url}}"
-              ],
-              "path": [
-                "services",
-                "data",
-                "v61.0",
-                "sobjects",
-                "Lead",
-                "Monday_Item_Id__c",
-                "{{monday_item_id}}"
-              ]
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 200 or 404', () => {",
-                  "  pm.expect([200, 404]).to.include(pm.response.code);",
-                  "});",
-                  "if (pm.response.code === 200) {",
-                  "  pm.test('External ID matches', () => {",
-                  "    pm.expect(pm.response.json().Monday_Item_Id__c)",
-                  "      .to.equal(pm.collectionVariables.get('monday_item_id'));",
-                  "  });",
-                  "}"
                 ]
               }
             }
