@@ -34,7 +34,7 @@ jobs:
             "_postman_variable_scope": "environment",
             "values": [
               { "key": "sf_login_url",      "value": "https://login.salesforce.com", "enabled": true },
-              { "key": "sf_instance_url",   "value": "",                             "enabled": true },
+              { "key": "sf_instance_url",   "value": "${{ secrets.SF_INSTANCE_URL }}", "enabled": true },
               { "key": "sf_client_id",      "value": "${{ secrets.SF_CLIENT_ID }}",     "enabled": true },
               { "key": "sf_client_secret",  "value": "${{ secrets.SF_CLIENT_SECRET }}", "enabled": true },
               { "key": "sf_username",       "value": "${{ secrets.SF_USERNAME }}",       "enabled": true },
