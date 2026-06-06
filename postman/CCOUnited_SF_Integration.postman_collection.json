@@ -135,7 +135,7 @@
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"Name\": \"[TEST] Postman Created Event\",\n  \"Event_Date__c\": \"2026-09-01T18:00:00.000Z\",\n  \"Location__c\": \"Tahlequah, OK\",\n  \"Event_Type__c\": \"Community Meeting\",\n  \"Is_Public__c\": true,\n  \"Status__c\": \"Pending Review\",\n  \"Description__c\": \"Created via Postman integration test.\",\n  \"Monday_Item_Id__c\": \"POSTMAN_TEST_001\"\n}"
+              "raw": "{\n  \"Name\": \"[TEST] Postman Created Event\",\n  \"Event_Date__c\": \"2026-09-01T18:00:00.000Z\",\n  \"Location__c\": \"Tahlequah, OK\",\n  \"Event_Type__c\": \"Meeting\",\n  \"Is_Public__c\": true,\n  \"Status__c\": \"Approved\",\n  \"Description__c\": \"Created via Postman integration test.\",\n  \"Monday_Item_Id__c\": \"POSTMAN_TEST_001\"\n}"
             },
             "url": {
               "raw": "{{sf_instance_url}}/services/data/v61.0/sobjects/Event__c",
