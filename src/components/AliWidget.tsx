@@ -122,6 +122,8 @@ function Bubble({ m, isAf }: { m: Message; isAf?: boolean }) {
 }
 
 // ── Chat lane (reusable column) ────────────────────────────────────────────────
+const AF_STUDIO_URL = 'https://orgfarm-f8c9044497-dev-ed.develop.lightning.force.com/AiCopilot/copilotStudio.app#/copilot/builder?copilotId=0XxgK000001fZIzSAM&versionId=0X9gK000002sFLtSAM'
+
 function ChatLane({
   label, dot, hist, showChips, streaming, onChip,
   isAf = false,
@@ -156,6 +158,54 @@ function ChatLane({
         }}
       >
         {hist.map((m, i) => <Bubble key={i} m={m} isAf={isAf} />)}
+        {isAf && hist.filter(m => m.role === 'user').length === 0 && (
+          <div style={{
+            display: 'flex', flexDirection: 'column', alignItems: 'center',
+            justifyContent: 'center', flex: 1, gap: '1rem', textAlign: 'center',
+            padding: '1.5rem',
+          }}>
+            <div style={{ fontSize: '2rem' }}>⚡</div>
+            <div style={{
+              fontFamily: "'Cinzel', serif", fontSize: '.85rem',
+              color: '#60a5fa', letterSpacing: '.06em',
+            }}>
+              Agentforce Enterprise
+            </div>
+            <div style={{
+              fontSize: '.78rem', color: 'rgba(200,220,255,0.6)',
+              lineHeight: 1.6, maxWidth: '200px',
+            }}>
+              Live agent powered by Salesforce. Tap below to launch a full session.
+            </div>
+            <a
+              href={AF_STUDIO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '.4rem',
+                padding: '.55rem 1.1rem',
+                background: 'rgba(0,120,212,0.2)',
+                border: '1px solid rgba(96,165,250,0.5)',
+                color: '#60a5fa', borderRadius: '6px',
+                fontSize: '.78rem', textDecoration: 'none',
+                fontFamily: "'Source Sans 3', sans-serif",
+                letterSpacing: '.04em',
+              }}
+            >
+              Launch in Salesforce ↗
+            </a>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '.4rem', justifyContent: 'center' }}>
+              {QUICK_REPLIES.map(q => (
+                <a key={q} href={AF_STUDIO_URL} target="_blank" rel="noopener noreferrer" style={{
+                  background: 'transparent', border: '1px solid rgba(96,165,250,0.35)',
+                  color: '#60a5fa', borderRadius: '20px', padding: '.3rem .75rem',
+                  fontSize: '.75rem', cursor: 'pointer', fontFamily: "'Source Sans 3', sans-serif",
+                  letterSpacing: '.04em', textDecoration: 'none',
+                }}>{q}</a>
+              ))}
+            </div>
+          </div>
+        )}
         {showChips && !streaming && !isAf && (
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '.4rem', padding: '.25rem 0', alignSelf: 'flex-start' }}>
             {QUICK_REPLIES.map(q => (
@@ -288,7 +338,7 @@ export default function AliWidget() {
         {(mode === 'agentforce' || mode === 'both') && (
           <ChatLane
             label="Agentforce" dot="◆"
-            hist={afHist} showChips={false} streaming={streaming}
+            hist={afHist} showChips={showChips} streaming={streaming}
             onChip={sendMsg} isAf
           />
         )}
