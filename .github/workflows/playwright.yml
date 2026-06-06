@@ -51,13 +51,29 @@ jobs:
         if: always()
         run: node scripts/summarize-tests.mjs
 
-      - name: Commit test-summary.json
+      - name: Sync Jira QA status (Playwright suites)
+        if: always()
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          JIRA_SCOPE: playwright
+        run: node scripts/jira-sync-from-summary.mjs
+
+      - name: Append test history
+        if: always()
+        run: |
+          PASS=$(node -e "const s=require('./public/test-summary.json');const pw=s.suites.filter(x=>x.suite.startsWith('Playwright'));console.log(pw.reduce((a,x)=>a+(x.pass||0),0))")
+          FAIL=$(node -e "const s=require('./public/test-summary.json');const pw=s.suites.filter(x=>x.suite.startsWith('Playwright'));console.log(pw.reduce((a,x)=>a+(x.fail||0),0))")
+          HISTORY_LANE=playwright HISTORY_PASS="$PASS" HISTORY_FAIL="$FAIL" node scripts/append-test-history.mjs
+
+      - name: Commit test-summary.json and test-history.json
         if: always() && github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/test-summary.json
-          git diff --cached --quiet || git commit -m "ci: update test-summary.json [skip ci]"
+          git add public/test-summary.json public/test-history.json
+          git diff --cached --quiet || git commit -m "ci: update test-summary + history [skip ci]"
           git push
 
       - name: Upload test report

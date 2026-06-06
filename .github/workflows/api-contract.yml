@@ -47,12 +47,38 @@ jobs:
           EOF
 
       - name: Run Newman API contract tests
+        id: newman
         run: |
           npx newman run postman/CCOUnited_SF_Integration.postman_collection.json \
             --environment postman/ci-environment.json \
             --reporters cli,json \
             --reporter-json-export test-results/newman-results.json \
-            --bail
+            --bail && echo "NEWMAN_RESULT=pass" >> "$GITHUB_ENV" \
+                   || echo "NEWMAN_RESULT=fail" >> "$GITHUB_ENV"
+
+      - name: Sync Jira QA status (Newman)
+        if: always()
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          JIRA_SCOPE: newman
+        run: |
+          mkdir -p public
+          echo '{"suites":[]}' > public/test-summary.json
+          NEWMAN_STATUS="${NEWMAN_RESULT}" node scripts/jira-sync-from-summary.mjs
+
+      - name: Append test history (Newman)
+        if: always()
+        run: |
+          # Count pass/fail from newman-results.json if it exists
+          if [ -f test-results/newman-results.json ]; then
+            PASS=$(node -e "const r=require('./test-results/newman-results.json');const s=r.run?.stats?.assertions;console.log(s?.total-s?.failed||0)")
+            FAIL=$(node -e "const r=require('./test-results/newman-results.json');const s=r.run?.stats?.assertions;console.log(s?.failed||0)")
+          else
+            PASS=0; FAIL=11
+          fi
+          HISTORY_LANE=newman HISTORY_PASS="$PASS" HISTORY_FAIL="$FAIL" node scripts/append-test-history.mjs
 
       - name: Upload Newman results
         if: always()

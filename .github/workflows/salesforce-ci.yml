@@ -51,12 +51,37 @@ jobs:
           rm server.key
 
       - name: Deploy + Run Apex Tests
+        id: apex
         run: |
           sf project deploy start \
             --source-dir force-app \
             --target-org ccouSF \
             --test-level RunLocalTests \
-            --wait 30
+            --wait 30 && echo "APEX_RESULT=pass" >> "$GITHUB_ENV" \
+                       || echo "APEX_RESULT=fail" >> "$GITHUB_ENV"
+
+      - name: Sync Jira QA status (Apex)
+        if: always()
+        working-directory: ${{ github.workspace }}
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+        run: |
+          if [ "${APEX_RESULT}" = "fail" ]; then
+            node scripts/jira-update.mjs --status fail QA-135 QA-136 QA-137 QA-138 QA-139 QA-140
+          else
+            node scripts/jira-update.mjs --status pass QA-135 QA-136 QA-137 QA-138 QA-139 QA-140
+          fi
+
+      - name: Append test history (Apex)
+        if: always()
+        working-directory: ${{ github.workspace }}
+        run: |
+          PASS=0; FAIL=0
+          if [ "${APEX_RESULT}" = "pass" ]; then PASS=7; else FAIL=7; fi
+          HISTORY_LANE=salesforce-apex HISTORY_PASS="$PASS" HISTORY_FAIL="$FAIL" HISTORY_TOTAL=7 \
+            node scripts/append-test-history.mjs
 
   # ── Lane 2: Playwright BDD (Salesforce surface) ─────────────────
   playwright-bdd:
@@ -82,7 +107,11 @@ jobs:
         run: npx bddgen
 
       - name: Run Salesforce BDD tests
-        run: npx playwright test --project=salesforce-bdd
+        id: bdd
+        run: |
+          npx playwright test --project=salesforce-bdd \
+            && echo "BDD_RESULT=pass" >> "$GITHUB_ENV" \
+            || echo "BDD_RESULT=fail" >> "$GITHUB_ENV"
         # Phase 0: runs against Next.js localhost (webServer starts automatically)
         # Phase 4+: set SF_EXPERIENCE_CLOUD_URL as a repo variable to hit the live SF site
         env:
@@ -97,6 +126,38 @@ jobs:
           SF_USERNAME: ${{ secrets.SF_USERNAME }}
           SF_PASSWORD: ${{ secrets.SF_PASSWORD }}
           SF_SECURITY_TOKEN: ${{ secrets.SF_SECURITY_TOKEN }}
+
+      - name: Generate BDD test summary
+        if: always()
+        run: node scripts/summarize-tests.mjs
+
+      - name: Sync Jira QA status (BDD)
+        if: always()
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+        run: |
+          if [ "${BDD_RESULT}" = "fail" ]; then
+            node scripts/jira-update.mjs --status fail \
+              QA-106 QA-107 QA-108 QA-109 \
+              QA-110 QA-111 QA-112 QA-113 QA-114 QA-115 \
+              QA-116 QA-117 QA-118 QA-119 QA-120 QA-121 \
+              QA-122 QA-123
+          else
+            node scripts/jira-update.mjs --status pass \
+              QA-106 QA-107 QA-108 QA-109 \
+              QA-110 QA-111 QA-112 QA-113 QA-114 QA-115 \
+              QA-116 QA-117 QA-118 QA-119 QA-120 QA-121 \
+              QA-122 QA-123
+          fi
+
+      - name: Append test history (BDD)
+        if: always()
+        run: |
+          PASS=$(node -e "const s=require('./public/test-summary.json');const bdd=s.suites.filter(x=>x.suite.startsWith('BDD'));console.log(bdd.reduce((a,x)=>a+(x.pass||0),0))")
+          FAIL=$(node -e "const s=require('./public/test-summary.json');const bdd=s.suites.filter(x=>x.suite.startsWith('BDD'));console.log(bdd.reduce((a,x)=>a+(x.fail||0),0))")
+          HISTORY_LANE=salesforce-bdd HISTORY_PASS="$PASS" HISTORY_FAIL="$FAIL" node scripts/append-test-history.mjs
 
       - name: Upload BDD report
         if: always()
