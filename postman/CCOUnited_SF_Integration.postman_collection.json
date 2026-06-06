@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "CCO United — Salesforce Integration",
-    "description": "API contract tests for the Monday.com → Salesforce ETL integration powering CCO United. Covers Event__c (custom object), Account (CCO Registry), Case (Housing Inquiry), and Lead (Subscriber) objects via the Salesforce REST API.\n\nAuth: OAuth 2.0 username+password flow. Set credentials in the matching environment file. The pre-request script in each folder automatically fetches and caches the access token.",
+    "name": "CCO United \u2014 Salesforce Integration",
+    "description": "API contract tests for the Monday.com \u2192 Salesforce ETL integration powering CCO United. Covers Event__c (custom object), Account (CCO Registry), Case (Housing Inquiry), and Lead (Subscriber) objects via the Salesforce REST API.\n\nAuth: OAuth 2.0 username+password flow. Set credentials in the matching environment file. The pre-request script in each folder automatically fetches and caches the access token.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_postman_id": "ccou-sf-integration-v1"
   },
@@ -9,7 +9,11 @@
   "auth": {
     "type": "bearer",
     "bearer": [
-      { "key": "token", "value": "{{sf_access_token}}", "type": "string" }
+      {
+        "key": "token",
+        "value": "{{sf_access_token}}",
+        "type": "string"
+      }
     ]
   },
   "event": [
@@ -51,18 +55,25 @@
   ],
   "item": [
     {
-      "name": "Event__c — CCO Events Calendar",
+      "name": "Event__c \u2014 CCO Events Calendar",
       "description": "CRUD operations on the Event__c custom object. Records are ETL-synced from the Monday.com CN Master Events Calendar board (ID: 18415647485).",
       "item": [
         {
-          "name": "GET — Upcoming Public Events",
+          "name": "GET \u2014 Upcoming Public Events",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{sf_instance_url}}/services/data/v61.0/query?q=SELECT Id,Name,Event_Date__c,Location__c,Event_Type__c,Description__c,Status__c FROM Event__c WHERE Is_Public__c=true AND Status__c='Approved' AND Event_Date__c>=TODAY ORDER BY Event_Date__c ASC LIMIT 20",
-              "host": ["{{sf_instance_url}}"],
-              "path": ["services", "data", "v61.0", "query"],
+              "host": [
+                "{{sf_instance_url}}"
+              ],
+              "path": [
+                "services",
+                "data",
+                "v61.0",
+                "query"
+              ],
               "query": [
                 {
                   "key": "q",
@@ -101,14 +112,23 @@
           "response": []
         },
         {
-          "name": "GET — Event by ID",
+          "name": "GET \u2014 Event by ID",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{sf_instance_url}}/services/data/v61.0/sobjects/Event__c/{{event_id}}",
-              "host": ["{{sf_instance_url}}"],
-              "path": ["services", "data", "v61.0", "sobjects", "Event__c", "{{event_id}}"]
+              "host": [
+                "{{sf_instance_url}}"
+              ],
+              "path": [
+                "services",
+                "data",
+                "v61.0",
+                "sobjects",
+                "Event__c",
+                "{{event_id}}"
+              ]
             }
           },
           "event": [
@@ -129,21 +149,43 @@
           "response": []
         },
         {
-          "name": "POST — Create Event (manual / test data)",
+          "name": "POST \u2014 Create Event (manual / test data)",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"Name\": \"[TEST] Postman Created Event\",\n  \"Event_Date__c\": \"2026-09-01T18:00:00.000Z\",\n  \"Location__c\": \"Tahlequah, OK\",\n  \"Event_Type__c\": \"Meeting\",\n  \"Is_Public__c\": true,\n  \"Status__c\": \"Pending Review\",\n  \"Description__c\": \"Created via Postman integration test.\",\n  \"Monday_Item_Id__c\": \"POSTMAN_TEST_001\"\n}"
+              "raw": "{\n  \"Name\": \"[TEST] Postman Created Event\",\n  \"Event_Date__c\": \"2026-09-01T18:00:00.000Z\",\n  \"Location__c\": \"Tahlequah, OK\",\n  \"Event_Type__c\": \"Meeting\",\n  \"Is_Public__c\": true,\n  \"Status__c\": \"Pending Review\",\n  \"Description__c\": \"Created via Postman integration test.\",\n  \"Monday_Item_Id__c\": \"{{test_monday_id}}\"\n}"
             },
             "url": {
               "raw": "{{sf_instance_url}}/services/data/v61.0/sobjects/Event__c",
-              "host": ["{{sf_instance_url}}"],
-              "path": ["services", "data", "v61.0", "sobjects", "Event__c"]
+              "host": [
+                "{{sf_instance_url}}"
+              ],
+              "path": [
+                "services",
+                "data",
+                "v61.0",
+                "sobjects",
+                "Event__c"
+              ]
             }
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set(\"test_monday_id\", \"POSTMAN_TEST_\" + Date.now());"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -163,18 +205,32 @@
           "response": []
         },
         {
-          "name": "PATCH — Update Event Status",
+          "name": "PATCH \u2014 Update Event Status",
           "request": {
             "method": "PATCH",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"Status__c\": \"Approved\"\n}"
             },
             "url": {
               "raw": "{{sf_instance_url}}/services/data/v61.0/sobjects/Event__c/{{new_event_id}}",
-              "host": ["{{sf_instance_url}}"],
-              "path": ["services", "data", "v61.0", "sobjects", "Event__c", "{{new_event_id}}"]
+              "host": [
+                "{{sf_instance_url}}"
+              ],
+              "path": [
+                "services",
+                "data",
+                "v61.0",
+                "sobjects",
+                "Event__c",
+                "{{new_event_id}}"
+              ]
             }
           },
           "event": [
@@ -191,14 +247,23 @@
           "response": []
         },
         {
-          "name": "DELETE — Cleanup Test Event",
+          "name": "DELETE \u2014 Cleanup Test Event",
           "request": {
             "method": "DELETE",
             "header": [],
             "url": {
               "raw": "{{sf_instance_url}}/services/data/v61.0/sobjects/Event__c/{{new_event_id}}",
-              "host": ["{{sf_instance_url}}"],
-              "path": ["services", "data", "v61.0", "sobjects", "Event__c", "{{new_event_id}}"]
+              "host": [
+                "{{sf_instance_url}}"
+              ],
+              "path": [
+                "services",
+                "data",
+                "v61.0",
+                "sobjects",
+                "Event__c",
+                "{{new_event_id}}"
+              ]
             }
           },
           "event": [
@@ -207,7 +272,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Status 204 — record deleted', () => pm.response.to.have.status(204));",
+                  "pm.test('Status 204 \u2014 record deleted', () => pm.response.to.have.status(204));",
                   "pm.collectionVariables.unset('new_event_id');"
                 ]
               }
@@ -218,18 +283,25 @@
       ]
     },
     {
-      "name": "Account — CCO Registry",
+      "name": "Account \u2014 CCO Registry",
       "description": "Account records represent CCO organizations synced from the Monday.com Master CCO Registry board (ID: 18415645308) via AccountEtl.cls.",
       "item": [
         {
-          "name": "GET — Active CCO Organizations",
+          "name": "GET \u2014 Active CCO Organizations",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{sf_instance_url}}/services/data/v61.0/query?q=SELECT Id,Name,CCO_Status__c,CCO_Contact_Name__c,CCO_Contact_Email__c,Phone,Website FROM Account WHERE CCO_Status__c='Active' ORDER BY Name ASC LIMIT 50",
-              "host": ["{{sf_instance_url}}"],
-              "path": ["services", "data", "v61.0", "query"],
+              "host": [
+                "{{sf_instance_url}}"
+              ],
+              "path": [
+                "services",
+                "data",
+                "v61.0",
+                "query"
+              ],
               "query": [
                 {
                   "key": "q",
@@ -261,14 +333,21 @@
           "response": []
         },
         {
-          "name": "GET — CCO Org by Monday Board ID",
+          "name": "GET \u2014 CCO Org by Monday Board ID",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{sf_instance_url}}/services/data/v61.0/query?q=SELECT Id,Name,Monday_Board_Id__c,CCO_Status__c FROM Account WHERE Monday_Board_Id__c='{{monday_board_id}}' LIMIT 1",
-              "host": ["{{sf_instance_url}}"],
-              "path": ["services", "data", "v61.0", "query"],
+              "host": [
+                "{{sf_instance_url}}"
+              ],
+              "path": [
+                "services",
+                "data",
+                "v61.0",
+                "query"
+              ],
               "query": [
                 {
                   "key": "q",
@@ -297,18 +376,25 @@
       ]
     },
     {
-      "name": "Case — Housing Inquiry",
-      "description": "Housing inquiry Cases created when site visitors submit the /housing form (Next.js → /api/housing → SF REST). RecordType: Housing Inquiry.",
+      "name": "Case \u2014 Housing Inquiry",
+      "description": "Housing inquiry Cases created when site visitors submit the /housing form (Next.js \u2192 /api/housing \u2192 SF REST). RecordType: Housing Inquiry.",
       "item": [
         {
-          "name": "GET — Open Housing Cases",
+          "name": "GET \u2014 Open Housing Cases",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{sf_instance_url}}/services/data/v61.0/query?q=SELECT Id,CaseNumber,Subject,Status,Priority,Contact.Name,Contact.Email,CreatedDate FROM Case WHERE Status!='Closed' ORDER BY CreatedDate DESC LIMIT 25",
-              "host": ["{{sf_instance_url}}"],
-              "path": ["services", "data", "v61.0", "query"],
+              "host": [
+                "{{sf_instance_url}}"
+              ],
+              "path": [
+                "services",
+                "data",
+                "v61.0",
+                "query"
+              ],
               "query": [
                 {
                   "key": "q",
@@ -336,18 +422,31 @@
           "response": []
         },
         {
-          "name": "POST — Create Housing Case",
+          "name": "POST \u2014 Create Housing Case",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"Subject\": \"Housing Inquiry — Rental Assistance\",\n  \"Description\": \"Requesting information about rental assistance programs.\",\n  \"Status\": \"New\",\n  \"Priority\": \"Medium\",\n  \"Origin\": \"Web\",\n  \"SuppliedName\": \"Jane Doe\",\n  \"SuppliedEmail\": \"jane@example.com\",\n  \"SuppliedPhone\": \"918-555-0100\"\n}"
+              "raw": "{\n  \"Subject\": \"Housing Inquiry \u2014 Rental Assistance\",\n  \"Description\": \"Requesting information about rental assistance programs.\",\n  \"Status\": \"New\",\n  \"Priority\": \"Medium\",\n  \"Origin\": \"Web\",\n  \"SuppliedName\": \"Jane Doe\",\n  \"SuppliedEmail\": \"jane@example.com\",\n  \"SuppliedPhone\": \"918-555-0100\"\n}"
             },
             "url": {
               "raw": "{{sf_instance_url}}/services/data/v61.0/sobjects/Case",
-              "host": ["{{sf_instance_url}}"],
-              "path": ["services", "data", "v61.0", "sobjects", "Case"]
+              "host": [
+                "{{sf_instance_url}}"
+              ],
+              "path": [
+                "services",
+                "data",
+                "v61.0",
+                "sobjects",
+                "Case"
+              ]
             }
           },
           "event": [
@@ -370,14 +469,23 @@
           "response": []
         },
         {
-          "name": "GET — Case by ID",
+          "name": "GET \u2014 Case by ID",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{sf_instance_url}}/services/data/v61.0/sobjects/Case/{{new_case_id}}",
-              "host": ["{{sf_instance_url}}"],
-              "path": ["services", "data", "v61.0", "sobjects", "Case", "{{new_case_id}}"]
+              "host": [
+                "{{sf_instance_url}}"
+              ],
+              "path": [
+                "services",
+                "data",
+                "v61.0",
+                "sobjects",
+                "Case",
+                "{{new_case_id}}"
+              ]
             }
           },
           "event": [
@@ -399,18 +507,25 @@
       ]
     },
     {
-      "name": "Lead — CCO Event Subscribers",
+      "name": "Lead \u2014 CCO Event Subscribers",
       "description": "Lead records represent event newsletter subscribers synced from Monday via LeadEtl.cls. External ID: Monday_Item_Id__c.",
       "item": [
         {
-          "name": "GET — CCO Subscribers (Leads)",
+          "name": "GET \u2014 CCO Subscribers (Leads)",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{sf_instance_url}}/services/data/v61.0/query?q=SELECT Id,LastName,Email,LeadSource,Description,Monday_Item_Id__c FROM Lead WHERE Company='CCO United Subscriber' ORDER BY CreatedDate DESC LIMIT 50",
-              "host": ["{{sf_instance_url}}"],
-              "path": ["services", "data", "v61.0", "query"],
+              "host": [
+                "{{sf_instance_url}}"
+              ],
+              "path": [
+                "services",
+                "data",
+                "v61.0",
+                "query"
+              ],
               "query": [
                 {
                   "key": "q",
@@ -438,14 +553,24 @@
           "response": []
         },
         {
-          "name": "GET — Subscriber by Monday Item ID (external ID lookup)",
+          "name": "GET \u2014 Subscriber by Monday Item ID (external ID lookup)",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{sf_instance_url}}/services/data/v61.0/sobjects/Lead/Monday_Item_Id__c/{{monday_item_id}}",
-              "host": ["{{sf_instance_url}}"],
-              "path": ["services", "data", "v61.0", "sobjects", "Lead", "Monday_Item_Id__c", "{{monday_item_id}}"]
+              "host": [
+                "{{sf_instance_url}}"
+              ],
+              "path": [
+                "services",
+                "data",
+                "v61.0",
+                "sobjects",
+                "Lead",
+                "Monday_Item_Id__c",
+                "{{monday_item_id}}"
+              ]
             }
           },
           "event": [
@@ -472,29 +597,62 @@
       ]
     },
     {
-      "name": "Auth — OAuth 2.0",
+      "name": "Auth \u2014 OAuth 2.0",
       "description": "Standalone auth request for manual token refresh or debugging. The collection pre-request script handles auth automatically for all other folders.",
       "item": [
         {
-          "name": "POST — Get Access Token",
+          "name": "POST \u2014 Get Access Token",
           "request": {
-            "auth": { "type": "noauth" },
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/x-www-form-urlencoded" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
             "body": {
               "mode": "urlencoded",
               "urlencoded": [
-                { "key": "grant_type",    "value": "password",                    "type": "text" },
-                { "key": "client_id",     "value": "{{sf_client_id}}",            "type": "text" },
-                { "key": "client_secret", "value": "{{sf_client_secret}}",        "type": "text" },
-                { "key": "username",      "value": "{{sf_username}}",             "type": "text" },
-                { "key": "password",      "value": "{{sf_password}}{{sf_security_token}}", "type": "text" }
+                {
+                  "key": "grant_type",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{sf_client_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{sf_client_secret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "{{sf_username}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{sf_password}}{{sf_security_token}}",
+                  "type": "text"
+                }
               ]
             },
             "url": {
               "raw": "{{sf_login_url}}/services/oauth2/token",
-              "host": ["{{sf_login_url}}"],
-              "path": ["services", "oauth2", "token"]
+              "host": [
+                "{{sf_login_url}}"
+              ],
+              "path": [
+                "services",
+                "oauth2",
+                "token"
+              ]
             }
           },
           "event": [
