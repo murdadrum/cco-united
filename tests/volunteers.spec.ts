@@ -125,7 +125,7 @@ test.describe('VolunteerForm — validation', () => {
     await page.locator('#volunteer-register button.btn-submit').click()
 
     await expect(page.locator('#volunteer-register .form-success')).toBeVisible({ timeout: 5000 })
-    await expect(page.getByText(/wado/i).first()).toBeVisible()
+    await expect(page.locator('#volunteer-register .form-success').getByText(/wado/i)).toBeVisible()
   })
 
   test('submit button is disabled while request is in-flight', async ({ page }) => {

@@ -23,9 +23,10 @@ test.describe('QA Board page — smoke', () => {
     await page.goto('/qa')
     await expect(page.getByText('At a Glance')).toBeVisible()
     await expect(page.getByText('Total Issues')).toBeVisible()
-    await expect(page.getByText('Done')).toBeVisible()
-    await expect(page.getByText('In Progress')).toBeVisible()
-    await expect(page.getByText('To Do')).toBeVisible()
+    // Use .first() — page may have many "Done" badges from the issues list
+    await expect(page.getByText('Done').first()).toBeVisible()
+    await expect(page.getByText('In Progress').first()).toBeVisible()
+    await expect(page.getByText('To Do').first()).toBeVisible()
   })
 
   test('Sprint Progress section renders gauge', async ({ page }) => {
@@ -47,13 +48,13 @@ test.describe('QA Board page — smoke', () => {
 
   test('shows issue keys from SCRUM project', async ({ page }) => {
     await page.goto('/qa')
-    // At least one SCRUM key should appear
-    await expect(page.getByText(/SCRUM-/)).toBeVisible({ timeout: 10000 })
+    // At least one SCRUM key should appear — use .first() for strict mode
+    await expect(page.getByText(/SCRUM-/).first()).toBeVisible({ timeout: 10000 })
   })
 
   test('completion percentage is displayed', async ({ page }) => {
     await page.goto('/qa')
-    await expect(page.locator('text=/\\d+%/')).toBeVisible()
+    await expect(page.locator('text=/\\d+%/').first()).toBeVisible()
   })
 })
 
