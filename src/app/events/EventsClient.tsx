@@ -1,6 +1,67 @@
 'use client'
+/* eslint-disable @next/next/no-img-element */
 import { useState, useMemo } from 'react'
 import type { CCOEvent } from '@/lib/sfTypes'
+
+// Title keyword → Unsplash image (checked longest/most-specific first)
+const TITLE_KEYWORD_IMAGES: Array<[string, string]> = [
+  // Sports / games
+  ['stickball',    'https://images.unsplash.com/photo-1587280501635-68a0e82cd5ff?w=800&q=80'],
+  ['tournament',   'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=800&q=80'],
+  ['sports',       'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=800&q=80'],
+  // Language / learning
+  ['language',     'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&q=80'],
+  ['immersion',    'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&q=80'],
+  ['workshop',     'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80'],
+  ['learning',     'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80'],
+  // Health / wellness
+  ['health',       'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80'],
+  ['wellness',     'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80'],
+  ['medical',      'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80'],
+  // Construction / groundbreaking
+  ['groundbreaking','https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80'],
+  ['construction', 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80'],
+  ['heritage trail','https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&q=80'],
+  ['trail',        'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&q=80'],
+  // Ribbon cutting / opening
+  ['ribbon',       'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80'],
+  ['opening',      'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80'],
+  ['resource hub', 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80'],
+  ['youth center', 'https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=800&q=80'],
+  // Youth / leadership
+  ['leadership',   'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&q=80'],
+  ['summit',       'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&q=80'],
+  ['youth',        'https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=800&q=80'],
+  // Gathering / community
+  ['gathering',    'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=800&q=80'],
+  ['community',    'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=800&q=80'],
+  // Convention / annual
+  ['annual',       'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&q=80'],
+  ['convention',   'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&q=80'],
+  ['conference',   'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&q=80'],
+  // Cultural / heritage
+  ['cultural',     'https://images.unsplash.com/photo-1571913543986-3a96b03d9378?w=800&q=80'],
+  ['heritage',     'https://images.unsplash.com/photo-1571913543986-3a96b03d9378?w=800&q=80'],
+  ['cherokee',     'https://images.unsplash.com/photo-1571913543986-3a96b03d9378?w=800&q=80'],
+  // Food
+  ['food',         'https://images.unsplash.com/photo-1610348725531-843dff563e2c?w=800&q=80'],
+  ['nutrition',    'https://images.unsplash.com/photo-1610348725531-843dff563e2c?w=800&q=80'],
+  ['strawberry',   'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=800&q=80'],
+  // Festival / fair
+  ['festival',     'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=80'],
+  ['fair',         'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=80'],
+  // Elder / senior
+  ['elder',        'https://images.unsplash.com/photo-1447005497901-b3e9ee359928?w=800&q=80'],
+  ['senior',       'https://images.unsplash.com/photo-1447005497901-b3e9ee359928?w=800&q=80'],
+]
+
+const DEFAULT_EVENT_IMAGE = 'https://images.unsplash.com/photo-1571913543986-3a96b03d9378?w=800&q=80'
+
+function getEventImage(title: string | null, eventType: string | null): string {
+  const haystack = ((title ?? '') + ' ' + (eventType ?? '')).toLowerCase()
+  const match = TITLE_KEYWORD_IMAGES.find(([kw]) => haystack.includes(kw))
+  return match ? match[1] : DEFAULT_EVENT_IMAGE
+}
 
 type View = 'grid' | 'list' | 'calendar'
 
@@ -119,7 +180,7 @@ function CalendarView({ events }: { events: CCOEvent[] }) {
 }
 
 export default function EventsClient({ events }: { events: CCOEvent[] }) {
-  const [view, setView] = useState<View>('list')
+  const [view, setView] = useState<View>('grid')
   const [filterOrg, setFilterOrg] = useState('')
   const [filterType, setFilterType] = useState('')
   const [filterDateFrom, setFilterDateFrom] = useState('')
@@ -148,6 +209,10 @@ export default function EventsClient({ events }: { events: CCOEvent[] }) {
       return true
     })
   }, [events, filterOrg, filterType, filterDateFrom, filterDateTo])
+
+  function onImgLoad(e: React.SyntheticEvent<HTMLImageElement>) {
+    e.currentTarget.classList.add('loaded')
+  }
 
   async function handleSubscribe(e: React.FormEvent) {
     e.preventDefault()
@@ -231,10 +296,21 @@ export default function EventsClient({ events }: { events: CCOEvent[] }) {
         <div className="events-grid">
           {filteredEvents.map(ev => (
             <a key={ev.id} href={`/events/${ev.id}`} className="event-card">
-              {ev.eventType && <div className="event-card-type">{ev.eventType}</div>}
-              <div className="event-card-title">{ev.name}</div>
-              {ev.date && <div className="event-card-date">{formatDate(ev.date)}</div>}
-              {ev.organization && <div className="event-card-org">{ev.organization}</div>}
+              <img
+                className="feature-card-img"
+                src={getEventImage(ev.name, ev.eventType)}
+                alt={ev.eventType ?? 'Community event'}
+                loading="lazy"
+                onLoad={onImgLoad}
+                onError={onImgLoad}
+              />
+              <div className="feature-card-scrim" />
+              <div className="event-card-body">
+                {ev.eventType && <div className="event-card-type">{ev.eventType}</div>}
+                <div className="event-card-title">{ev.name}</div>
+                {ev.date && <div className="event-card-date">{formatDate(ev.date)}</div>}
+                {ev.organization && <div className="event-card-org">{ev.organization}</div>}
+              </div>
             </a>
           ))}
         </div>
@@ -246,7 +322,7 @@ export default function EventsClient({ events }: { events: CCOEvent[] }) {
             <a key={ev.id} href={`/events/${ev.id}`} className="event-list-item">
               <span className="event-list-date">{formatShortDate(ev.date)}</span>
               <span className="event-list-title">{ev.name}</span>
-              <span className="event-list-org">{ev.organization ?? ''}</span>
+              <span className="event-list-org">{ev.location ?? ''}</span>
               {ev.eventType && <span className="event-list-type">{ev.eventType}</span>}
             </a>
           ))}

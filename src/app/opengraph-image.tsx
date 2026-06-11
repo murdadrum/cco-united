@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og'
 
 export const runtime = 'edge'
-export const alt = 'CCO United — One Platform. Fourteen Communities. Stronger Together.'
+export const alt = 'CCO United — One Platform. One Hundred Communities. Stronger Together.'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
@@ -86,7 +86,7 @@ export default function Image() {
             textTransform: 'uppercase',
           }}
         >
-          ONE PLATFORM · FOURTEEN COMMUNITIES
+          ONE PLATFORM · ONE HUNDRED COMMUNITIES
         </div>
       </div>
     ),

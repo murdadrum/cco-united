@@ -9,7 +9,7 @@ export default function HeroSection() {
         <span className="hero-eyebrow">Community &amp; Cultural Outreach</span>
         <h1 className="hero-title">CCO United</h1>
         <div className="hero-rule"></div>
-        <p className="hero-tagline">One Platform. Fourteen Communities.<br />Stronger Together.</p>
+        <p className="hero-tagline">One Platform. One Hundred Communities.<br />Stronger Together.</p>
         <p className="hero-sub">A living, growing workspace — built for Cherokee Nation CCO organizations.</p>
         <div className="hero-cta">
           <a href="#about" className="btn-primary">See the Vision →</a>

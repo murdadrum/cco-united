@@ -3,7 +3,7 @@ import type { CCOEvent } from './sfTypes'
 
 const SOQL = `
   SELECT Id, Name, Event_Date__c, Location__c, Event_Type__c,
-         CCO_Organization__c, Is_Public__c, Description__c, Status__c
+         CCO_Organization__r.Name, Is_Public__c, Description__c, Status__c
   FROM Event__c
   WHERE Is_Public__c = true
     AND Status__c = 'Approved'
@@ -18,7 +18,7 @@ interface SfEventRecord {
   Event_Date__c: string | null
   Location__c: string | null
   Event_Type__c: string | null
-  CCO_Organization__c: string | null
+  CCO_Organization__r: { Name: string } | null
   Is_Public__c: boolean
   Description__c: string | null
   Status__c: string | null
@@ -57,7 +57,7 @@ export async function fetchPublicEvents(): Promise<CCOEvent[]> {
       name: r.Name,
       date: r.Event_Date__c ?? null,
       time: null,
-      organization: r.CCO_Organization__c ?? null,
+      organization: r.CCO_Organization__r?.Name ?? null,
       eventType: r.Event_Type__c ?? null,
       isPublic: r.Is_Public__c,
       description: r.Description__c ?? null,

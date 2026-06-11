@@ -14,7 +14,7 @@ export default function AboutSection() {
               </div>
               <div className="stat-card">
                 <div className="stat-num">1839</div>
-                <div className="stat-label">Constitutional Governance</div>
+                <div className="stat-label">Year of Constitutional Governance</div>
               </div>
               <div className="stat-card">
                 <div className="stat-num">11,000</div>

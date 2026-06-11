@@ -7,16 +7,28 @@ type Mode = 'alis' | 'agentforce' | 'both'
 const QUICK_REPLIES = [
   "What is CCO United?",
   "How do I join a CCO?",
-  "Tell me about upcoming events",
+  "Tell me about Josh Barteaux",
   "What tools does the platform offer?",
   "How can I get involved?",
 ]
 
 function renderContent(text: string) {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g)
+  // Split on: **bold**, [label](url), bare https?:// URLs, bare emails
+  const TOKEN = /(\*\*[^*]+\*\*|\[[^\]]+\]\(https?:\/\/[^)]+\)|https?:\/\/[^\s)>\]]+|[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})/g
+  const parts = text.split(TOKEN)
   return parts.map((part, i) => {
     if (part.startsWith('**') && part.endsWith('**')) {
       return <span key={i} style={{ color: '#E8B84B', fontWeight: 600 }}>{part.slice(2, -2)}</span>
+    }
+    const mdLink = part.match(/^\[([^\]]+)\]\((https?:\/\/[^)]+)\)$/)
+    if (mdLink) {
+      return <a key={i} href={mdLink[2]} target="_blank" rel="noopener noreferrer" style={{ color: '#60a5fa', textDecoration: 'underline' }}>{mdLink[1]}</a>
+    }
+    if (part.match(/^https?:\/\//)) {
+      return <a key={i} href={part} target="_blank" rel="noopener noreferrer" style={{ color: '#60a5fa', textDecoration: 'underline' }}>{part}</a>
+    }
+    if (part.match(/^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/)) {
+      return <a key={i} href={`mailto:${part}`} style={{ color: '#60a5fa', textDecoration: 'underline' }}>{part}</a>
     }
     return <span key={i}>{part}</span>
   })
@@ -58,22 +70,20 @@ async function streamAlis(
   return out
 }
 
-// ── Agentforce streaming ──────────────────────────────────────────────────────
+// ── Agentforce lane — demo mode via second Anthropic call ────────────────────
 async function streamAgentforce(
-  message: string,
-  sessionId: string | null,
+  _message: string,
+  _sessionId: string | null,
   onChunk: (text: string) => void,
-  onSession: (id: string) => void
+  _onSession: (id: string) => void,
+  messages: Message[]
 ): Promise<string> {
-  const res = await fetch('/api/agentforce', {
+  const res = await fetch('/api/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message, sessionId }),
+    body: JSON.stringify({ messages }),
   })
-  if (!res.ok) throw new Error(`Agentforce API ${res.status}`)
-
-  const newSession = res.headers.get('X-Session-Id')
-  if (newSession) onSession(newSession)
+  if (!res.ok) throw new Error(`AF demo API ${res.status}`)
 
   const reader = res.body!.getReader()
   const dec = new TextDecoder()
@@ -86,16 +96,17 @@ async function streamAgentforce(
     for (const line of lines) {
       if (!line.startsWith('data: ')) continue
       const d = line.slice(6).trim()
-      if (!d || d === '[DONE]') continue
+      if (d === '[DONE]') break
       try {
         const p = JSON.parse(d)
-        // Agentforce SSE: { type: 'chunk', data: { message: { text } } }
-        const text = p?.data?.message?.text ?? p?.message?.text ?? p?.text ?? null
-        if (text) { out += text; onChunk(out) }
+        if (p.type === 'content_block_delta' && p.delta?.text) {
+          out += p.delta.text
+          onChunk(out)
+        }
       } catch { /* skip */ }
     }
   }
-  return out || '(No response from agent)'
+  return out
 }
 
 // ── Message bubble ─────────────────────────────────────────────────────────────
@@ -131,8 +142,22 @@ function ChatLane({
   label: string; dot?: string; hist: Message[]; showChips: boolean;
   streaming: boolean; onChip: (q: string) => void; isAf?: boolean;
 }) {
-  const ref = useRef<HTMLDivElement>(null)
-  useEffect(() => { if (ref.current) ref.current.scrollTop = ref.current.scrollHeight }, [hist])
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const anchorRef = useRef<HTMLDivElement>(null)
+  const prevLenRef = useRef(hist.length)
+
+  useEffect(() => {
+    const prev = prevLenRef.current
+    prevLenRef.current = hist.length
+    if (!scrollRef.current) return
+    if (hist.length > prev && anchorRef.current) {
+      // New message added — scroll so the user bubble sits at the top of the pane
+      anchorRef.current.scrollIntoView({ block: 'start', behavior: 'smooth' })
+    }
+  }, [hist])
+
+  // Index of the last user message (used to place the scroll anchor)
+  const lastUserIdx = hist.map(m => m.role).lastIndexOf('user')
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
@@ -150,72 +175,69 @@ function ChatLane({
         {label}
       </div>
       <div
-        ref={ref}
+        ref={scrollRef}
         style={{
           flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column',
           gap: '.6rem', padding: '.85rem .75rem',
           background: isAf ? 'rgba(0,20,50,0.35)' : 'transparent',
         }}
       >
-        {hist.map((m, i) => <Bubble key={i} m={m} isAf={isAf} />)}
+        {hist.map((m, i) => (
+          <div key={i} ref={i === lastUserIdx ? anchorRef : undefined}>
+            <Bubble m={m} isAf={isAf} />
+          </div>
+        ))}
         {isAf && hist.filter(m => m.role === 'user').length === 0 && (
-          <div style={{
-            display: 'flex', flexDirection: 'column', alignItems: 'center',
-            justifyContent: 'center', flex: 1, gap: '1rem', textAlign: 'center',
-            padding: '1.5rem',
-          }}>
-            <div style={{ fontSize: '2rem' }}>⚡</div>
-            <div style={{
-              fontFamily: "'Cinzel', serif", fontSize: '.85rem',
-              color: '#60a5fa', letterSpacing: '.06em',
-            }}>
-              Agentforce Enterprise
-            </div>
-            <div style={{
-              fontSize: '.78rem', color: 'rgba(200,220,255,0.6)',
-              lineHeight: 1.6, maxWidth: '200px',
-            }}>
-              Live agent powered by Salesforce. Tap below to launch a full session.
-            </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '.4rem', padding: '.25rem 0', alignSelf: 'flex-start' }}>
+            {QUICK_REPLIES.map(q => {
+              const isHighlight = q === 'Tell me about Josh Barteaux'
+              return (
+              <button key={q} onClick={() => onChip(q)} style={{
+                background: isHighlight ? 'rgba(0,120,212,0.18)' : 'transparent',
+                border: `1px solid ${isHighlight ? '#0078d4' : 'rgba(96,165,250,0.45)'}`,
+                color: isHighlight ? '#60c8ff' : '#60a5fa',
+                borderRadius: '20px', padding: '.3rem .75rem',
+                fontSize: '.75rem', cursor: 'pointer', fontFamily: "'Source Sans 3', sans-serif",
+                letterSpacing: '.04em',
+                fontWeight: isHighlight ? 600 : 400,
+              }}>{q}</button>
+              )
+            })}
             <a
               href={AF_STUDIO_URL}
               target="_blank"
               rel="noopener noreferrer"
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '.4rem',
-                padding: '.55rem 1.1rem',
-                background: 'rgba(0,120,212,0.2)',
-                border: '1px solid rgba(96,165,250,0.5)',
-                color: '#60a5fa', borderRadius: '6px',
-                fontSize: '.78rem', textDecoration: 'none',
+                padding: '.3rem .75rem',
+                background: '#0078d4',
+                border: '1px solid #0078d4',
+                color: '#ffffff', borderRadius: '20px',
+                fontSize: '.75rem', textDecoration: 'none',
                 fontFamily: "'Source Sans 3', sans-serif",
-                letterSpacing: '.04em',
+                letterSpacing: '.04em', fontWeight: 600,
               }}
             >
-              Launch in Salesforce ↗
+              Launch in Salesforce ☁
             </a>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '.4rem', justifyContent: 'center' }}>
-              {QUICK_REPLIES.map(q => (
-                <a key={q} href={AF_STUDIO_URL} target="_blank" rel="noopener noreferrer" style={{
-                  background: 'transparent', border: '1px solid rgba(96,165,250,0.35)',
-                  color: '#60a5fa', borderRadius: '20px', padding: '.3rem .75rem',
-                  fontSize: '.75rem', cursor: 'pointer', fontFamily: "'Source Sans 3', sans-serif",
-                  letterSpacing: '.04em', textDecoration: 'none',
-                }}>{q}</a>
-              ))}
-            </div>
           </div>
         )}
         {showChips && !streaming && !isAf && (
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '.4rem', padding: '.25rem 0', alignSelf: 'flex-start' }}>
-            {QUICK_REPLIES.map(q => (
+            {QUICK_REPLIES.map(q => {
+              const isHighlight = q === 'Tell me about Josh Barteaux'
+              return (
               <button key={q} onClick={() => onChip(q)} style={{
-                background: 'transparent', border: '1px solid rgba(200,150,12,0.45)',
-                color: '#E8B84B', borderRadius: '20px', padding: '.3rem .75rem',
+                background: isHighlight ? 'rgba(200,150,12,0.18)' : 'transparent',
+                border: `1px solid ${isHighlight ? '#C8960C' : 'rgba(200,150,12,0.45)'}`,
+                color: isHighlight ? '#FFD060' : '#E8B84B',
+                borderRadius: '20px', padding: '.3rem .75rem',
                 fontSize: '.75rem', cursor: 'pointer', fontFamily: "'Source Sans 3', sans-serif",
                 letterSpacing: '.04em',
+                fontWeight: isHighlight ? 600 : 400,
               }}>{q}</button>
-            ))}
+              )
+            })}
           </div>
         )}
       </div>
@@ -236,7 +258,7 @@ export default function AliWidget() {
 
   useEffect(() => {
     setAlisHist([{ role: 'assistant', content: "Osiyo! I'm Alis — CCO United's AI assistant. Ask me anything about our platform, CCO organizations, events, or how to get involved." }])
-    setAfHist([{ role: 'assistant', content: "Hello! I'm the CCO United Housing & Events Assistant powered by Agentforce. How can I help you today?" }])
+    setAfHist([{ role: 'assistant', content: "Osiyo! I'm Alis — CCO United's Agentforce assistant. Ask me about the organization, the platform, or the developer. Or launch Salesforce for QA configuration." }])
   }, [])
 
   const sendMsg = useCallback(async (text: string) => {
@@ -262,7 +284,8 @@ export default function AliWidget() {
       streamAgentforce(
         text.trim(), afSessionId,
         out => setAfHist([...newAfHist, { role: 'assistant', content: out }]),
-        id => setAfSessionId(id)
+        id => setAfSessionId(id),
+        newAfHist
       )
         .then(out => setAfHist([...newAfHist, { role: 'assistant', content: out }]))
         .catch(() => setAfHist([...newAfHist, { role: 'assistant', content: 'Agentforce unavailable. Please try again.' }]))
@@ -283,16 +306,17 @@ export default function AliWidget() {
   return (
     <div id="ali-widget" style={{ maxHeight: collapsed ? '54px' : '560px', width: widgetWidth, maxWidth: '96vw' }}>
       {/* Header */}
-      <div id="ali-header" onClick={() => setCollapsed(c => !c)}>
-        <div>
-          <div className="ali-hname">
-            {mode === 'agentforce' ? 'CCO Housing & Events Agent' : 'Alisdelisgi · ᎠᎵᏍᏓᎵᏍᎩ'}
-          </div>
-          <div className="ali-hsub">
-            {mode === 'both' ? 'Alis + Agentforce — side by side' : mode === 'agentforce' ? 'Powered by Salesforce Agentforce' : 'Uh-lee-s-deh-lee-s-gee · "One who helps"'}
-          </div>
+      <div id="ali-header" onClick={() => setCollapsed(c => !c)}
+        style={{ padding: collapsed ? '.75rem 1.1rem' : '1.25rem 1.1rem', minHeight: collapsed ? '54px' : undefined, boxSizing: 'border-box' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <div className="ali-hname">Alisdelisgi · ᎠᎵᏍᏓᎵᏍᎩ</div>
+          {!collapsed && (
+            <div className="ali-hsub">
+              {mode === 'both' ? 'Anthropic + Agentforce' : 'Uh-lee-s-deh-lee-s-gee · "One who helps"'}
+            </div>
+          )}
         </div>
-        <div className="ali-hright" style={{ gap: '.5rem' }}>
+        <div className="ali-hright" style={{ gap: '.5rem', alignSelf: 'center' }}>
           {/* Mode toggle pills */}
           {!collapsed && (
             <div onClick={e => e.stopPropagation()} style={{ display: 'flex', gap: '.3rem', marginRight: '.25rem' }}>
@@ -327,7 +351,7 @@ export default function AliWidget() {
       }}>
         {(mode === 'alis' || mode === 'both') && (
           <ChatLane
-            label="Alisdelisgi" dot="●"
+            label="Anthropic" dot="●"
             hist={alisHist} showChips={showChips} streaming={streaming}
             onChip={sendMsg}
           />

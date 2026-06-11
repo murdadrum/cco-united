@@ -44,6 +44,50 @@ test.describe('About section stats', () => {
   })
 })
 
+test.describe('Navigation links', () => {
+  test('Events link is present in nav', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.locator('.nav-links').getByRole('link', { name: 'Events' })).toBeVisible()
+  })
+
+  test('Volunteers link is present in nav', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.locator('.nav-links').getByRole('link', { name: 'Volunteers' })).toBeVisible()
+  })
+
+  test('QA | MIGRATION link is present in nav', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.locator('.nav-links').getByRole('link', { name: 'QA | MIGRATION' })).toBeVisible()
+  })
+
+  test('QA | JIRA link is present in nav', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.locator('.nav-links').getByRole('link', { name: 'QA | JIRA' })).toBeVisible()
+  })
+
+  test('QA | GitHub link opens github.com', async ({ page }) => {
+    await page.goto('/')
+    const link = page.locator('.nav-links').getByRole('link', { name: 'QA | GitHub' })
+    await expect(link).toHaveAttribute('href', 'https://github.com/murdadrum/ccou-salesforce')
+    await expect(link).toHaveAttribute('target', '_blank')
+  })
+
+  test('/volunteers route returns 200', async ({ request }) => {
+    const res = await request.get('/volunteers')
+    expect(res.status()).toBe(200)
+  })
+
+  test('/qa route returns 200', async ({ request }) => {
+    const res = await request.get('/qa')
+    expect(res.status()).toBe(200)
+  })
+
+  test('/migration-status route returns 200', async ({ request }) => {
+    const res = await request.get('/migration-status')
+    expect(res.status()).toBe(200)
+  })
+})
+
 test.describe('Building section', () => {
   test('feature cards are present', async ({ page }) => {
     await page.goto('/')

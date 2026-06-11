@@ -2726,18 +2726,33 @@
 .event-card {
   display: flex;
   flex-direction: column;
-  background: rgba(255, 255, 255, 0.03);
+  position: relative;
+  overflow: hidden;
+  background: #111;
   border: 1px solid rgba(200, 150, 12, 0.15);
-  padding: 1.6rem 1.75rem;
   text-decoration: none;
   color: inherit;
-  transition: border-color 0.25s, transform 0.25s, background 0.25s;
+  transition: border-color 0.25s, transform 0.25s;
+  min-height: 280px;
 }
 
 .event-card:hover {
   border-color: rgba(200, 150, 12, 0.4);
-  background: rgba(200, 150, 12, 0.05);
   transform: translateY(-3px);
+  box-shadow: 0 16px 48px rgba(200, 150, 12, 0.22);
+}
+
+.event-card:hover .feature-card-img {
+  transform: scale(1.05);
+}
+
+.event-card-body {
+  position: relative;
+  z-index: 2;
+  padding: 1.6rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .event-card-type {
@@ -2773,8 +2788,8 @@
   color: #C8B89A;
   letter-spacing: 0.04em;
   margin-top: auto;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(200, 150, 12, 0.08);
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(200, 150, 12, 0.15);
 }
 
 /* EVENT LIST VIEW */

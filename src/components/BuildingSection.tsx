@@ -117,7 +117,11 @@ export default function BuildingSection() {
                 <div className="feature-name">Alisdelisgi AI Assistant</div>
                 <p className="feature-desc">An intelligent agent trained on CCO United data — a knowledgeable community guide
                   configured to our mission, available 24/7.</p>
-                <span className="feature-card-cta">View in Platform →</span>
+                <span className="feature-card-cta" style={{
+                  background: '#E8B84B',
+                  borderColor: '#E8B84B',
+                  color: '#1A0F0A',
+                }}>Ask a Question →</span>
               </div>
             </div>
           </a>

@@ -11,14 +11,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     title: 'CCO United',
-    description: 'One Platform. Fourteen Communities. Stronger Together.',
+    description: 'One Platform. One Hundred Communities. Stronger Together.',
     url: 'https://cco-united.joshbarteaux.com',
     siteName: 'CCO United',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'CCO United',
-    description: 'One Platform. Fourteen Communities. Stronger Together.',
+    description: 'One Platform. One Hundred Communities. Stronger Together.',
   },
 }
 

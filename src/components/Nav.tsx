@@ -94,9 +94,18 @@ export default function Nav() {
           <Link href="/events" className={pathname.startsWith('/events') ? 'nav-active' : ''}>
             Events
           </Link>
-          <Link href="/migration-status" className={pathname.startsWith('/migration-status') ? 'nav-active' : ''}>
-            Migration
+          <Link href="/volunteers" className={pathname.startsWith('/volunteers') ? 'nav-active' : ''}>
+            Volunteers
           </Link>
+          <Link href="/migration-status" className={pathname.startsWith('/migration-status') ? 'nav-active' : ''}>
+            QA | MIGRATION
+          </Link>
+          <Link href="/qa" className={pathname.startsWith('/qa') ? 'nav-active' : ''}>
+            QA | JIRA
+          </Link>
+          <a href="https://github.com/murdadrum/ccou-salesforce" target="_blank" rel="noopener noreferrer">
+            QA | GitHub
+          </a>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <a href={navHref('get-involved')} className="btn-nav">Request Access</a>
@@ -137,12 +146,29 @@ export default function Nav() {
             Events
           </Link>
           <Link
+            href="/volunteers"
+            className={pathname.startsWith('/volunteers') ? 'nav-active' : ''}
+            onClick={close}
+          >
+            Volunteers
+          </Link>
+          <Link
             href="/migration-status"
             className={pathname.startsWith('/migration-status') ? 'nav-active' : ''}
             onClick={close}
           >
-            Migration
+            QA | MIGRATION
           </Link>
+          <Link
+            href="/qa"
+            className={pathname.startsWith('/qa') ? 'nav-active' : ''}
+            onClick={close}
+          >
+            QA | JIRA
+          </Link>
+          <a href="https://github.com/murdadrum/ccou-salesforce" target="_blank" rel="noopener noreferrer" onClick={close}>
+            QA | GitHub
+          </a>
           <a href={navHref('get-involved')} className="btn-nav nav-flyout-cta" onClick={close}>
             Request Access
           </a>

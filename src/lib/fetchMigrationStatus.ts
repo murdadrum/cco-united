@@ -37,7 +37,7 @@ export async function fetchMigrationStatus(): Promise<MigrationStatus> {
     (async () => {
       const { token, instanceUrl } = await getSfToken()
       const [ccos, events, contacts] = await Promise.all([
-        sfCount(token, instanceUrl, "SELECT COUNT() FROM Account WHERE RecordType.Name = 'CCO Organization'"),
+        sfCount(token, instanceUrl, 'SELECT COUNT() FROM Account'),
         sfCount(token, instanceUrl, 'SELECT COUNT() FROM Event__c'),
         sfCount(token, instanceUrl, 'SELECT COUNT() FROM Contact'),
       ])

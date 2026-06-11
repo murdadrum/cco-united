@@ -8,11 +8,11 @@ export default function CCOUnitedSection() {
           <div className="cco-spotlight-inner">
             <span className="section-label" style={{ color: 'var(--cn-gold)' }}>Community &amp; Cultural Outreach</span>
             <h2 className="section-title" style={{ marginTop: '.75rem' }}>
-              CCO United —<br /><em>One Platform. Fourteen Communities.</em>
+              CCO United —<br /><em>One Platform. One Hundred Communities.</em>
             </h2>
             <div className="gold-rule" style={{ margin: '1.5rem 0' }}></div>
             <p style={{ color: 'var(--cn-tan)', lineHeight: 1.75, maxWidth: '640px', marginBottom: '1.5rem' }}>
-              The Cherokee Nation&apos;s 14 Community &amp; Cultural Outreach organizations now share a single,
+              The Cherokee Nation&apos;s ~100 Community &amp; Cultural Outreach organizations now share a single,
               intelligent digital workspace. CCO United unifies grant management, resource directories,
               volunteer coordination, event planning, and AI-powered tools — giving every CCO the reach
               and efficiency of an organization ten times its size.

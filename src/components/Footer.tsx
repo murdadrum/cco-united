@@ -11,8 +11,8 @@ export default function Footer() {
       <div className="footer-inner">
         <div>
           <span className="footer-logo">CCO United</span>
-          <p className="footer-tagline">One Platform. Fourteen Communities.<br />Stronger Together.</p>
-          <p className="footer-legal">CCO United is an independent platform being developed by <a href="mailto:josh@joshbarteaux.com" className="footer-email" target="_blank" rel="noopener noreferrer">josh@joshbarteaux.com</a> to serve Cherokee Nation&apos;s Cultural &amp; Community Outreach organizations.</p>
+          <p className="footer-tagline">One Platform. One Hundred Communities.<br />Stronger Together.</p>
+          <p className="footer-legal">CCO United is an independent platform being developed by <a href="mailto:josh@joshbarteaux.com" className="footer-email" target="_blank" rel="noopener noreferrer">josh@joshbarteaux.com</a> to serve Cherokee Nation&apos;s Community &amp; Cultural Outreach organizations.</p>
         </div>
         <div className="footer-col">
           <h4>Navigate</h4>

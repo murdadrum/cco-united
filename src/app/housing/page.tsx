@@ -10,7 +10,7 @@ const STATS = [
   { num: '106+', label: 'CCO Organizations' },
   { num: '14',   label: 'Counties Served' },
   { num: '6',    label: 'Program Areas' },
-  { num: '1906', label: 'Cherokee Nation Est.' },
+  { num: '1794', label: 'Cherokee Nation Est.' },
 ]
 
 const PROGRAMS = [
