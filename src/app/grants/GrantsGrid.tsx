@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import Image from 'next/image'
 import type { MondayGrant, MondayGrantProvider } from '@/lib/sfTypes'
 
 // ─── Status colors matching Monday.com pipeline ──────────────────────────────
@@ -65,11 +66,13 @@ function GrantCard({ grant, index }: { grant: MondayGrant; index: number }) {
   const color = statusColor(grant.status)
   return (
     <div className="event-card">
-      <img
+      <Image
         className="feature-card-img"
         src={grantImage(index)}
         alt={grant.name}
-        loading="lazy"
+        fill
+        sizes="(max-width: 768px) 100vw, 400px"
+        style={{ objectFit: 'cover' }}
         onLoad={onImgLoad}
         onError={onImgLoad}
       />

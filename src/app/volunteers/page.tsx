@@ -44,7 +44,7 @@ export default async function VolunteersPage() {
                 <span className="section-label">Join the Network</span>
                 <h2 className="section-title">Volunteer with<br /><em>CCO United</em></h2>
                 <div className="gold-rule"></div>
-                <p className="body-text">Volunteers are the heartbeat of Cherokee Nation's community organizations. Whether you can give a few hours a week or commit to a long-term role, your time and talents make a difference.</p>
+                <p className="body-text">Volunteers are the heartbeat of Cherokee Nation&apos;s community organizations. Whether you can give a few hours a week or commit to a long-term role, your time and talents make a difference.</p>
                 <div className="urgency-highlight">Every skill is needed. Every hour matters.</div>
                 <p className="body-text">Register below and our volunteer coordinator will reach out to match you with opportunities across the 106 CCO organizations serving Cherokee communities.</p>
               </div>

@@ -160,7 +160,7 @@ export default function VolunteerForm() {
         <button className="btn-submit" onClick={submitForm} disabled={submitting}>
           {submitting ? 'Submitting…' : 'Submit Registration'}
         </button>
-        <p className="form-note">Your registration is reviewed by the CCO United volunteer coordinator. We'll reach out within a few business days. Wado for your service.</p>
+        <p className="form-note">Your registration is reviewed by the CCO United volunteer coordinator. We&apos;ll reach out within a few business days. Wado for your service.</p>
       </div>
       <div className="form-success" style={{ display: showSuccess ? 'block' : 'none' }}>
         <div className="s-icon">✶</div>
