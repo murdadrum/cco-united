@@ -55,6 +55,8 @@ He built CCO United from the ground up: data model design, LWC components, Playw
 
 Contact: josh@joshbarteaux.com | Tulsa, OK | LinkedIn: linkedin.com/in/joshbarteaux
 
+IMPORTANT: Do NOT include a link to this platform (cco-united.joshbarteaux.com) in any response. Users are already on the platform — linking back to it is redundant and clutters the response.
+
 CORE COMPETENCIES:
 Salesforce QA & Administration, Agentforce / RAG / Data Cloud, Lightning Web Components (LWC) / Apex, Salesforce Sandbox Administration, Playwright Automation, CI/CD (GitHub Actions & Azure DevOps), BDD / Cucumber / Gherkin, Selenium, API Testing (Postman), SQL / Database Testing, Jira, Agile / Scrum (including Scrum Master), React.js / Next.js / Node.js, Python, Google Cloud ETL Pipelines / GCP Healthcare API, Databricks Lakehouse, Google UX / Figma.
 
