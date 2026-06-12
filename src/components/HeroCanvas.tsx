@@ -20,6 +20,8 @@ export default function HeroCanvas() {
     const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100)
     camera.position.set(0, 0, 5)
 
+    const isLight = () => document.body.classList.contains('light')
+
     const updateCamera = () => {
       const w = canvas.clientWidth, h = canvas.clientHeight
       renderer.setSize(w, h, false)
@@ -74,10 +76,21 @@ export default function HeroCanvas() {
         color: new THREE.Color(CLAN[i]),
         roughness: 0.22,
         metalness: 0.72,
+        transparent: true,
+        opacity: isLight() ? 0.22 : 1,
       })
       grp.add(new THREE.Mesh(geo, mat))
     }
     positionStar()
+
+    const onThemeChange = () => {
+      const light = isLight()
+      grp.children.forEach(child => {
+        const mat = (child as THREE.Mesh).material as THREE.MeshStandardMaterial
+        mat.opacity = light ? 0.22 : 1
+      })
+    }
+    window.addEventListener('ccou-theme-changed', onThemeChange)
     let mx = 0, my = 0, tx = 0, ty = 0
     const onMouseMove = (e: MouseEvent) => {
       mx = (e.clientX / window.innerWidth - 0.5) * 2
@@ -106,6 +119,7 @@ export default function HeroCanvas() {
       renderer.dispose()
       document.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('resize', resize)
+      window.removeEventListener('ccou-theme-changed', onThemeChange)
     }
   }, [])
 
