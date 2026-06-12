@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "https://sf.cco-united.joshbarteaux.com/$1",
+      "permanent": true
+    }
+  ]
+}
