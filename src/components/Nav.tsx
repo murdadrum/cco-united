@@ -3,6 +3,26 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
+function ThemeToggle() {
+  const [light, setLight] = useState(false)
+  useEffect(() => {
+    setLight(document.body.classList.contains('light'))
+    const sync = () => setLight(document.body.classList.contains('light'))
+    window.addEventListener('ccou-theme-changed', sync)
+    return () => window.removeEventListener('ccou-theme-changed', sync)
+  }, [])
+  return (
+    <button
+      id="theme-toggle"
+      aria-label={light ? 'Switch to dark mode' : 'Switch to light mode'}
+      onClick={() => window.dispatchEvent(new Event('ccou-toggle-theme'))}
+    >
+      <span className="toggle-icon">{light ? '☽' : '☀︎'}</span>
+      {light ? 'Dark' : 'Light'}
+    </button>
+  )
+}
+
 const CLAN = ['#8B1A1A','#C8960C','#4A5E3A','#2C5F7A','#7A3B6B','#8B5E1A','#1A4A3A']
 
 function starSegs(cx: number, cy: number, R: number, r: number, n: number) {
@@ -99,6 +119,7 @@ export default function Nav() {
           </Link>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <ThemeToggle />
           <a href={navHref('get-involved')} className="btn-nav">Request Access</a>
           <button
             className="nav-hamburger"
@@ -143,6 +164,7 @@ export default function Nav() {
           >
             Tests
           </Link>
+          <ThemeToggle />
           <a href={navHref('get-involved')} className="btn-nav nav-flyout-cta" onClick={close}>
             Request Access
           </a>
